@@ -1,0 +1,12 @@
+container.builder, build version 7, id 024e79c994c643d09eb045d488dafb94
+1024 partitions, 3.000000 replicas, 1 regions, 1 zones, 6 devices, 0.00 balance, 0.00 dispersion
+The minimum number of hours before a partition can be reassigned is 24 (0:00:00 remaining)
+The overload factor is 0.00% (0.000000)
+Ring file container.ring.gz is obsolete
+Devices:   id region zone   ip address:port replication ip:port  name weight partitions balance flags meta
+            0      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-01 100.00        512    0.00       
+            1      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-02 100.00        512    0.00       
+            2      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-03 100.00        512    0.00       
+            3      1    1 10.114.1.203:6001   10.114.1.203:6001 swift-01 100.00        512    0.00       
+            4      1    1 10.114.1.203:6001   10.114.1.203:6001 swift-02 100.00        512    0.00       
+            5      1    1 10.114.1.203:6001   10.114.1.203:6001 swift-03 100.00        512    0.00       

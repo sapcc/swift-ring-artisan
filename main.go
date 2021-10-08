@@ -19,5 +19,38 @@
 
 package main
 
+import (
+	"os"
+	"strconv"
+
+	"github.com/sapcc/go-bits/logg"
+	parsecmd "github.com/sapcc/swift-ring-artisan/cmd/parse"
+	"github.com/spf13/cobra"
+)
+
+// TODO: ask @majewksy : move to gobits?
+// source https://github.com/sapcc/keppel/blob/master/internal/keppel/config.go#L134-L138
+// ParseBool is like strconv.ParseBool() but doesn't return any error.
+func ParseBool(str string) bool {
+	v, _ := strconv.ParseBool(str)
+	return v
+}
+
 func main() {
+	logg.ShowDebug = ParseBool(os.Getenv("ARTISAN_DEBUG"))
+
+	rootCmd := &cobra.Command{
+		Use:   "swift-ring-artisan",
+		Short: "Declarative frontend for swift-ring-builder",
+		Long:  "swift-ring-artisan is a declarative frontend for swift-ring-builder. This binary also contains a tool to parse the output of swift-ring-builder to a machine readable format.",
+		Args:  cobra.NoArgs,
+		Run: func(cmd *cobra.Command, args []string) {
+			cmd.Help()
+		},
+	}
+	parsecmd.AddCommandTo(rootCmd)
+
+	if err := rootCmd.Execute(); err != nil {
+		logg.Fatal(err.Error())
+	}
 }

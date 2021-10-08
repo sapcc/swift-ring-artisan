@@ -1,0 +1,69 @@
+filename: container.builder
+buildversion: 7
+id: 024e79c994c643d09eb045d488dafb94
+partitions: 0
+replicas: 0
+regions: 0
+zones: 0
+devicecount: 0
+balance: 0
+dispersion: 0
+reassignedcooldown: 0
+reassignedremaining: 0001-01-01T00:00:00Z
+overloadfactorpercent: 0
+overloadfactordezimal: 0
+devices:
+- id: 0
+  region: 1
+  zone: 1
+  ipaddressport: 10.114.1.202:6001
+  replicationipport: 10.114.1.202:6001
+  name: swift-01
+  weight: 100
+  partitions: 512
+  balance: 0
+- id: 1
+  region: 1
+  zone: 1
+  ipaddressport: 10.114.1.202:6001
+  replicationipport: 10.114.1.202:6001
+  name: swift-02
+  weight: 100
+  partitions: 512
+  balance: 0
+- id: 2
+  region: 1
+  zone: 1
+  ipaddressport: 10.114.1.202:6001
+  replicationipport: 10.114.1.202:6001
+  name: swift-03
+  weight: 100
+  partitions: 512
+  balance: 0
+- id: 3
+  region: 1
+  zone: 1
+  ipaddressport: 10.114.1.203:6001
+  replicationipport: 10.114.1.203:6001
+  name: swift-01
+  weight: 100
+  partitions: 512
+  balance: 0
+- id: 4
+  region: 1
+  zone: 1
+  ipaddressport: 10.114.1.203:6001
+  replicationipport: 10.114.1.203:6001
+  name: swift-02
+  weight: 100
+  partitions: 512
+  balance: 0
+- id: 5
+  region: 1
+  zone: 1
+  ipaddressport: 10.114.1.203:6001
+  replicationipport: 10.114.1.203:6001
+  name: swift-03
+  weight: 100
+  partitions: 512
+  balance: 0

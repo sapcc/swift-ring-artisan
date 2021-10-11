@@ -12,6 +12,9 @@ endif
 
 default: build-all
 
+generate: build/swift-ring-artisan
+	./build/swift-ring-artisan parse testing/swift-ring-builder-output.txt -o testing/swift-ring-builder-output.yaml
+
 build-all: build/swift-ring-artisan
 
 GO_BUILDFLAGS = -mod vendor

@@ -24,3 +24,7 @@ githubWorkflows:
   spellCheck:
     enabled: true
     ignorePaths: [] # override global setting so that nothing is ignored
+
+verbatim: |
+  generate: build/swift-ring-artisan
+    ./build/swift-ring-artisan parse testing/swift-ring-builder-output.txt -o testing/swift-ring-builder-output.yaml

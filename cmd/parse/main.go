@@ -44,7 +44,7 @@ func AddCommandTo(parent *cobra.Command) {
 The output of swift-ring-builder needs to be piped into swift-ring-artisan.`,
 		Run: run,
 	}
-	cmd.PersistentFlags().StringVar(&format, "format", "yaml", "Output format. Can be either json or yaml.")
+	cmd.PersistentFlags().StringVarP(&format, "format", "f", "yaml", "Output format. Can be either json or yaml.")
 	parent.AddCommand(cmd)
 }
 

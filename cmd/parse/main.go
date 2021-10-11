@@ -33,6 +33,7 @@ import (
 
 var (
 	format string
+	output string
 )
 
 func AddCommandTo(parent *cobra.Command) {
@@ -45,6 +46,7 @@ The output of swift-ring-builder needs to be piped into swift-ring-artisan.`,
 		Run: run,
 	}
 	cmd.PersistentFlags().StringVarP(&format, "format", "f", "yaml", "Output format. Can be either json or yaml.")
+	cmd.PersistentFlags().StringVarP(&output, "output", "o", "", "Output file to write the parsed data to.")
 	parent.AddCommand(cmd)
 }
 
@@ -82,7 +84,14 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(err.Error())
 	}
 
-	fmt.Printf("%+v", string(metaDataOutput))
+	if output == "" {
+		fmt.Printf("%+v", string(metaDataOutput))
+	} else {
+		err := os.WriteFile(output, metaDataOutput, 0644)
+		if err != nil {
+			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", output, err.Error()))
+		}
+	}
 
 	if err != nil {
 		os.Exit(1)

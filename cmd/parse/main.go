@@ -51,7 +51,7 @@ The output of swift-ring-builder needs to be piped into swift-ring-artisan.`,
 }
 
 func run(cmd *cobra.Command, args []string) {
-	if format != "json" && format != "yaml" {
+	if format != "" && format != "json" && format != "yaml" {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
 
@@ -74,7 +74,8 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	var metaDataOutput []byte
-	if format == "yaml" {
+	// default to yaml
+	if format == "" || format == "yaml" {
 		metaDataOutput, err = yaml.Marshal(metaData)
 	} else if format == "json" {
 		metaDataOutput, err = json.Marshal(metaData)

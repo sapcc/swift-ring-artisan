@@ -20,6 +20,7 @@
 package parsecmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -43,11 +44,15 @@ func AddCommandTo(parent *cobra.Command) {
 The output of swift-ring-builder needs to be piped into swift-ring-artisan.`,
 		Run: run,
 	}
-	cmd.PersistentFlags().StringVar(&format, "format", "[]", "Output format. Can be either json or yaml.")
+	cmd.PersistentFlags().StringVar(&format, "format", "yaml", "Output format. Can be either json or yaml.")
 	parent.AddCommand(cmd)
 }
 
 func run(cmd *cobra.Command, args []string) {
+	if format != "json" && format != "yaml" {
+		logg.Fatal("format needs to be set to json OR yaml.")
+	}
+
 	// if a file is supplied read that otherwise listen on stdin
 	var input io.Reader
 	if len(args) == 1 {
@@ -66,12 +71,18 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(err.Error())
 	}
 
-	metaDataYaml, err := yaml.Marshal(metaData)
+	var metaDataOutput []byte
+	if format == "yaml" {
+		metaDataOutput, err = yaml.Marshal(metaData)
+	} else if format == "json" {
+		metaDataOutput, err = json.Marshal(metaData)
+	}
+
 	if err != nil {
 		logg.Fatal(err.Error())
 	}
 
-	fmt.Printf("%+v", string(metaDataYaml))
+	fmt.Printf("%+v", string(metaDataOutput))
 
 	if err != nil {
 		os.Exit(1)

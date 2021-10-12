@@ -26,7 +26,7 @@ import (
 	"os"
 
 	"github.com/sapcc/go-bits/logg"
-	artisan "github.com/sapcc/swift-ring-artisan/pkg"
+	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -68,7 +68,7 @@ func run(cmd *cobra.Command, args []string) {
 		input = os.Stdin
 	}
 
-	metaData, err := artisan.ParseInput(input)
+	metaData, err := parse.ParseInput(input)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

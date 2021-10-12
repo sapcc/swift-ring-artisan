@@ -1,15 +1,15 @@
 filename: container.builder
 buildversion: 7
 id: 024e79c994c643d09eb045d488dafb94
-partitions: 0
+partitions: 1024
 replicas: 0
-regions: 0
-zones: 0
-devicecount: 0
+regions: 1
+zones: 1
+devicecount: 6
 balance: 0
 dispersion: 0
-reassignedcooldown: 0
-reassignedremaining: 0001-01-01T00:00:00Z
+reassignedcooldown: 24
+reassignedremaining: 0000-01-01T00:00:00Z
 overloadfactorpercent: 0
 overloadfactordezimal: 0
 devices:

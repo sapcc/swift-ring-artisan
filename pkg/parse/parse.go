@@ -62,15 +62,15 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone   ip address:
 var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ipAddressPort>(?:\d+\.){3}\d+:\d+)\s+(?P<replicationIpPort>(?:\d+\.){3}\d+:\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>\d+\.\d+)\s*$`)
 
 type device struct {
-	Id                int
-	Region            int
-	Zone              int
+	Id                uint64
+	Region            uint64
+	Zone              uint64
 	IpAddressPort     string
 	ReplicationIpPort string
 	Name              string
 	Weight            float64
-	Partitions        int
-	Balance           int
+	Partitions        uint64
+	Balance           uint64
 	//lint:ignore U1000 TODO
 	flags struct{} // TODO: figure out how the field looks like
 	//lint:ignore U1000 TODO
@@ -80,18 +80,18 @@ type device struct {
 // Meta data about the ring file
 type MetaData struct {
 	FileName     string
-	BuildVersion int
+	BuildVersion uint64
 	Id           string
 
-	Partitions  int
+	Partitions  uint64
 	Replicas    float64
-	Regions     int
-	Zones       int
-	DeviceCount int
+	Regions     uint64
+	Zones       uint64
+	DeviceCount uint64
 	Balance     float64
 	Dispersion  float64
 
-	ReassignedCooldown  int
+	ReassignedCooldown  uint64
 	ReassignedRemaining time.Time
 
 	OverloadFactorPercent float64
@@ -115,26 +115,26 @@ func ParseInput(input io.Reader) (MetaData, error) {
 			matches, _ := fileInfoRx.Groups(line)
 			if len(matches) > 0 {
 				metaData.FileName = matches["fileName"]
-				metaData.BuildVersion, _ = strconv.Atoi(matches["buildVersion"])
+				metaData.BuildVersion, _ = strconv.ParseUint(matches["buildVersion"], 10, 32)
 				metaData.Id = matches["id"]
-				continue
-			}
-
-			matches, _ = remainingTimeRx.Groups(line)
-			if len(matches) > 0 {
-				metaData.Partitions, _ = strconv.Atoi(matches["partitions"])
-				metaData.Replicas, _ = strconv.ParseFloat(matches["replicas"], 32)
-				metaData.Regions, _ = strconv.Atoi(matches["regions"])
-				metaData.Zones, _ = strconv.Atoi(matches["zones"])
-				metaData.DeviceCount, _ = strconv.Atoi(matches["deviceCount"])
-				metaData.Balance, _ = strconv.ParseFloat(matches["balance"], 32)
-				metaData.Dispersion, _ = strconv.ParseFloat(matches["dispersion"], 32)
 				continue
 			}
 
 			matches, _ = statsRx.Groups(line)
 			if len(matches) > 0 {
-				metaData.ReassignedCooldown, _ = strconv.Atoi(matches["reassignedCooldown"])
+				metaData.Partitions, _ = strconv.ParseUint(matches["partitions"], 10, 32)
+				metaData.Replicas, _ = strconv.ParseFloat(matches["replicas"], 32)
+				metaData.Regions, _ = strconv.ParseUint(matches["regions"], 10, 32)
+				metaData.Zones, _ = strconv.ParseUint(matches["zones"], 10, 32)
+				metaData.DeviceCount, _ = strconv.ParseUint(matches["deviceCount"], 10, 32)
+				metaData.Balance, _ = strconv.ParseFloat(matches["balance"], 32)
+				metaData.Dispersion, _ = strconv.ParseFloat(matches["dispersion"], 32)
+				continue
+			}
+
+			matches, _ = remainingTimeRx.Groups(line)
+			if len(matches) > 0 {
+				metaData.ReassignedCooldown, _ = strconv.ParseUint(matches["reassignedCooldown"], 10, 32)
 				metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"])
 				continue
 			}
@@ -146,7 +146,7 @@ func ParseInput(input io.Reader) (MetaData, error) {
 				continue
 			}
 
-			// this line is purely informationaly but we need to match it anyway to not abort the process
+			// this line is purely informational but we need to match it anyway to not abort the process
 			if obsoleteRx.MatchString(line) {
 				continue
 			}
@@ -156,18 +156,16 @@ func ParseInput(input io.Reader) (MetaData, error) {
 				continue
 			}
 
-			fmt.Printf("%+v\n", metaData)
-
 			logg.Fatal(fmt.Sprintf("A header regex did not match the line: \"%s\"", line))
 		} else {
 			matches, _ := rowEntryRx.Groups(line)
 			if len(matches) > 0 {
-				id, _ := strconv.Atoi(matches["id"])
-				region, _ := strconv.Atoi(matches["region"])
-				zone, _ := strconv.Atoi(matches["zone"])
+				id, _ := strconv.ParseUint(matches["id"], 10, 32)
+				region, _ := strconv.ParseUint(matches["region"], 10, 32)
+				zone, _ := strconv.ParseUint(matches["zone"], 10, 32)
 				weight, _ := strconv.ParseFloat(matches["weight"], 32)
-				partitions, _ := strconv.Atoi(matches["partitions"])
-				balance, _ := strconv.Atoi(matches["balance"])
+				partitions, _ := strconv.ParseUint(matches["partitions"], 10, 32)
+				balance, _ := strconv.ParseUint(matches["balance"], 10, 32)
 
 				metaData.Devices = append(metaData.Devices, device{
 					Id:                id,

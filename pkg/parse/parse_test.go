@@ -31,13 +31,13 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	input, err := os.Open("../testing/swift-ring-builder-output.txt")
+	input, err := os.Open("../../testing/swift-ring-builder-output.txt")
 	if err != nil {
 		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
 	}
 	defer input.Close()
 
-	expectedFile, err := ioutil.ReadFile("../testing/swift-ring-builder-output.yaml")
+	expectedFile, err := ioutil.ReadFile("../../testing/swift-ring-builder-output.yaml")
 	if err != nil {
 		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
 	}

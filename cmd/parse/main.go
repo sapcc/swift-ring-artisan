@@ -32,8 +32,8 @@ import (
 )
 
 var (
-	format string
-	output string
+	outputFormat string
+	outputFile   string
 )
 
 func AddCommandTo(parent *cobra.Command) {
@@ -45,13 +45,13 @@ func AddCommandTo(parent *cobra.Command) {
 The output of swift-ring-builder needs to be piped into swift-ring-artisan.`,
 		Run: run,
 	}
-	cmd.PersistentFlags().StringVarP(&format, "format", "f", "yaml", "Output format. Can be either json or yaml.")
-	cmd.PersistentFlags().StringVarP(&output, "output", "o", "", "Output file to write the parsed data to.")
+	cmd.PersistentFlags().StringVarP(&outputFormat, "format", "f", "yaml", "Output format. Can be either json or yaml.")
+	cmd.PersistentFlags().StringVarP(&outputFile, "output", "o", "", "Output file to write the parsed data to.")
 	parent.AddCommand(cmd)
 }
 
 func run(cmd *cobra.Command, args []string) {
-	if format != "" && format != "json" && format != "yaml" {
+	if outputFormat != "" && outputFormat != "json" && outputFormat != "yaml" {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
 
@@ -75,9 +75,9 @@ func run(cmd *cobra.Command, args []string) {
 
 	var metaDataOutput []byte
 	// default to yaml
-	if format == "" || format == "yaml" {
+	if outputFormat == "" || outputFormat == "yaml" {
 		metaDataOutput, err = yaml.Marshal(metaData)
-	} else if format == "json" {
+	} else if outputFormat == "json" {
 		metaDataOutput, err = json.Marshal(metaData)
 	}
 
@@ -85,12 +85,12 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(err.Error())
 	}
 
-	if output == "" {
+	if outputFile == "" {
 		fmt.Printf("%+v", string(metaDataOutput))
 	} else {
-		err := os.WriteFile(output, metaDataOutput, 0644)
+		err := os.WriteFile(outputFile, metaDataOutput, 0644)
 		if err != nil {
-			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", output, err.Error()))
+			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", outputFile, err.Error()))
 		}
 	}
 

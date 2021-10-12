@@ -28,9 +28,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ParseBool is like strconv.ParseBool() but doesn't return any error.
 // TODO: ask @majewksy : move to gobits?
 // source https://github.com/sapcc/keppel/blob/master/internal/keppel/config.go#L134-L138
-// ParseBool is like strconv.ParseBool() but doesn't return any error.
 func ParseBool(str string) bool {
 	v, _ := strconv.ParseBool(str)
 	return v

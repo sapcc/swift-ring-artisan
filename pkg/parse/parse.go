@@ -62,11 +62,11 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone   ip address:
 var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ipAddressPort>(?:\d+\.){3}\d+:\d+)\s+(?P<replicationIpPort>(?:\d+\.){3}\d+:\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>\d+\.\d+)\s*$`)
 
 type device struct {
-	Id                uint64
+	ID                uint64
 	Region            uint64
 	Zone              uint64
-	IpAddressPort     string
-	ReplicationIpPort string
+	IPAddressPort     string
+	ReplicationIPPort string
 	Name              string
 	Weight            float64
 	Partitions        uint64
@@ -77,11 +77,11 @@ type device struct {
 	meta struct{} // TODO: figure out how the field looks like
 }
 
-// Meta data about the ring file
+// MetaData contains the meta data about the ring file
 type MetaData struct {
 	FileName     string
 	BuildVersion uint64
-	Id           string
+	ID           string
 
 	Partitions  uint64
 	Replicas    float64
@@ -116,7 +116,7 @@ func ParseInput(input io.Reader) (MetaData, error) {
 			if len(matches) > 0 {
 				metaData.FileName = matches["fileName"]
 				metaData.BuildVersion, _ = strconv.ParseUint(matches["buildVersion"], 10, 32)
-				metaData.Id = matches["id"]
+				metaData.ID = matches["id"]
 				continue
 			}
 
@@ -168,11 +168,11 @@ func ParseInput(input io.Reader) (MetaData, error) {
 				balance, _ := strconv.ParseUint(matches["balance"], 10, 32)
 
 				metaData.Devices = append(metaData.Devices, device{
-					Id:                id,
+					ID:                id,
 					Region:            region,
 					Zone:              zone,
-					IpAddressPort:     matches["ipAddressPort"],
-					ReplicationIpPort: matches["replicationIpPort"],
+					IPAddressPort:     matches["ipAddressPort"],
+					ReplicationIPPort: matches["replicationIpPort"],
 					Name:              matches["name"],
 					Weight:            weight,
 					Partitions:        partitions,

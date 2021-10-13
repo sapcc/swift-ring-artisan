@@ -100,6 +100,7 @@ type MetaData struct {
 	Devices []device
 }
 
+// ParseInput parses an input and return the data as MetData object
 func ParseInput(input io.Reader) (MetaData, error) {
 	var (
 		metaData MetaData

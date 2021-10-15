@@ -90,7 +90,7 @@ func run(cmd *cobra.Command, args []string) {
 
 	logg.Debug(fmt.Sprintf("inputData: %+v", inputData))
 	logg.Debug(fmt.Sprintf("ruleData: %+v", ruleData))
-	parsedData, err := rules.ApplyRules(inputData, ruleData)
+	parsedData := rules.ApplyRules(inputData, ruleData)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

@@ -46,6 +46,6 @@ type DiskRules struct {
 	Zones    []Zone
 }
 
-func ApplyRules(inputData parse.MetaData, ruleData DiskRules) (parse.MetaData, error) {
-	return inputData, nil
+func ApplyRules(inputData parse.MetaData, ruleData DiskRules) parse.MetaData {
+	return inputData
 }

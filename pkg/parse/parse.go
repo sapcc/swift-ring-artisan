@@ -101,7 +101,7 @@ type MetaData struct {
 }
 
 // ParseInput parses an input and return the data as MetData object
-func ParseInput(input io.Reader) (MetaData, error) {
+func ParseInput(input io.Reader) MetaData {
 	var (
 		metaData MetaData
 		// track if we processed all headers and then only match table entries
@@ -191,5 +191,5 @@ func ParseInput(input io.Reader) (MetaData, error) {
 		logg.Fatal(fmt.Sprintf("Reading input failed: %s", err.Error()))
 	}
 
-	return metaData, nil
+	return metaData
 }

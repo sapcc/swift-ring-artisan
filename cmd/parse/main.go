@@ -68,12 +68,12 @@ func run(cmd *cobra.Command, args []string) {
 		input = os.Stdin
 	}
 
-	metaData, err := parse.ParseInput(input)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
+	metaData := parse.ParseInput(input)
 
-	var metaDataOutput []byte
+	var (
+		metaDataOutput []byte
+		err            error
+	)
 	// default to yaml
 	if outputFormat == "" || outputFormat == "yaml" {
 		metaDataOutput, err = yaml.Marshal(metaData)

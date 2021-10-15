@@ -37,7 +37,7 @@ var fileInfoRx = regroup.MustCompile(`^(?P<fileName>\w+\.builder), build version
 
 // regex to match the following line:
 // 1024 partitions, 3.000000 replicas, 1 regions, 1 zones, 6 devices, 0.00 balance, 0.00 dispersion
-var statsRx = regroup.MustCompile(`^(?P<partitions>\d+) partitions, (?P<repliacs>\d+\.\d+) replicas, (?P<regions>\d+) regions, (?P<zones>\d) zones, (?P<deviceCount>\d+) devices, (?P<balance>\d+\.\d+) balance, (?P<dispersion>\d+\.\d+) dispersion$`)
+var statsRx = regroup.MustCompile(`^(?P<partitions>\d+) partitions, (?P<replicas>\d+\.\d+) replicas, (?P<regions>\d+) regions, (?P<zones>\d) zones, (?P<deviceCount>\d+) devices, (?P<balance>\d+\.\d+) balance, (?P<dispersion>\d+\.\d+) dispersion$`)
 
 // regex to match the following line:
 // The minimum number of hours before a partition can be reassigned is 24 (0:00:00 remaining)
@@ -45,7 +45,7 @@ var remainingTimeRx = regroup.MustCompile(`^The minimum number of hours before a
 
 // regex to match the following line:
 // The overload factor is 0.00% (0.000000)
-var overloadFactorRx = regroup.MustCompile(`^The overload factor is (?P<percent>\d+\.\d+)% \((?P<dezimal>\d+\.\d+\))$`)
+var overloadFactorRx = regroup.MustCompile(`^The overload factor is (?P<percent>\d+\.\d+)% \((?P<decimal>\d+\.\d+\))$`)
 
 // regex to match the following line:
 // Ring file container.ring.gz is obsolete
@@ -95,7 +95,7 @@ type MetaData struct {
 	ReassignedRemaining time.Time `yaml:"reassigned_remaining"`
 
 	OverloadFactorPercent float64 `yaml:"overload_factor_Percent"`
-	OverloadFactorDezimal float64 `yaml:"overload_factor_dezimal"`
+	OverloadFactorDecimal float64 `yaml:"overload_factor_decimal"`
 
 	Devices []device
 }

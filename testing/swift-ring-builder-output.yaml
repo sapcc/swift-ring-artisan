@@ -11,7 +11,7 @@ dispersion: 0
 reassigned_cooldown: 24
 reassigned_remaining: 0000-01-01T00:00:00Z
 overload_factor_Percent: 0
-overload_factor_dezimal: 0
+overload_factor_decimal: 0
 devices:
 - id: 0
   region: 1

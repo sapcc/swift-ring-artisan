@@ -33,6 +33,7 @@ import (
 )
 
 var (
+	baseSize       string
 	inputFilename  string
 	outputFilename string
 )
@@ -47,6 +48,7 @@ This file should be edited and anchors & aliases should be added.
 Currently this is not possible from within go due to a bug in the yaml library that support anchors & aliases.`,
 		Run: run,
 	}
+	cmd.PersistentFlags().StringVarP(&baseSize, "size", "s", "6TB", "Base size to use for the size of the disks. Defaults to 6TB. Should have a suffix like GB or TB.")
 	cmd.PersistentFlags().StringVarP(&inputFilename, "input", "i", "", "Input file from where the parsed data should be read.")
 	cmd.PersistentFlags().StringVarP(&outputFilename, "output", "o", "", "Output file to write the rules to.")
 	parent.AddCommand(cmd)
@@ -81,9 +83,8 @@ func run(cmd *cobra.Command, args []string) {
 	})
 
 	diskRules := rules.DiskRules{
-		Region: inputData.Devices[0].Region,
-		// TODO: better default? argument?
-		BaseSize: "6TB",
+		Region:   inputData.Devices[0].Region,
+		BaseSize: baseSize,
 	}
 
 	var (

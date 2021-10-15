@@ -90,8 +90,6 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
 	}
 
-	logg.Debug(fmt.Sprintf("inputData: %+v", inputData))
-	logg.Debug(fmt.Sprintf("ruleData: %+v", ruleData))
 	parsedData := rules.ApplyRules(inputData, ruleData)
 	if err != nil {
 		logg.Fatal(err.Error())

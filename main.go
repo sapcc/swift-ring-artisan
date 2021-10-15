@@ -24,13 +24,13 @@ import (
 	"strconv"
 
 	"github.com/sapcc/go-bits/logg"
+	applycmd "github.com/sapcc/swift-ring-artisan/cmd/apply"
+	initcmd "github.com/sapcc/swift-ring-artisan/cmd/init"
 	parsecmd "github.com/sapcc/swift-ring-artisan/cmd/parse"
 	"github.com/spf13/cobra"
 )
 
 // ParseBool is like strconv.ParseBool() but doesn't return any error.
-// TODO: ask @majewksy : move to gobits?
-// source https://github.com/sapcc/keppel/blob/master/internal/keppel/config.go#L134-L138
 func ParseBool(str string) bool {
 	v, _ := strconv.ParseBool(str)
 	return v
@@ -48,6 +48,8 @@ func main() {
 			cmd.Help()
 		},
 	}
+	applycmd.AddCommandTo(rootCmd)
+	initcmd.AddCommandTo(rootCmd)
 	parsecmd.AddCommandTo(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {

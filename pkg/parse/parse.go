@@ -65,8 +65,8 @@ type device struct {
 	ID                uint64
 	Region            uint64
 	Zone              uint64
-	IPAddressPort     string
-	ReplicationIPPort string
+	IPAddressPort     string `yaml:"ip_address_port"`
+	ReplicationIPPort string `yaml:"replication_ip_port"`
 	Name              string
 	Weight            float64
 	Partitions        uint64
@@ -79,23 +79,23 @@ type device struct {
 
 // MetaData contains the meta data about the ring file
 type MetaData struct {
-	FileName     string
-	BuildVersion uint64
+	FileName     string `yaml:"file_name"`
+	BuildVersion uint64 `yaml:"build_version"`
 	ID           string
 
 	Partitions  uint64
 	Replicas    float64
 	Regions     uint64
 	Zones       uint64
-	DeviceCount uint64
+	DeviceCount uint64 `yaml:"device_count"`
 	Balance     float64
 	Dispersion  float64
 
-	ReassignedCooldown  uint64
-	ReassignedRemaining time.Time
+	ReassignedCooldown  uint64    `yaml:"reassigned_cooldown"`
+	ReassignedRemaining time.Time `yaml:"reassigned_remaining"`
 
-	OverloadFactorPercent float64
-	OverloadFactorDezimal float64
+	OverloadFactorPercent float64 `yaml:"overload_factor_Percent"`
+	OverloadFactorDezimal float64 `yaml:"overload_factor_dezimal"`
 
 	Devices []device
 }

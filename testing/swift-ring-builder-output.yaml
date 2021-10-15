@@ -1,23 +1,23 @@
-filename: container.builder
-buildversion: 7
+file_name: container.builder
+build_version: 7
 id: 024e79c994c643d09eb045d488dafb94
 partitions: 1024
 replicas: 0
 regions: 1
 zones: 1
-devicecount: 6
+device_count: 6
 balance: 0
 dispersion: 0
-reassignedcooldown: 24
-reassignedremaining: 0000-01-01T00:00:00Z
-overloadfactorpercent: 0
-overloadfactordezimal: 0
+reassigned_cooldown: 24
+reassigned_remaining: 0000-01-01T00:00:00Z
+overload_factor_Percent: 0
+overload_factor_dezimal: 0
 devices:
 - id: 0
   region: 1
   zone: 1
-  ipaddressport: 10.114.1.202:6001
-  replicationipport: 10.114.1.202:6001
+  ip_address_port: 10.114.1.202:6001
+  replication_ip_port: 10.114.1.202:6001
   name: swift-01
   weight: 100
   partitions: 512
@@ -25,8 +25,8 @@ devices:
 - id: 1
   region: 1
   zone: 1
-  ipaddressport: 10.114.1.202:6001
-  replicationipport: 10.114.1.202:6001
+  ip_address_port: 10.114.1.202:6001
+  replication_ip_port: 10.114.1.202:6001
   name: swift-02
   weight: 100
   partitions: 512
@@ -34,8 +34,8 @@ devices:
 - id: 2
   region: 1
   zone: 1
-  ipaddressport: 10.114.1.202:6001
-  replicationipport: 10.114.1.202:6001
+  ip_address_port: 10.114.1.202:6001
+  replication_ip_port: 10.114.1.202:6001
   name: swift-03
   weight: 100
   partitions: 512
@@ -43,8 +43,8 @@ devices:
 - id: 3
   region: 1
   zone: 1
-  ipaddressport: 10.114.1.203:6001
-  replicationipport: 10.114.1.203:6001
+  ip_address_port: 10.114.1.203:6001
+  replication_ip_port: 10.114.1.203:6001
   name: swift-01
   weight: 100
   partitions: 512
@@ -52,8 +52,8 @@ devices:
 - id: 4
   region: 1
   zone: 1
-  ipaddressport: 10.114.1.203:6001
-  replicationipport: 10.114.1.203:6001
+  ip_address_port: 10.114.1.203:6001
+  replication_ip_port: 10.114.1.203:6001
   name: swift-02
   weight: 100
   partitions: 512
@@ -61,8 +61,8 @@ devices:
 - id: 5
   region: 1
   zone: 1
-  ipaddressport: 10.114.1.203:6001
-  replicationipport: 10.114.1.203:6001
+  ip_address_port: 10.114.1.203:6001
+  replication_ip_port: 10.114.1.203:6001
   name: swift-03
   weight: 100
   partitions: 512

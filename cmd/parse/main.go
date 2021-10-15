@@ -38,7 +38,7 @@ var (
 
 func AddCommandTo(parent *cobra.Command) {
 	cmd := &cobra.Command{
-		Use:     "parse <image>",
+		Use:     "parse <file>",
 		Example: "  swift-ring-builder object.builder | swift-ring-artisan parse",
 		Short:   "Parses the output of swift-ring-builder to a machine readable format.",
 		Long: `Parses the output of swift-ring-builder to a machine readable format.

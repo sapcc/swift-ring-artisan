@@ -39,9 +39,8 @@ func TestParse(t *testing.T) {
 
 	expectedFile, err := ioutil.ReadFile("../../testing/swift-ring-builder-output.yaml")
 	if err != nil {
-		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
+		logg.Fatal(err.Error())
 	}
-
 	var expected MetaData
 	yaml.Unmarshal(expectedFile, &expected)
 

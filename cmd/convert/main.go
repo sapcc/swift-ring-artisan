@@ -17,17 +17,16 @@
 *
 *******************************************************************************/
 
-package initcmd
+package convertcmd
 
 import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"sort"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/swift-ring-artisan/pkg/convert"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
-	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -40,8 +39,8 @@ var (
 
 func AddCommandTo(parent *cobra.Command) {
 	cmd := &cobra.Command{
-		Use:     "init",
-		Example: "  swift-ring-artisan init --input <file> --output <file>",
+		Use:     "convert",
+		Example: "  swift-ring-artisan convert --input <file> --output <file>",
 		Short:   "Does an initial conversion from a parsed swift-ring-builder file to a rule file.",
 		Long: `Does an initial conversion from a parsed swift-ring-builder file to a rule file.
 This file should be edited and anchors & aliases should be added.
@@ -70,50 +69,7 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
 	}
 
-	sort.Slice(inputData.Devices, func(i, j int) bool {
-		lhs := inputData.Devices[i]
-		rhs := inputData.Devices[j]
-		if lhs.Zone != rhs.Zone {
-			return lhs.Zone < rhs.Zone
-		}
-		if lhs.IPAddressPort != rhs.IPAddressPort {
-			return lhs.IPAddressPort < rhs.IPAddressPort
-		}
-		return lhs.Name < rhs.Name
-	})
-
-	diskRules := rules.DiskRules{
-		Region:   inputData.Devices[0].Region,
-		BaseSize: baseSize,
-	}
-
-	var (
-		last          string
-		diskRulesZone *rules.Zone
-	)
-	for _, device := range inputData.Devices {
-		// create zone if it does not exist
-		if len(diskRules.Zones) == 0 || diskRules.Zones[len(diskRules.Zones)-1].ID != device.Zone {
-			diskRules.Zones = append(diskRules.Zones, rules.Zone{ID: device.Zone})
-		}
-
-		diskRulesZone = &diskRules.Zones[device.Zone-1]
-		// if the last IPAddressPort matches the current, there is another disk on the same note, just increase the count
-		if last != "" && last == device.IPAddressPort {
-			diskRulesZone.Nodes[len(diskRulesZone.Nodes)-1].Disks.Count += 1
-			continue
-		}
-		diskRulesZone.Nodes = append(diskRulesZone.Nodes, rules.Node{
-			IPPort: device.IPAddressPort,
-			Disks: rules.Disk{
-				Count:  1,
-				Size:   diskRules.BaseSize,
-				Weight: device.Weight,
-			},
-		})
-
-		last = device.IPAddressPort
-	}
+	diskRules := convert.Convert(inputData, baseSize)
 
 	dataYAML, err := yaml.Marshal(diskRules)
 	if err != nil {

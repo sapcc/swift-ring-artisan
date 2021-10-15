@@ -26,6 +26,7 @@ import (
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/convert"
+	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -77,14 +78,7 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(err.Error())
 	}
 
-	if outputFilename == "" {
-		fmt.Printf("%+v", string(dataYAML))
-	} else {
-		err := os.WriteFile(outputFilename, dataYAML, 0644)
-		if err != nil {
-			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", dataYAML, err.Error()))
-		}
-	}
+	misc.WriteToStdoutOrFile(dataYAML, outputFilename)
 
 	if err != nil {
 		os.Exit(1)

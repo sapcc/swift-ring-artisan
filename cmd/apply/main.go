@@ -26,6 +26,7 @@ import (
 	"os"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 	"github.com/spf13/cobra"
@@ -107,14 +108,7 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(err.Error())
 	}
 
-	if outputFilename == "" {
-		fmt.Printf("%+v", string(parsedDataOutput))
-	} else {
-		err := os.WriteFile(outputFilename, parsedDataOutput, 0644)
-		if err != nil {
-			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", outputFilename, err.Error()))
-		}
-	}
+	misc.WriteToStdoutOrFile(parsedDataOutput, outputFilename)
 
 	if err != nil {
 		os.Exit(1)

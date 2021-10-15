@@ -44,7 +44,7 @@ func TestParse(t *testing.T) {
 	var expected MetaData
 	yaml.Unmarshal(expectedFile, &expected)
 
-	metaData := ParseInput(input)
+	metaData := Input(input)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

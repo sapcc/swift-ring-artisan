@@ -26,6 +26,7 @@ import (
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 )
 
+// Convert converts parsed MetaData to DiskRules
 func Convert(inputData parse.MetaData, baseSize string) rules.DiskRules {
 	sort.Slice(inputData.Devices, func(i, j int) bool {
 		lhs := inputData.Devices[i]
@@ -57,7 +58,7 @@ func Convert(inputData parse.MetaData, baseSize string) rules.DiskRules {
 		diskRulesZone = &diskRules.Zones[device.Zone-1]
 		// if the last IPAddressPort matches the current, there is another disk on the same note, just increase the count
 		if last != "" && last == device.IPAddressPort {
-			diskRulesZone.Nodes[len(diskRulesZone.Nodes)-1].Disks.Count += 1
+			diskRulesZone.Nodes[len(diskRulesZone.Nodes)-1].Disks.Count++
 			continue
 		}
 		diskRulesZone.Nodes = append(diskRulesZone.Nodes, rules.Node{

@@ -100,8 +100,8 @@ type MetaData struct {
 	Devices []device
 }
 
-// ParseInput parses an input and return the data as MetData object
-func ParseInput(input io.Reader) MetaData {
+// Input parses an input and return the data as MetData object
+func Input(input io.Reader) MetaData {
 	var metaData MetaData
 
 	scanner := bufio.NewScanner(input)

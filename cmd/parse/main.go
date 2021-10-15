@@ -36,6 +36,7 @@ var (
 	outputFile   string
 )
 
+// AddCommandTo adds a command to cobra.Command
 func AddCommandTo(parent *cobra.Command) {
 	cmd := &cobra.Command{
 		Use:     "parse <file>",
@@ -68,7 +69,7 @@ func run(cmd *cobra.Command, args []string) {
 		input = os.Stdin
 	}
 
-	metaData := parse.ParseInput(input)
+	metaData := parse.Input(input)
 
 	var (
 		metaDataOutput []byte

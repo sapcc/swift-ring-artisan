@@ -39,6 +39,7 @@ var (
 	ruleFilename   string
 )
 
+// AddCommandTo adds a command to cobra.Command
 func AddCommandTo(parent *cobra.Command) {
 	cmd := &cobra.Command{
 		Use:     "apply -i <file> -r <file>",

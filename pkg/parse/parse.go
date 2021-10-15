@@ -102,88 +102,92 @@ type MetaData struct {
 
 // ParseInput parses an input and return the data as MetData object
 func ParseInput(input io.Reader) MetaData {
-	var (
-		metaData MetaData
-		// track if we processed all headers and then only match table entries
-		processedTableEntries bool
-	)
+	var metaData MetaData
+
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		line := scanner.Text()
 		logg.Debug(fmt.Sprintf("Processing line: %s\n", line))
 
-		if !processedTableEntries {
-			matches, _ := fileInfoRx.Groups(line)
-			if len(matches) > 0 {
-				metaData.FileName = matches["fileName"]
-				metaData.BuildVersion, _ = strconv.ParseUint(matches["buildVersion"], 10, 32)
-				metaData.ID = matches["id"]
-				continue
-			}
-
-			matches, _ = statsRx.Groups(line)
-			if len(matches) > 0 {
-				metaData.Partitions, _ = strconv.ParseUint(matches["partitions"], 10, 32)
-				metaData.Replicas, _ = strconv.ParseFloat(matches["replicas"], 32)
-				metaData.Regions, _ = strconv.ParseUint(matches["regions"], 10, 32)
-				metaData.Zones, _ = strconv.ParseUint(matches["zones"], 10, 32)
-				metaData.DeviceCount, _ = strconv.ParseUint(matches["deviceCount"], 10, 32)
-				metaData.Balance, _ = strconv.ParseFloat(matches["balance"], 32)
-				metaData.Dispersion, _ = strconv.ParseFloat(matches["dispersion"], 32)
-				continue
-			}
-
-			matches, _ = remainingTimeRx.Groups(line)
-			if len(matches) > 0 {
-				metaData.ReassignedCooldown, _ = strconv.ParseUint(matches["reassignedCooldown"], 10, 32)
-				metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"])
-				continue
-			}
-
-			matches, _ = overloadFactorRx.Groups(line)
-			if len(matches) > 0 {
-				metaData.OverloadFactorPercent, _ = strconv.ParseFloat(matches["percent"], 32)
-				metaData.OverloadFactorDezimal, _ = strconv.ParseFloat(matches["dezimal"], 32)
-				continue
-			}
-
-			// this line is purely informational but we need to match it anyway to not abort the process
-			if obsoleteRx.MatchString(line) {
-				continue
-			}
-
-			if tableHeaderRx.MatchString(line) {
-				processedTableEntries = true
-				continue
-			}
-
-			logg.Fatal(fmt.Sprintf("A header regex did not match the line: \"%s\"", line))
-		} else {
-			matches, _ := rowEntryRx.Groups(line)
-			if len(matches) > 0 {
-				id, _ := strconv.ParseUint(matches["id"], 10, 32)
-				region, _ := strconv.ParseUint(matches["region"], 10, 32)
-				zone, _ := strconv.ParseUint(matches["zone"], 10, 32)
-				weight, _ := strconv.ParseFloat(matches["weight"], 32)
-				partitions, _ := strconv.ParseUint(matches["partitions"], 10, 32)
-				balance, _ := strconv.ParseUint(matches["balance"], 10, 32)
-
-				metaData.Devices = append(metaData.Devices, device{
-					ID:                id,
-					Region:            region,
-					Zone:              zone,
-					IPAddressPort:     matches["ipAddressPort"],
-					ReplicationIPPort: matches["replicationIpPort"],
-					Name:              matches["name"],
-					Weight:            weight,
-					Partitions:        partitions,
-					Balance:           balance,
-				})
-				continue
-			}
-
-			logg.Fatal(fmt.Sprintf("The table entry regex did not match the line: %s", line))
+		matches, _ := fileInfoRx.Groups(line)
+		if len(matches) > 0 {
+			metaData.FileName = matches["fileName"]
+			// errors can be ignored because the regex matches digits (\d)
+			metaData.BuildVersion, _ = strconv.ParseUint(matches["buildVersion"], 10, 32)
+			metaData.ID = matches["id"]
+			continue
 		}
+
+		matches, _ = statsRx.Groups(line)
+		if len(matches) > 0 {
+			// errors can be ignored because the regex matches digits (\d)
+			metaData.Partitions, _ = strconv.ParseUint(matches["partitions"], 10, 32)
+			metaData.Replicas, _ = strconv.ParseFloat(matches["replicas"], 32)
+			metaData.Regions, _ = strconv.ParseUint(matches["regions"], 10, 32)
+			metaData.Zones, _ = strconv.ParseUint(matches["zones"], 10, 32)
+			metaData.DeviceCount, _ = strconv.ParseUint(matches["deviceCount"], 10, 32)
+			metaData.Balance, _ = strconv.ParseFloat(matches["balance"], 32)
+			metaData.Dispersion, _ = strconv.ParseFloat(matches["dispersion"], 32)
+			continue
+		}
+
+		matches, _ = remainingTimeRx.Groups(line)
+		if len(matches) > 0 {
+			// errors can be ignored because the regex matches digits (\d)
+			metaData.ReassignedCooldown, _ = strconv.ParseUint(matches["reassignedCooldown"], 10, 32)
+			metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"])
+			continue
+		}
+
+		matches, _ = overloadFactorRx.Groups(line)
+		if len(matches) > 0 {
+			// errors can be ignored because the regex matches digits (\d)
+			metaData.OverloadFactorPercent, _ = strconv.ParseFloat(matches["percent"], 32)
+			metaData.OverloadFactorDecimal, _ = strconv.ParseFloat(matches["decimal"], 32)
+			continue
+		}
+
+		// this line is purely informational but we need to match it anyway to not abort the process
+		if obsoleteRx.MatchString(line) {
+			continue
+		}
+
+		if tableHeaderRx.MatchString(line) {
+			break
+		}
+
+		logg.Fatal(fmt.Sprintf("A header regex did not match the line: \"%s\"", line))
+	}
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		logg.Debug(fmt.Sprintf("Processing line: %s\n", line))
+
+		matches, _ := rowEntryRx.Groups(line)
+		if len(matches) > 0 {
+			// errors can be ignored because the regex matches digits (\d)
+			id, _ := strconv.ParseUint(matches["id"], 10, 32)
+			region, _ := strconv.ParseUint(matches["region"], 10, 32)
+			zone, _ := strconv.ParseUint(matches["zone"], 10, 32)
+			weight, _ := strconv.ParseFloat(matches["weight"], 32)
+			partitions, _ := strconv.ParseUint(matches["partitions"], 10, 32)
+			balance, _ := strconv.ParseUint(matches["balance"], 10, 32)
+
+			metaData.Devices = append(metaData.Devices, device{
+				ID:                id,
+				Region:            region,
+				Zone:              zone,
+				IPAddressPort:     matches["ipAddressPort"],
+				ReplicationIPPort: matches["replicationIpPort"],
+				Name:              matches["name"],
+				Weight:            weight,
+				Partitions:        partitions,
+				Balance:           balance,
+			})
+			continue
+		}
+
+		logg.Fatal(fmt.Sprintf("The table entry regex did not match the line: %s", line))
 	}
 
 	err := scanner.Err()

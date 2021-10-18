@@ -6,7 +6,7 @@ binaries:
     installTo:   bin/
 
 coverageTest:
-  only: '/internal'
+  only: '/internal|/pkg'
 
 vendoring:
   enabled: true

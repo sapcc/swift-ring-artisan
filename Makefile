@@ -18,8 +18,8 @@ generate: build/swift-ring-artisan
 build-all: build/swift-ring-artisan
 
 GO_BUILDFLAGS = -mod vendor
-GO_LDFLAGS = 
-GO_TESTENV = 
+GO_LDFLAGS =
+GO_TESTENV =
 
 build/swift-ring-artisan: FORCE
 	go build $(GO_BUILDFLAGS) -ldflags '-s -w $(GO_LDFLAGS)' -o build/swift-ring-artisan .
@@ -41,7 +41,7 @@ GO_ALLFILES := $(addsuffix /*.go,$(patsubst $(shell go list .)%,.%,$(shell go li
 # which packages to test with "go test"
 GO_TESTPKGS := $(shell go list -f '{{if or .TestGoFiles .XTestGoFiles}}{{.ImportPath}}{{end}}' ./...)
 # which packages to measure coverage for
-GO_COVERPKGS := $(shell go list ./... | grep -E '/internal')
+GO_COVERPKGS := $(shell go list ./... | command grep -E '/internal|/pkg')
 # to get around weird Makefile syntax restrictions, we need variables containing a space and comma
 space := $(null) $(null)
 comma := ,

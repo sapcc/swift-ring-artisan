@@ -45,7 +45,7 @@ var remainingTimeRx = regroup.MustCompile(`^The minimum number of hours before a
 
 // regex to match the following line:
 // The overload factor is 0.00% (0.000000)
-var overloadFactorRx = regroup.MustCompile(`^The overload factor is (?P<percent>\d+\.\d+)% \((?P<decimal>\d+\.\d+\))$`)
+var overloadFactorRx = regroup.MustCompile(`^The overload factor is (?P<percent>\d+\.\d+)% \((?P<decimal>\d+\.\d+)\)$`)
 
 // regex to match the following line:
 // Ring file container.ring.gz is obsolete
@@ -70,7 +70,7 @@ type device struct {
 	Name              string
 	Weight            float64
 	Partitions        uint64
-	Balance           uint64
+	Balance           float64
 	//lint:ignore U1000 TODO
 	flags struct{} // TODO: figure out how the field looks like
 	//lint:ignore U1000 TODO

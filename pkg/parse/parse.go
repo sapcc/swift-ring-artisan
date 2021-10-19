@@ -24,11 +24,11 @@ import (
 	"fmt"
 	"io"
 	"regexp"
-	"strconv"
 	"time"
 
 	"github.com/oriser/regroup"
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 
 // regex to match the following line:
@@ -113,7 +113,7 @@ func Input(input io.Reader) MetaData {
 		if len(matches) > 0 {
 			metaData.FileName = matches["fileName"]
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.BuildVersion, _ = strconv.ParseUint(matches["buildVersion"], 10, 32)
+			metaData.BuildVersion = misc.ParseUint(matches["buildVersion"])
 			metaData.ID = matches["id"]
 			continue
 		}
@@ -121,20 +121,20 @@ func Input(input io.Reader) MetaData {
 		matches, _ = statsRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.Partitions, _ = strconv.ParseUint(matches["partitions"], 10, 32)
-			metaData.Replicas, _ = strconv.ParseFloat(matches["replicas"], 32)
-			metaData.Regions, _ = strconv.ParseUint(matches["regions"], 10, 32)
-			metaData.Zones, _ = strconv.ParseUint(matches["zones"], 10, 32)
-			metaData.DeviceCount, _ = strconv.ParseUint(matches["deviceCount"], 10, 32)
-			metaData.Balance, _ = strconv.ParseFloat(matches["balance"], 32)
-			metaData.Dispersion, _ = strconv.ParseFloat(matches["dispersion"], 32)
+			metaData.Partitions = misc.ParseUint(matches["partitions"])
+			metaData.Replicas = misc.ParseFloat(matches["replicas"])
+			metaData.Regions = misc.ParseUint(matches["regions"])
+			metaData.Zones = misc.ParseUint(matches["zones"])
+			metaData.DeviceCount = misc.ParseUint(matches["deviceCount"])
+			metaData.Balance = misc.ParseFloat(matches["balance"])
+			metaData.Dispersion = misc.ParseFloat(matches["dispersion"])
 			continue
 		}
 
 		matches, _ = remainingTimeRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.ReassignedCooldown, _ = strconv.ParseUint(matches["reassignedCooldown"], 10, 32)
+			metaData.ReassignedCooldown = misc.ParseUint(matches["reassignedCooldown"])
 			metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"])
 			continue
 		}
@@ -142,8 +142,8 @@ func Input(input io.Reader) MetaData {
 		matches, _ = overloadFactorRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.OverloadFactorPercent, _ = strconv.ParseFloat(matches["percent"], 32)
-			metaData.OverloadFactorDecimal, _ = strconv.ParseFloat(matches["decimal"], 32)
+			metaData.OverloadFactorPercent = misc.ParseFloat(matches["percent"])
+			metaData.OverloadFactorDecimal = misc.ParseFloat(matches["decimal"])
 			continue
 		}
 
@@ -166,23 +166,16 @@ func Input(input io.Reader) MetaData {
 		matches, _ := rowEntryRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
-			id, _ := strconv.ParseUint(matches["id"], 10, 32)
-			region, _ := strconv.ParseUint(matches["region"], 10, 32)
-			zone, _ := strconv.ParseUint(matches["zone"], 10, 32)
-			weight, _ := strconv.ParseFloat(matches["weight"], 32)
-			partitions, _ := strconv.ParseUint(matches["partitions"], 10, 32)
-			balance, _ := strconv.ParseUint(matches["balance"], 10, 32)
-
 			metaData.Devices = append(metaData.Devices, device{
-				ID:                id,
-				Region:            region,
-				Zone:              zone,
+				ID:                misc.ParseUint(matches["id"]),
+				Region:            misc.ParseUint(matches["region"]),
+				Zone:              misc.ParseUint(matches["zone"]),
 				IPAddressPort:     matches["ipAddressPort"],
 				ReplicationIPPort: matches["replicationIpPort"],
 				Name:              matches["name"],
-				Weight:            weight,
-				Partitions:        partitions,
-				Balance:           balance,
+				Weight:            misc.ParseFloat(matches["weight"]),
+				Partitions:        misc.ParseUint(matches["partitions"]),
+				Balance:           misc.ParseFloat(matches["balance"]),
 			})
 			continue
 		}

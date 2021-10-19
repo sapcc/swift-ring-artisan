@@ -31,14 +31,14 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	inputFile, err := ioutil.ReadFile("../../testing/swift-ring-builder-output.yaml")
+	inputFile, err := ioutil.ReadFile("../../testing/builder-output.yaml")
 	if err != nil {
 		logg.Fatal("Reading file failed: %s", err.Error())
 	}
 	var input parse.MetaData
 	yaml.Unmarshal(inputFile, &input)
 
-	expectedFile, err := ioutil.ReadFile("../../testing/swift-ring-artisan-rules.yaml")
+	expectedFile, err := ioutil.ReadFile("../../testing/artisan-rules.yaml")
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

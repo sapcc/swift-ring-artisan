@@ -94,8 +94,4 @@ func run(cmd *cobra.Command, args []string) {
 			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", outputFile, err.Error()))
 		}
 	}
-
-	if err != nil {
-		os.Exit(1)
-	}
 }

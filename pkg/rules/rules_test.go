@@ -29,7 +29,7 @@ import (
 
 func TestApplyRules1(t *testing.T) {
 	var input parse.MetaData
-	misc.ReadYAML("../../testing/builder-output.yaml", &input)
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
 	var rules DiskRules
 	misc.ReadYAML("../../testing/artisan-rules-changes-1.yaml", &rules)
@@ -45,7 +45,7 @@ func TestApplyRules1(t *testing.T) {
 
 func TestApplyRules2(t *testing.T) {
 	var input parse.MetaData
-	misc.ReadYAML("../../testing/builder-output.yaml", &input)
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
 	var rules DiskRules
 	misc.ReadYAML("../../testing/artisan-rules-changes-2.yaml", &rules)

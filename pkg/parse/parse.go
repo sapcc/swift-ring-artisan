@@ -59,7 +59,8 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone   ip address:
 //            0      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-01 100.00        512    0.00
 //            1      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-02 100.00        512    0.00
 //            2      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-03 100.00        512    0.00
-var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ipAddressPort>(?:\d+\.){3}\d+:\d+)\s+(?P<replicationIpPort>(?:\d+\.){3}\d+:\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>\d+\.\d+)\s*$`)
+//          111      1    1  10.46.14.44:6001    10.46.14.44:6001 swift-33 100.00         78   -0.98
+var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ipAddressPort>(?:\d+\.){3}\d+:\d+)\s+(?P<replicationIpPort>(?:\d+\.){3}\d+:\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*$`)
 
 type device struct {
 	ID                uint64

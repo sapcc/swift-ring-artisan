@@ -29,15 +29,29 @@ import (
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 
-func TestParse(t *testing.T) {
-	input, err := os.Open("../../testing/builder-output.txt")
+func TestParse1(t *testing.T) {
+	input, err := os.Open("../../testing/builder-output-1.txt")
 	if err != nil {
 		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
 	}
 	defer input.Close()
 
 	var expected MetaData
-	misc.ReadYAML("../../testing/builder-output.yaml", &expected)
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &expected)
+
+	metaData := Input(input)
+	assert.DeepEqual(t, "parsing", metaData, expected)
+}
+
+func TestParse2(t *testing.T) {
+	input, err := os.Open("../../testing/builder-output-2.txt")
+	if err != nil {
+		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
+	}
+	defer input.Close()
+
+	var expected MetaData
+	misc.ReadYAML("../../testing/builder-output-2.yaml", &expected)
 
 	metaData := Input(input)
 	assert.DeepEqual(t, "parsing", metaData, expected)

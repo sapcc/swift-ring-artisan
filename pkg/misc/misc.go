@@ -21,9 +21,11 @@ package misc
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	"github.com/sapcc/go-bits/logg"
+	"gopkg.in/yaml.v2"
 )
 
 // WriteToStdoutOrFile writes a bytes object to stdout if filename is empty or to the file
@@ -36,4 +38,12 @@ func WriteToStdoutOrFile(data []byte, filename string) {
 			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", data, err.Error()))
 		}
 	}
+}
+
+func ReadYAML(filename string, variable interface{}) {
+	ruleFile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		logg.Fatal(err.Error())
+	}
+	yaml.Unmarshal(ruleFile, variable)
 }

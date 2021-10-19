@@ -20,7 +20,6 @@
 package applycmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -37,6 +36,7 @@ var (
 	outputFormat   string
 	inputFilename  string
 	outputFilename string
+	ringFilename   string
 	ruleFilename   string
 )
 
@@ -53,6 +53,7 @@ func AddCommandTo(parent *cobra.Command) {
 	cmd.PersistentFlags().StringVarP(&inputFilename, "input", "i", "", "Input file from where the parsed data should be read.")
 	cmd.PersistentFlags().StringVarP(&outputFormat, "format", "f", "", "Output format. Can be either json or yaml.")
 	cmd.PersistentFlags().StringVarP(&outputFilename, "output", "o", "", "Output file to write the parsed data to.")
+	cmd.PersistentFlags().StringVar(&ringFilename, "ring", "ring", "Ring file to apply the changes to.")
 	cmd.PersistentFlags().StringVarP(&ruleFilename, "rule", "r", "", "Rule file to apply to the input data.")
 	parent.AddCommand(cmd)
 }
@@ -90,23 +91,13 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
 	}
 
-	parsedData := rules.ApplyRules(inputData, ruleData)
-	if err != nil {
-		logg.Fatal(err.Error())
+	if ringFilename == "" {
+		logg.Fatal("--ring needs to be supplied and cannot be empty.")
 	}
-
-	var parsedDataOutput []byte
-	// default to yaml
-	if outputFormat == "" || outputFormat == "yaml" {
-		parsedDataOutput, err = yaml.Marshal(parsedData)
-	} else if outputFormat == "json" {
-		parsedDataOutput, err = json.Marshal(parsedData)
+	commandQueue := rules.ApplyRules(inputData, ruleData, ringFilename)
+	for _, command := range commandQueue {
+		misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
 	}
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
-
-	misc.WriteToStdoutOrFile(parsedDataOutput, outputFilename)
 
 	if err != nil {
 		os.Exit(1)

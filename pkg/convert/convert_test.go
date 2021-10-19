@@ -33,7 +33,7 @@ import (
 func TestParse(t *testing.T) {
 	inputFile, err := ioutil.ReadFile("../../testing/builder-output.yaml")
 	if err != nil {
-		logg.Fatal("Reading file failed: %s", err.Error())
+		logg.Fatal(err.Error())
 	}
 	var input parse.MetaData
 	yaml.Unmarshal(inputFile, &input)

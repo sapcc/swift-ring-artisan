@@ -66,7 +66,7 @@ func Convert(inputData parse.MetaData, baseSize string) rules.DiskRules {
 			Disks: rules.Disk{
 				Count:  1,
 				Size:   diskRules.BaseSize,
-				Weight: device.Weight,
+				Weight: &device.Weight,
 			},
 		})
 

@@ -13,7 +13,7 @@ endif
 default: build-all
 
 generate: build/swift-ring-artisan
-	./build/swift-ring-artisan parse testing/swift-ring-builder-output.txt -o testing/swift-ring-builder-output.yaml
+	./build/swift-ring-artisan parse testing/builder-output.txt -o testing/builder-output.yaml
 
 build-all: build/swift-ring-artisan
 

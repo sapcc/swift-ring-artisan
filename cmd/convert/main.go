@@ -20,10 +20,6 @@
 package convertcmd
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
-
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/convert"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
@@ -60,16 +56,8 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal("--input needs to be supplied and cannot be empty.")
 	}
 
-	inputContent, err := ioutil.ReadFile(inputFilename)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
-
 	var inputData parse.MetaData
-	err = yaml.Unmarshal(inputContent, &inputData)
-	if err != nil {
-		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
-	}
+	misc.ReadYAML(inputFilename, &inputData)
 
 	diskRules := convert.Convert(inputData, baseSize)
 
@@ -77,10 +65,5 @@ func run(cmd *cobra.Command, args []string) {
 	if err != nil {
 		logg.Fatal(err.Error())
 	}
-
 	misc.WriteToStdoutOrFile(dataYAML, outputFilename)
-
-	if err != nil {
-		os.Exit(1)
-	}
 }

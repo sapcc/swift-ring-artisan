@@ -20,16 +20,11 @@
 package applycmd
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
-
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -63,33 +58,17 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
 
-	// read and parse input file
 	if inputFilename == "" {
 		logg.Fatal("--input needs to be supplied and cannot be empty.")
 	}
-	inputContent, err := ioutil.ReadFile(inputFilename)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
 	var inputData parse.MetaData
-	err = yaml.Unmarshal(inputContent, &inputData)
-	if err != nil {
-		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
-	}
+	misc.ReadYAML(inputFilename, &inputData)
 
-	// read and parse rule file
 	if ruleFilename == "" {
 		logg.Fatal("--rule needs to be supplied and cannot be empty.")
 	}
-	ruleContent, err := ioutil.ReadFile(ruleFilename)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
 	var ruleData rules.DiskRules
-	err = yaml.Unmarshal(ruleContent, &ruleData)
-	if err != nil {
-		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
-	}
+	misc.ReadYAML(ruleFilename, &ruleData)
 
 	if ringFilename == "" {
 		logg.Fatal("--ring needs to be supplied and cannot be empty.")
@@ -97,9 +76,5 @@ func run(cmd *cobra.Command, args []string) {
 	commandQueue := rules.ApplyRules(inputData, ruleData, ringFilename)
 	for _, command := range commandQueue {
 		misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
-	}
-
-	if err != nil {
-		os.Exit(1)
 	}
 }

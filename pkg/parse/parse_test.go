@@ -21,13 +21,12 @@ package parse
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"testing"
 
 	"github.com/sapcc/go-bits/assert"
 	"github.com/sapcc/go-bits/logg"
-	"gopkg.in/yaml.v2"
+	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 
 func TestParse(t *testing.T) {
@@ -37,17 +36,9 @@ func TestParse(t *testing.T) {
 	}
 	defer input.Close()
 
-	expectedFile, err := ioutil.ReadFile("../../testing/builder-output.yaml")
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
 	var expected MetaData
-	yaml.Unmarshal(expectedFile, &expected)
+	misc.ReadYAML("../../testing/builder-output.yaml", &expected)
 
 	metaData := Input(input)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
-
 	assert.DeepEqual(t, "parsing", metaData, expected)
 }

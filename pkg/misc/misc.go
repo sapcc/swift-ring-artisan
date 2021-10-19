@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 
 	"github.com/sapcc/go-bits/logg"
 	"gopkg.in/yaml.v2"
@@ -49,4 +50,20 @@ func ReadYAML(filename string, variable interface{}) {
 	if err != nil {
 		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
 	}
+}
+
+func ParseUint(string string) uint64 {
+	uint, err := strconv.ParseUint(string, 10, 32)
+	if err != nil {
+		logg.Fatal(err.Error())
+	}
+	return uint
+}
+
+func ParseFloat(string string) float64 {
+	float, err := strconv.ParseFloat(string, 32)
+	if err != nil {
+		logg.Fatal(err.Error())
+	}
+	return float
 }

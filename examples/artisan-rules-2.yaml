@@ -1,0 +1,27 @@
+base_size: 6TB
+region: 1
+zones:
+- id: 1
+  nodes:
+  - ip_port: 10.46.14.44:6001
+    disks: &40-disks
+      count: 40
+      size: 6TB
+      weight: 100
+  - ip_port: 10.46.14.52:6001
+    disks: *40-disks
+- id: 2
+  nodes:
+  - ip_port: 10.46.14.116:6001
+    disks: *40-disks
+- id: 3
+  nodes:
+  - ip_port: 10.46.14.204:6001
+    disks: &12-disks
+      count: 12
+      size: 6TB
+      weight: 100
+  - ip_port: 10.46.14.212:6001
+    disks: *12-disks
+  - ip_port: 10.46.14.220:6001
+    disks: *12-disks

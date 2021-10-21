@@ -20,26 +20,12 @@
 package convert
 
 import (
-	"sort"
-
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 )
 
 // Convert converts parsed MetaData to DiskRules
 func Convert(inputData parse.MetaData, baseSize string) rules.DiskRules {
-	sort.Slice(inputData.Devices, func(i, j int) bool {
-		lhs := inputData.Devices[i]
-		rhs := inputData.Devices[j]
-		if lhs.Zone != rhs.Zone {
-			return lhs.Zone < rhs.Zone
-		}
-		if lhs.IPAddressPort != rhs.IPAddressPort {
-			return lhs.IPAddressPort < rhs.IPAddressPort
-		}
-		return lhs.Name < rhs.Name
-	})
-
 	diskRules := rules.DiskRules{
 		Region:   inputData.Devices[0].Region,
 		BaseSize: baseSize,

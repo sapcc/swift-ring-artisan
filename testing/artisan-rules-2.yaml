@@ -4,38 +4,34 @@ zones:
 - id: 1
   nodes:
   - ip_port: 10.46.14.44:6001
-    disks: &40-disks
+    disks:
       count: 40
       size: 6TB
       weight: 100
   - ip_port: 10.46.14.52:6001
     disks:
-      count: 20
-      size: 12TB
-  - ip_port: 10.46.14.52:6001
-    disks:
-      count: 20
+      count: 40
       size: 6TB
-      weight: 150
+      weight: 100
 - id: 2
   nodes:
   - ip_port: 10.46.14.116:6001
     disks:
-      count: 10
-      weight: 150
-  - ip_port: 10.46.14.116:6001
-    disks:
-      count: 30
-      size: 10TB
+      count: 40
+      size: 6TB
+      weight: 100
 - id: 3
   nodes:
   - ip_port: 10.46.14.204:6001
-    disks: &12-disks
+    disks:
       count: 12
       size: 6TB
       weight: 100
   - ip_port: 10.46.14.212:6001
-    disks: *12-disks
+    disks:
+      count: 12
+      size: 6TB
+      weight: 100
   - ip_port: 10.46.14.220:6001
     disks:
       count: 12

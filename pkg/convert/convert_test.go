@@ -28,12 +28,23 @@ import (
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 )
 
-func TestParse(t *testing.T) {
+func TestParse1(t *testing.T) {
 	var input parse.MetaData
-	misc.ReadYAML("../../testing/builder-output.yaml", &input)
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
 	var expected rules.DiskRules
-	misc.ReadYAML("../../testing/artisan-rules.yaml", &expected)
+	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &expected)
+
+	metaData := Convert(input, "6TB")
+	assert.DeepEqual(t, "parsing", metaData, expected)
+}
+
+func TestParse2(t *testing.T) {
+	var input parse.MetaData
+	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
+
+	var expected rules.DiskRules
+	misc.ReadYAML("../../testing/artisan-rules-2.yaml", &expected)
 
 	metaData := Convert(input, "6TB")
 	assert.DeepEqual(t, "parsing", metaData, expected)

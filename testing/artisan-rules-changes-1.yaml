@@ -11,5 +11,5 @@ zones:
   - ip_port: 10.114.1.203:6001
     disks:
       count: 3
-      size: 6TB
+      size: "6TB"
       weight: 166

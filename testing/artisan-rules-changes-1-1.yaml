@@ -4,9 +4,10 @@ zones:
 - id: 1
   nodes:
   - ip_port: 10.114.1.202:6001
-    disks: &disk
+    disks:
       count: 3
-      size: 6TB
       weight: 100
   - ip_port: 10.114.1.203:6001
-    disks: *disk
+    disks:
+      count: 3
+      size: 10TB

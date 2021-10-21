@@ -65,18 +65,25 @@ func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename strin
 	}
 
 	var commandQueue []string
-
+	counter := 0
 	for i := range ruleData.Zones {
 		zone := ruleData.Zones[i]
-		counter := 0
+		if zone.ID != uint64(i+1) {
+			logg.Fatal("Zone ID mismatch between parsed data and rule file.")
+		}
+
 		for j := range zone.Nodes {
 			node := zone.Nodes[j]
 
 			for k := 0; k < int(node.Disks.Count); k++ {
-				counter++
 				diskRules := node.Disks
-				diskData := inputData.Devices[counter-1]
+				diskData := inputData.Devices[counter]
 				logg.Debug(fmt.Sprintf("Applying rule %+v to disk number %d: %+v", diskRules, counter, diskData))
+
+				if node.IPPort != diskData.IPAddressPort {
+					logg.Fatal(fmt.Sprintf("The IP port combination of the rule number %d does not match the by id sorted parsed one: %s != %s",
+						counter, node.IPPort, diskData.IPAddressPort))
+				}
 
 				if diskRules.Weight == nil && diskRules.Size != "" {
 					matches, _ := storageRx.Groups(diskRules.Size)
@@ -105,6 +112,7 @@ func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename strin
 						"swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %s --device %s --weight %g %g",
 						ringFilename, diskData.Region, diskData.Zone, ipAddressPort[0], ipAddressPort[1], diskData.Name, diskData.Weight, *diskRules.Weight))
 				}
+				counter++
 			}
 		}
 	}

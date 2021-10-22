@@ -20,6 +20,12 @@
 package applycmd
 
 import (
+	"bytes"
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
@@ -28,11 +34,13 @@ import (
 )
 
 var (
-	outputFormat   string
-	inputFilename  string
-	outputFilename string
-	ringFilename   string
-	ruleFilename   string
+	checkChanges    bool
+	executeCommands bool
+	inputFilename   string
+	outputFilename  string
+	outputFormat    string
+	builderFilename string
+	ruleFilename    string
 )
 
 // AddCommandTo adds a command to cobra.Command
@@ -45,10 +53,12 @@ func AddCommandTo(parent *cobra.Command) {
 		Rebalance needs to be done manually afterwards.`,
 		Run: run,
 	}
+	cmd.PersistentFlags().BoolVarP(&checkChanges, "check", "c", false, "Wether to check if the rule file matches the ring. If it does not match the exit code is 1.")
+	cmd.PersistentFlags().BoolVarP(&executeCommands, "execute", "e", false, "Wether to execute the generated commands.")
 	cmd.PersistentFlags().StringVarP(&inputFilename, "input", "i", "", "Input file from where the parsed data should be read.")
 	cmd.PersistentFlags().StringVarP(&outputFormat, "format", "f", "", "Output format. Can be either json or yaml.")
 	cmd.PersistentFlags().StringVarP(&outputFilename, "output", "o", "", "Output file to write the parsed data to.")
-	cmd.PersistentFlags().StringVar(&ringFilename, "ring", "ring", "Ring file to apply the changes to.")
+	cmd.PersistentFlags().StringVarP(&builderFilename, "builder", "b", "", "Builder file to apply the changes to.")
 	cmd.PersistentFlags().StringVarP(&ruleFilename, "rule", "r", "", "Rule file to apply to the input data.")
 	parent.AddCommand(cmd)
 }
@@ -58,11 +68,19 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
 
-	if inputFilename == "" {
-		logg.Fatal("--input needs to be supplied and cannot be empty.")
-	}
 	var inputData parse.MetaData
-	misc.ReadYAML(inputFilename, &inputData)
+	if inputFilename == "" && builderFilename != "" {
+		cmd := exec.Command("swift-ring-builder", builderFilename)
+		stdout, err := cmd.Output()
+		if err != nil {
+			logg.Fatal(err.Error())
+		}
+		inputData = parse.Input(bytes.NewReader(stdout))
+	} else if inputFilename != "" {
+		misc.ReadYAML(inputFilename, &inputData)
+	} else {
+		logg.Fatal("Either --input or --builder needs to be set.")
+	}
 
 	if ruleFilename == "" {
 		logg.Fatal("--rule needs to be supplied and cannot be empty.")
@@ -70,11 +88,31 @@ func run(cmd *cobra.Command, args []string) {
 	var ruleData rules.DiskRules
 	misc.ReadYAML(ruleFilename, &ruleData)
 
-	if ringFilename == "" {
+
+
+	if (checkChanges || executeCommands) && builderFilename == "" {
 		logg.Fatal("--ring needs to be supplied and cannot be empty.")
 	}
-	commandQueue := rules.ApplyRules(inputData, ruleData, ringFilename)
+	commandQueue := rules.ApplyRules(inputData, ruleData, builderFilename)
+	if checkChanges {
+		if len(commandQueue) != 0 {
+			os.Exit(1)
+		} else {
+			os.Exit(0)
+		}
+	}
+
 	for _, command := range commandQueue {
-		misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+		if executeCommands {
+			args := strings.Split(command, " ")
+			cmd := exec.Command(args[0], args[1:]...)
+			stdout, err := cmd.Output()
+			if err != nil {
+				logg.Fatal(fmt.Sprintf("Command \"%s\" failed: %v", command, err.Error()))
+			}
+			logg.Info(string(stdout))
+		} else {
+			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+		}
 	}
 }

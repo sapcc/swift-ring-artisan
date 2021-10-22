@@ -88,8 +88,6 @@ func run(cmd *cobra.Command, args []string) {
 	var ruleData rules.DiskRules
 	misc.ReadYAML(ruleFilename, &ruleData)
 
-
-
 	if (checkChanges || executeCommands) && builderFilename == "" {
 		logg.Fatal("--ring needs to be supplied and cannot be empty.")
 	}

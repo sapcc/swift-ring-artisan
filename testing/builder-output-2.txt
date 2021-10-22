@@ -1,4 +1,4 @@
-container.builder, build version 1246, id 304a06d5435f4e0eb90c1327a1712209
+../container.builder, build version 1246, id 304a06d5435f4e0eb90c1327a1712209
 4096 partitions, 3.000000 replicas, 1 regions, 3 zones, 156 devices, 1.56 balance, 17.97 dispersion
 The minimum number of hours before a partition can be reassigned is 24 (0:00:00 remaining)
 The overload factor is 0.00% (0.000000)

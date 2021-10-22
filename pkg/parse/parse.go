@@ -33,7 +33,7 @@ import (
 
 // regex to match the following line:
 // container.builder, build version 7, id 024e79c994c643d09eb045d488dafb94
-var fileInfoRx = regroup.MustCompile(`^(?P<fileName>\w+\.builder), build version (?P<buildVersion>\d+), id (?P<id>[\d\w]{32})$`)
+var fileInfoRx = regroup.MustCompile(`^(?:[\w\/\.-]+\/)?(?P<fileName>\w+\.builder), build version (?P<buildVersion>\d+), id (?P<id>[\d\w]{32})$`)
 
 // regex to match the following line:
 // 1024 partitions, 3.000000 replicas, 1 regions, 1 zones, 6 devices, 0.00 balance, 0.00 dispersion
@@ -49,7 +49,7 @@ var overloadFactorRx = regroup.MustCompile(`^The overload factor is (?P<percent>
 
 // regex to match the following line:
 // Ring file container.ring.gz is obsolete
-var obsoleteRx = regexp.MustCompile(`^Ring file \w+\.ring\.gz is obsolete$`)
+var obsoleteRx = regexp.MustCompile(`^Ring file (?:[\w\/\.-]+\/)?\w+\.ring\.gz is obsolete$`)
 
 // regex to match the following line:
 // Devices:   id region zone   ip address:port replication ip:port  name weight partitions balance flags meta

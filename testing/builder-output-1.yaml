@@ -16,8 +16,10 @@ devices:
 - id: 0
   region: 1
   zone: 1
-  ip_address_port: 10.114.1.202:6001
-  replication_ip_port: 10.114.1.202:6001
+  ip: 10.114.1.202
+  port: 6001
+  replication_ip: 10.114.1.202
+  replication_port: 6001
   name: swift-01
   weight: 100
   partitions: 512
@@ -25,8 +27,10 @@ devices:
 - id: 1
   region: 1
   zone: 1
-  ip_address_port: 10.114.1.202:6001
-  replication_ip_port: 10.114.1.202:6001
+  ip: 10.114.1.202
+  port: 6001
+  replication_ip: 10.114.1.202
+  replication_port: 6001
   name: swift-02
   weight: 100
   partitions: 512
@@ -34,8 +38,10 @@ devices:
 - id: 2
   region: 1
   zone: 1
-  ip_address_port: 10.114.1.202:6001
-  replication_ip_port: 10.114.1.202:6001
+  ip: 10.114.1.202
+  port: 6001
+  replication_ip: 10.114.1.202
+  replication_port: 6001
   name: swift-03
   weight: 100
   partitions: 512
@@ -43,8 +49,10 @@ devices:
 - id: 3
   region: 1
   zone: 1
-  ip_address_port: 10.114.1.203:6001
-  replication_ip_port: 10.114.1.203:6001
+  ip: 10.114.1.203
+  port: 6001
+  replication_ip: 10.114.1.203
+  replication_port: 6001
   name: swift-01
   weight: 100
   partitions: 512
@@ -52,8 +60,10 @@ devices:
 - id: 4
   region: 1
   zone: 1
-  ip_address_port: 10.114.1.203:6001
-  replication_ip_port: 10.114.1.203:6001
+  ip: 10.114.1.203
+  port: 6001
+  replication_ip: 10.114.1.203
+  replication_port: 6001
   name: swift-02
   weight: 100
   partitions: 512
@@ -61,8 +71,10 @@ devices:
 - id: 5
   region: 1
   zone: 1
-  ip_address_port: 10.114.1.203:6001
-  replication_ip_port: 10.114.1.203:6001
+  ip: 10.114.1.203
+  port: 6001
+  replication_ip: 10.114.1.203
+  replication_port: 6001
   name: swift-03
   weight: 100
   partitions: 512

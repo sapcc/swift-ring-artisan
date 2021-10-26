@@ -59,18 +59,20 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone   ip address:
 //            1      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-02 100.00        512    0.00
 //            2      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-03 100.00        512    0.00
 //          111      1    1  10.46.14.44:6001    10.46.14.44:6001 swift-33 100.00         78   -0.98
-var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ipAddressPort>(?:\d+\.){3}\d+:\d+)\s+(?P<replicationIpPort>(?:\d+\.){3}\d+:\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*$`)
+var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*$`)
 
-type device struct {
-	ID                uint64
-	Region            uint64
-	Zone              uint64
-	IPAddressPort     string `yaml:"ip_address_port"`
-	ReplicationIPPort string `yaml:"replication_ip_port"`
-	Name              string
-	Weight            float64
-	Partitions        uint64
-	Balance           float64
+type Device struct {
+	ID              uint64
+	Region          uint64
+	Zone            uint64
+	IP              string // TODO: remove
+	Port            uint64
+	ReplicationIP   string `yaml:"replication_ip" mapstructure:"replication_ip"`
+	ReplicationPort uint64 `yaml:"replication_port" mapstructure:"replication_port"`
+	Name            string `mapstructure:"device"` // TODO: rename to Device?
+	Weight          float64
+	Partitions      uint64
+	Balance         float64
 	//lint:ignore U1000 TODO
 	flags struct{} // TODO: figure out how the field looks like
 	//lint:ignore U1000 TODO
@@ -97,12 +99,13 @@ type MetaData struct {
 	OverloadFactorPercent float64 `yaml:"overload_factor_Percent"`
 	OverloadFactorDecimal float64 `yaml:"overload_factor_decimal"`
 
-	Devices []device
+	Devices []Device
 }
 
 // Input parses an input and return the data as MetData object
 func Input(input io.Reader) MetaData {
 	var metaData MetaData
+	// metaData.Devices = make(map[string]Device)
 
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
@@ -166,16 +169,18 @@ func Input(input io.Reader) MetaData {
 		matches, _ := rowEntryRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.Devices = append(metaData.Devices, device{
-				ID:                misc.ParseUint(matches["id"]),
-				Region:            misc.ParseUint(matches["region"]),
-				Zone:              misc.ParseUint(matches["zone"]),
-				IPAddressPort:     matches["ipAddressPort"],
-				ReplicationIPPort: matches["replicationIpPort"],
-				Name:              matches["name"],
-				Weight:            misc.ParseFloat(matches["weight"]),
-				Partitions:        misc.ParseUint(matches["partitions"]),
-				Balance:           misc.ParseFloat(matches["balance"]),
+			metaData.Devices = append(metaData.Devices, Device{
+				ID:              misc.ParseUint(matches["id"]),
+				Region:          misc.ParseUint(matches["region"]),
+				Zone:            misc.ParseUint(matches["zone"]),
+				IP:              matches["ip"],
+				Port:            misc.ParseUint(matches["port"]),
+				ReplicationIP:   matches["replicationIp"],
+				ReplicationPort: misc.ParseUint(matches["replicationPort"]),
+				Name:            matches["name"],
+				Weight:          misc.ParseFloat(matches["weight"]),
+				Partitions:      misc.ParseUint(matches["partitions"]),
+				Balance:         misc.ParseFloat(matches["balance"]),
 			})
 			continue
 		}

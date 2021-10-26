@@ -24,12 +24,15 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"reflect"
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
+	"github.com/sapcc/swift-ring-artisan/pkg/pickler"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/spf13/cobra"
 )
 
@@ -70,12 +73,57 @@ func run(cmd *cobra.Command, args []string) {
 
 	var inputData parse.MetaData
 	if inputFilename == "" && builderFilename != "" {
-		cmd := exec.Command("swift-ring-builder", builderFilename)
-		stdout, err := cmd.Output()
-		if err != nil {
+		// // generate with ./unpickle.sh
+		// cmd := exec.Command("python3", "-c", "'import json;import pickle;import sys;d=pickle.load(open(sys.argv[-1],\"rb\"));d[\"_dispersion_graph\"]=None;d[\"_replica2part2dev\"]=None;d[\"_last_part_moves\"]=None;print(json.dumps(d));'", builderFilename)
+		// stdout, err := cmd.Output()
+		// logg.Info("%s %s", cmd, string(stdout))
+		// if err == exec.ErrNotFound {
+		// 	logg.Fatal("Please install python3 to decode the pickle file.")
+		// } else if err != nil {
+		// 	logg.Fatal(err.Error())
+		// }
+
+		// var pickleData PickleData
+		// decoder := json.NewDecoder(bytes.NewReader(stdout))
+		// decoder.DisallowUnknownFields()
+		// err = decoder.Decode(&pickleData)
+		// if err != nil {
+		// 	logg.Fatal(err.Error())
+		// }
+
+		pickleData := pickler.DecodeBuilderFile(builderFilename)
+
+		// optional compare pickle parser with cli parser
+		cmd := exec.Command("swift-ring-builder")
+		err := cmd.Run()
+		if err == exec.ErrNotFound {
+			logg.Debug("Did not find swift-ring-builder, skipping consistency check")
+		} else if err == nil {
+			cmd := exec.Command("swift-ring-builder", builderFilename)
+			stdout, err := cmd.Output()
+			if err != nil {
+				logg.Fatal(err.Error())
+			}
+			inputData = parse.Input(bytes.NewReader(stdout))
+
+			equal := reflect.DeepEqual(inputData, pickleData)
+			if !equal {
+				dmp := diffmatchpatch.New()
+				diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", inputData), fmt.Sprintf("%+v\n", pickleData), false)
+				logg.Info("Pickle parsed output and swift-ring-builder output are not equal. What is going on here?!")
+				logg.Fatal(dmp.DiffPrettyText(diffs))
+			}
+		} else {
 			logg.Fatal(err.Error())
 		}
-		inputData = parse.Input(bytes.NewReader(stdout))
+
+		inputData = parse.MetaData{
+			ID:         pickleData.ID,
+			Replicas:   pickleData.Replicas,
+			Regions:    pickleData.Devs[0].Region, // FIXME: make multi region aware
+			Dispersion: pickleData.Dispersion,
+			Devices:    pickleData.Devs,
+		}
 	} else if inputFilename != "" {
 		misc.ReadYAML(inputFilename, &inputData)
 	} else {

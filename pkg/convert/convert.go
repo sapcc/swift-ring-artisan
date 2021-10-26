@@ -25,10 +25,11 @@ import (
 )
 
 // Convert converts parsed MetaData to DiskRules
-func Convert(inputData parse.MetaData, baseSize string) rules.DiskRules {
+func Convert(inputData parse.MetaData, basePort uint64, baseSize float64) rules.DiskRules {
 	diskRules := rules.DiskRules{
-		Region:   inputData.Devices[0].Region,
-		BaseSize: baseSize,
+		Region:     1, // FIXME: make multi region aware
+		BasePort:   basePort,
+		BaseSizeTB: baseSize,
 	}
 
 	var (
@@ -37,26 +38,27 @@ func Convert(inputData parse.MetaData, baseSize string) rules.DiskRules {
 	)
 	for _, device := range inputData.Devices {
 		// create zone if it does not exist
-		if len(diskRules.Zones) == 0 || diskRules.Zones[len(diskRules.Zones)-1].ID != device.Zone {
-			diskRules.Zones = append(diskRules.Zones, rules.Zone{ID: device.Zone})
+		if len(diskRules.Zones) == 0 || diskRules.Zones[len(diskRules.Zones)-1].Zone != device.Zone {
+			diskRules.Zones = append(diskRules.Zones, rules.Zone{Zone: device.Zone})
 		}
 
 		diskRulesZone = &diskRules.Zones[device.Zone-1]
 		// if the last IPAddressPort matches the current, there is another disk on the same note, just increase the count
-		if last != "" && last == device.IPAddressPort {
-			diskRulesZone.Nodes[len(diskRulesZone.Nodes)-1].Disks.Count++
+		if last != "" && last == device.IP {
+			node := diskRulesZone.Nodes[device.IP]
+			node.DiskCount++
+			diskRulesZone.Nodes[device.IP] = node
 			continue
 		}
-		diskRulesZone.Nodes = append(diskRulesZone.Nodes, rules.Node{
-			IPPort: device.IPAddressPort,
-			Disks: rules.Disk{
-				Count:  1,
-				Size:   diskRules.BaseSize,
-				Weight: &device.Weight,
-			},
-		})
+		if diskRulesZone.Nodes == nil {
+			diskRulesZone.Nodes = make(map[string]rules.Node)
+		}
+		diskRulesZone.Nodes[device.IP] = rules.Node{
+			DiskCount: 1,
+			Weight:    &device.Weight,
+		}
 
-		last = device.IPAddressPort
+		last = device.IP
 	}
 
 	return diskRules

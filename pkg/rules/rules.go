@@ -21,46 +21,37 @@ package rules
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
+	"math"
 
-	"github.com/oriser/regroup"
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 )
 
-// Disk properties
-type Disk struct {
-	Count  uint64
-	Size   string
-	Weight *float64 `yaml:"weight,omitempty"`
-}
-
 // Node is a server containing disks
 type Node struct {
-	IPPort string   `yaml:"ip_port"`
-	Meta   struct{} `yaml:"meta,omitempty"` // TODO: figure out how the field looks like
-	Disks  Disk
+	Port       uint64   `yaml:"port,omitempty"`
+	Meta       struct{} `yaml:"meta,omitempty"` // TODO: figure out how the field looks like
+	DiskCount  uint64   `yaml:"disk_count"`
+	DiskSizeTB float64  `yaml:"disk_size_tb,omitempty"`
+	Weight     *float64 `yaml:"weight,omitempty"`
 }
 
 // Zone contains multiple nodes
 type Zone struct {
-	ID    uint64
-	Nodes []Node
+	Zone  uint64
+	Nodes map[string]Node
 }
 
 // DiskRules containing the rules for a region, multiple Zones and dozzens Nodes
 type DiskRules struct {
-	BaseSize string `yaml:"base_size"`
-	Region   uint64
-	Zones    []Zone
+	BaseSizeTB float64 `yaml:"base_size_tb"`
+	BasePort   uint64  `yaml:"base_port"`
+	Region     uint64
+	Zones      []Zone
 }
-
-var storageRx = regroup.MustCompile(`(?P<size>\d+)(?P<unit>\w+)`)
 
 // ApplyRules to parsed MetaData
 func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename string) []string {
-
 	if inputData.Regions == 0 {
 		logg.Fatal("Regions needs to be set.")
 	} else if ruleData.Region != inputData.Regions || inputData.Regions != 1 {
@@ -68,54 +59,49 @@ func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename strin
 	}
 
 	var commandQueue []string
-	counter := 0
-	for i := range ruleData.Zones {
-		zone := ruleData.Zones[i]
-		if zone.ID != uint64(i+1) {
+	for i, zone := range ruleData.Zones {
+		if zone.Zone != uint64(i+1) {
 			logg.Fatal("Zone ID mismatch between parsed data and rule file.")
 		}
 
-		for j := range zone.Nodes {
-			node := zone.Nodes[j]
-
-			for k := 0; k < int(node.Disks.Count); k++ {
-				diskRules := node.Disks
-				diskData := inputData.Devices[counter]
-				logg.Debug("Applying rule %+v to disk number %d: %+v", diskRules, counter, diskData)
-
-				if node.IPPort != diskData.IPAddressPort {
-					logg.Fatal("The IP port combination of the rule number %d does not match the by id sorted parsed one: %s != %s",
-						counter, node.IPPort, diskData.IPAddressPort)
-				}
-
-				if diskRules.Weight == nil && diskRules.Size != "" {
-					matches, _ := storageRx.Groups(diskRules.Size)
-					if len(matches) == 0 {
-						logg.Fatal("Can't parse size into a value unit pair: %s", diskRules.Size)
+		for ip, node := range zone.Nodes {
+			for diskNumber := 1; diskNumber <= int(node.DiskCount); diskNumber++ {
+				var disk parse.Device
+				diskName := fmt.Sprintf("swift-%02d", diskNumber)
+				for _, dev := range inputData.Devices {
+					if dev.IP == ip && dev.Name == diskName {
+						disk = dev
+						break
 					}
-					size, _ := strconv.ParseFloat(matches["size"], 32)
-					matches, _ = storageRx.Groups(ruleData.BaseSize)
-					if len(matches) == 0 {
-						logg.Fatal("Can't parse baseSize into a value unit pair: %s", ruleData.BaseSize)
+				}
+				if disk.Name == "" {
+					logg.Fatal("No device found for ip %s and name %s", ip, diskName)
+				}
+
+				logg.Debug("Applying rule %+v to disk %s:%d %+v", node, ip, node.Port, disk)
+				var weight float64
+				if node.Weight == nil && ruleData.BaseSizeTB == 0 {
+					logg.Fatal("Applying rule %+v to disk %s:%d failed because not enough data is present to calculate the weight", node, ip, node.Port)
+				} else if node.Weight == nil && ruleData.BaseSizeTB != 0 {
+					if node.DiskSizeTB == 0 {
+						weight = 100
+					} else {
+						weight = math.Floor(node.DiskSizeTB / ruleData.BaseSizeTB * 100)
 					}
-					baseSize, _ := strconv.ParseFloat(matches["size"], 32)
-					// poor mans rounding to convert 166.666 to 166 instead of 167
-					weight := float64(int(size / baseSize * 100))
-					diskRules.Weight = &weight
+				} else {
+					weight = *node.Weight
 				}
 
-				if diskRules.Weight == nil {
-					logg.Fatal("Applying rule %+v to disk number %d failed because weight is not set", diskRules, counter)
+				if weight == 0 {
+					logg.Info("node.Weight %+v ruleData.BaseSizeTB %+v", node.Weight, ruleData.BaseSizeTB)
 				}
 
-				if *diskRules.Weight != diskData.Weight {
+				if disk.Weight != weight {
 					logg.Debug("Weight does not match, adding command to change it")
-					ipAddressPort := strings.Split(diskData.IPAddressPort, ":")
 					commandQueue = append(commandQueue, fmt.Sprintf(
-						"swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %s --device %s --weight %g %g",
-						ringFilename, diskData.Region, diskData.Zone, ipAddressPort[0], ipAddressPort[1], diskData.Name, diskData.Weight, *diskRules.Weight))
+						"swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %d --device %s --weight %g %g",
+						ringFilename, disk.Region, disk.Zone, disk.IP, disk.Port, disk.Name, disk.Weight, weight))
 				}
-				counter++
 			}
 		}
 	}

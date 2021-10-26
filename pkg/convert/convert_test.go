@@ -35,7 +35,7 @@ func TestParse1(t *testing.T) {
 	var expected rules.DiskRules
 	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &expected)
 
-	metaData := Convert(input, "6TB")
+	metaData := Convert(input, 6001, 6)
 	assert.DeepEqual(t, "parsing", metaData, expected)
 }
 
@@ -46,6 +46,6 @@ func TestParse2(t *testing.T) {
 	var expected rules.DiskRules
 	misc.ReadYAML("../../testing/artisan-rules-2.yaml", &expected)
 
-	metaData := Convert(input, "6TB")
+	metaData := Convert(input, 6001, 6)
 	assert.DeepEqual(t, "parsing", metaData, expected)
 }

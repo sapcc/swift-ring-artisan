@@ -46,9 +46,9 @@ func ReadYAML(filename string, variable interface{}) {
 	if err != nil {
 		logg.Fatal(err.Error())
 	}
-	err = yaml.Unmarshal(ruleFile, variable)
+	err = yaml.UnmarshalStrict(ruleFile, variable)
 	if err != nil {
-		logg.Fatal("Parsing file failed: %s", err.Error())
+		logg.Fatal("Parsing file %s failed: %s", filename, err.Error())
 	}
 }
 

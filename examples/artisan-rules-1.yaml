@@ -1,12 +1,10 @@
-base_size: 6TB
+base_size_tb: 6
 region: 1
 zones:
-- id: 1
+- zone: 1
   nodes:
-  - ip_port: 10.114.1.202:6001
-    disks: &disk
-      count: 3
-      size: 6TB
+    10.114.1.202: &disk
+      disk_count: 3
+      disk_size_tb: 6
       weight: 100
-  - ip_port: 10.114.1.203:6001
-    disks: *disk
+    10.114.1.203: *disk

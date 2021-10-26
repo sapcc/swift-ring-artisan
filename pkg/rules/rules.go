@@ -60,7 +60,10 @@ var storageRx = regroup.MustCompile(`(?P<size>\d+)(?P<unit>\w+)`)
 
 // ApplyRules to parsed MetaData
 func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename string) []string {
-	if ruleData.Region != inputData.Regions || inputData.Regions != 1 {
+
+	if inputData.Regions == 0 {
+		logg.Fatal("Regions needs to be set.")
+	} else if ruleData.Region != inputData.Regions || inputData.Regions != 1 {
 		logg.Fatal("Only one region is currently supported.")
 	}
 

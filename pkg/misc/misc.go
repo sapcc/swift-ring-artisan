@@ -36,7 +36,7 @@ func WriteToStdoutOrFile(data []byte, filename string) {
 	} else {
 		err := os.WriteFile(filename, data, 0644)
 		if err != nil {
-			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", data, err.Error()))
+			logg.Fatal("writing data to %s failed: %s", data, err.Error())
 		}
 	}
 }
@@ -48,7 +48,7 @@ func ReadYAML(filename string, variable interface{}) {
 	}
 	err = yaml.Unmarshal(ruleFile, variable)
 	if err != nil {
-		logg.Fatal(fmt.Sprintf("Parsing file failed: %s", err.Error()))
+		logg.Fatal("Parsing file failed: %s", err.Error())
 	}
 }
 

@@ -21,7 +21,6 @@ package parse
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"regexp"
 	"time"
@@ -108,7 +107,7 @@ func Input(input io.Reader) MetaData {
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		line := scanner.Text()
-		logg.Debug(fmt.Sprintf("Processing line: %s\n", line))
+		logg.Debug("Processing line: %s\n", line)
 
 		matches, _ := fileInfoRx.Groups(line)
 		if len(matches) > 0 {
@@ -157,12 +156,12 @@ func Input(input io.Reader) MetaData {
 			break
 		}
 
-		logg.Fatal(fmt.Sprintf("A header regex did not match the line: \"%s\"", line))
+		logg.Fatal("A header regex did not match the line: \"%s\"", line)
 	}
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		logg.Debug(fmt.Sprintf("Processing line: %s\n", line))
+		logg.Debug("Processing line: %s\n", line)
 
 		matches, _ := rowEntryRx.Groups(line)
 		if len(matches) > 0 {
@@ -181,12 +180,12 @@ func Input(input io.Reader) MetaData {
 			continue
 		}
 
-		logg.Fatal(fmt.Sprintf("The table entry regex did not match the line: %s", line))
+		logg.Fatal("The table entry regex did not match the line: %s", line)
 	}
 
 	err := scanner.Err()
 	if err != nil {
-		logg.Fatal(fmt.Sprintf("Reading input failed: %s", err.Error()))
+		logg.Fatal("Reading input failed: %s", err.Error())
 	}
 
 	return metaData

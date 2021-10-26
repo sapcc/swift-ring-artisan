@@ -106,7 +106,7 @@ func run(cmd *cobra.Command, args []string) {
 			cmd := exec.Command(args[0], args[1:]...)
 			stdout, err := cmd.Output()
 			if err != nil {
-				logg.Fatal(fmt.Sprintf("Command \"%s\" failed: %v", command, err.Error()))
+				logg.Fatal("Command \"%s\" failed: %v", command, err.Error())
 			}
 			logg.Info(string(stdout))
 		} else {

@@ -20,7 +20,6 @@
 package parse
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -32,7 +31,7 @@ import (
 func TestParse1(t *testing.T) {
 	input, err := os.Open("../../testing/builder-output-1.txt")
 	if err != nil {
-		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
+		logg.Fatal("Reading file failed: %s", err.Error())
 	}
 	defer input.Close()
 
@@ -46,7 +45,7 @@ func TestParse1(t *testing.T) {
 func TestParse2(t *testing.T) {
 	input, err := os.Open("../../testing/builder-output-2.txt")
 	if err != nil {
-		logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
+		logg.Fatal("Reading file failed: %s", err.Error())
 	}
 	defer input.Close()
 

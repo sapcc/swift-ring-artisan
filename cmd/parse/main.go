@@ -61,7 +61,7 @@ func run(cmd *cobra.Command, args []string) {
 	if len(args) == 1 {
 		file, err := os.Open(args[0])
 		if err != nil {
-			logg.Fatal(fmt.Sprintf("Reading file failed: %s", err.Error()))
+			logg.Fatal("Reading file failed: %s", err.Error())
 		}
 		defer file.Close()
 		input = file
@@ -91,7 +91,7 @@ func run(cmd *cobra.Command, args []string) {
 	} else {
 		err := os.WriteFile(outputFile, metaDataOutput, 0644)
 		if err != nil {
-			logg.Fatal(fmt.Sprintf("writing data to %s failed: %s", outputFile, err.Error()))
+			logg.Fatal("writing data to %s failed: %s", outputFile, err.Error())
 		}
 	}
 }

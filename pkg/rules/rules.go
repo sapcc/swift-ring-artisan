@@ -78,22 +78,22 @@ func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename strin
 			for k := 0; k < int(node.Disks.Count); k++ {
 				diskRules := node.Disks
 				diskData := inputData.Devices[counter]
-				logg.Debug(fmt.Sprintf("Applying rule %+v to disk number %d: %+v", diskRules, counter, diskData))
+				logg.Debug("Applying rule %+v to disk number %d: %+v", diskRules, counter, diskData)
 
 				if node.IPPort != diskData.IPAddressPort {
-					logg.Fatal(fmt.Sprintf("The IP port combination of the rule number %d does not match the by id sorted parsed one: %s != %s",
-						counter, node.IPPort, diskData.IPAddressPort))
+					logg.Fatal("The IP port combination of the rule number %d does not match the by id sorted parsed one: %s != %s",
+						counter, node.IPPort, diskData.IPAddressPort)
 				}
 
 				if diskRules.Weight == nil && diskRules.Size != "" {
 					matches, _ := storageRx.Groups(diskRules.Size)
 					if len(matches) == 0 {
-						logg.Fatal(fmt.Sprintf("Can't parse size into a value unit pair: %s", diskRules.Size))
+						logg.Fatal("Can't parse size into a value unit pair: %s", diskRules.Size)
 					}
 					size, _ := strconv.ParseFloat(matches["size"], 32)
 					matches, _ = storageRx.Groups(ruleData.BaseSize)
 					if len(matches) == 0 {
-						logg.Fatal(fmt.Sprintf("Can't parse baseSize into a value unit pair: %s", ruleData.BaseSize))
+						logg.Fatal("Can't parse baseSize into a value unit pair: %s", ruleData.BaseSize)
 					}
 					baseSize, _ := strconv.ParseFloat(matches["size"], 32)
 					// poor mans rounding to convert 166.666 to 166 instead of 167
@@ -102,7 +102,7 @@ func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename strin
 				}
 
 				if diskRules.Weight == nil {
-					logg.Fatal(fmt.Sprintf("Applying rule %+v to disk number %d failed because weight is not set", diskRules, counter))
+					logg.Fatal("Applying rule %+v to disk number %d failed because weight is not set", diskRules, counter)
 				}
 
 				if *diskRules.Weight != diskData.Weight {

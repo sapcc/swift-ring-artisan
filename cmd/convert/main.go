@@ -21,9 +21,9 @@ package convertcmd
 
 import (
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/convert"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -58,10 +58,10 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal("--input needs to be supplied and cannot be empty.")
 	}
 
-	var inputData parse.MetaData
-	misc.ReadYAML(inputFilename, &inputData)
+	var ring builderfile.RingInfo
+	misc.ReadYAML(inputFilename, &ring)
 
-	diskRules := convert.Convert(inputData, basePort, baseSize)
+	diskRules := convert.Convert(ring, basePort, baseSize)
 
 	dataYAML, err := yaml.Marshal(diskRules)
 	if err != nil {

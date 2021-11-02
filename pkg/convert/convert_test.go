@@ -23,16 +23,16 @@ import (
 	"testing"
 
 	"github.com/sapcc/go-bits/assert"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 )
 
 func TestParse1(t *testing.T) {
-	var input parse.MetaData
+	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var expected rules.DiskRules
+	var expected rules.RingRules
 	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &expected)
 
 	metaData := Convert(input, 6001, 6)
@@ -40,10 +40,10 @@ func TestParse1(t *testing.T) {
 }
 
 func TestParse2(t *testing.T) {
-	var input parse.MetaData
+	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
 
-	var expected rules.DiskRules
+	var expected rules.RingRules
 	misc.ReadYAML("../../testing/artisan-rules-2.yaml", &expected)
 
 	metaData := Convert(input, 6001, 6)

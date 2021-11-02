@@ -26,7 +26,7 @@ import (
 	"os"
 
 	"github.com/sapcc/go-bits/logg"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -69,7 +69,7 @@ func run(cmd *cobra.Command, args []string) {
 		input = os.Stdin
 	}
 
-	metaData := parse.Input(input)
+	metaData := builderfile.Input(input)
 
 	var (
 		metaDataOutput []byte

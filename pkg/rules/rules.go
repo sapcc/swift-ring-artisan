@@ -24,11 +24,11 @@ import (
 	"math"
 
 	"github.com/sapcc/go-bits/logg"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 )
 
-// Node is a server containing disks
-type Node struct {
+// NodeRules is a server containing disks
+type NodeRules struct {
 	Port       uint64   `yaml:"port,omitempty"`
 	Meta       struct{} `yaml:"meta,omitempty"` // TODO: figure out how the field looks like
 	DiskCount  uint64   `yaml:"disk_count"`
@@ -36,66 +36,61 @@ type Node struct {
 	Weight     *float64 `yaml:"weight,omitempty"`
 }
 
-// Zone contains multiple nodes
-type Zone struct {
+// ZoneRules contains multiple nodes
+type ZoneRules struct {
 	Zone  uint64
-	Nodes map[string]Node
+	Nodes map[string]NodeRules
 }
 
-// DiskRules containing the rules for a region, multiple Zones and dozzens Nodes
-type DiskRules struct {
+// RingRules containing the rules for a region, multiple Zones and dozzens Nodes
+type RingRules struct {
 	BaseSizeTB float64 `yaml:"base_size_tb"`
 	BasePort   uint64  `yaml:"base_port"`
 	Region     uint64
-	Zones      []Zone
+	Zones      []ZoneRules
 }
 
-// ApplyRules to parsed MetaData
-func ApplyRules(inputData parse.MetaData, ruleData DiskRules, ringFilename string) []string {
-	if inputData.Regions == 0 {
+func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) float64 {
+	var weight float64
+	if nodeRules.Weight == nil && baseSizeTB == 0 {
+		logg.Fatal("Applying rule %+v to disk %s:%d failed because not enough data is present to calculate the weight", nodeRules, nodeIP, nodeRules.Port)
+	} else if nodeRules.Weight == nil && baseSizeTB != 0 {
+		if nodeRules.DiskSizeTB == 0 {
+			weight = 100
+		} else {
+			weight = math.Floor(nodeRules.DiskSizeTB / baseSizeTB * 100)
+		}
+	} else {
+		weight = *nodeRules.Weight
+	}
+
+	if weight == 0 {
+		logg.Info("node.Weight %+v ruleData.BaseSizeTB %+v", nodeRules.Weight, baseSizeTB)
+	}
+
+	return weight
+}
+
+// CalculateChanges to parsed MetaData
+func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) []string {
+	if ring.Regions == 0 {
 		logg.Fatal("Regions needs to be set.")
-	} else if ruleData.Region != inputData.Regions || inputData.Regions != 1 {
+	} else if ringRules.Region != ring.Regions || ring.Regions != 1 {
 		logg.Fatal("Only one region is currently supported.")
 	}
 
 	var commandQueue []string
-	for i, zone := range ruleData.Zones {
-		if zone.Zone != uint64(i+1) {
+	for zoneID, zoneRules := range ringRules.Zones {
+		if zoneRules.Zone != uint64(zoneID+1) {
 			logg.Fatal("Zone ID mismatch between parsed data and rule file.")
 		}
 
-		for ip, node := range zone.Nodes {
-			for diskNumber := 1; diskNumber <= int(node.DiskCount); diskNumber++ {
-				var disk parse.Device
-				diskName := fmt.Sprintf("swift-%02d", diskNumber)
-				for _, dev := range inputData.Devices {
-					if dev.IP == ip && dev.Name == diskName {
-						disk = dev
-						break
-					}
-				}
-				if disk.Name == "" {
-					logg.Fatal("No device found for ip %s and name %s", ip, diskName)
-				}
+		for nodeIP, nodeRules := range zoneRules.Nodes {
+			for diskNumber := 1; diskNumber <= int(nodeRules.DiskCount); diskNumber++ {
+				disk := ring.FindDevice(nodeIP, diskNumber)
 
-				logg.Debug("Applying rule %+v to disk %s:%d %+v", node, ip, node.Port, disk)
-				var weight float64
-				if node.Weight == nil && ruleData.BaseSizeTB == 0 {
-					logg.Fatal("Applying rule %+v to disk %s:%d failed because not enough data is present to calculate the weight", node, ip, node.Port)
-				} else if node.Weight == nil && ruleData.BaseSizeTB != 0 {
-					if node.DiskSizeTB == 0 {
-						weight = 100
-					} else {
-						weight = math.Floor(node.DiskSizeTB / ruleData.BaseSizeTB * 100)
-					}
-				} else {
-					weight = *node.Weight
-				}
-
-				if weight == 0 {
-					logg.Info("node.Weight %+v ruleData.BaseSizeTB %+v", node.Weight, ruleData.BaseSizeTB)
-				}
-
+				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, nodeRules.Port, disk)
+				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
 				if disk.Weight != weight {
 					logg.Debug("Weight does not match, adding command to change it")
 					commandQueue = append(commandQueue, fmt.Sprintf(

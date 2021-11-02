@@ -27,14 +27,14 @@ import (
 	"github.com/nlpodyssey/gopickle/pickle"
 	"github.com/nlpodyssey/gopickle/types"
 	"github.com/sapcc/go-bits/logg"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 )
 
 type PickleData struct {
 	ID         string
 	Replicas   float64
 	Dispersion float64
-	Devs       []parse.Device
+	Devs       []builderfile.DeviceInfo
 }
 
 func Unmarshal(input interface{}) PickleData {

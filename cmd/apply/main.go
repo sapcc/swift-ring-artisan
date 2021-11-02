@@ -28,8 +28,8 @@ import (
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 	"github.com/sapcc/swift-ring-artisan/pkg/pickler"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 	"github.com/sergi/go-diff/diffmatchpatch"
@@ -71,7 +71,7 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
 
-	var inputData parse.MetaData
+	var ring builderfile.RingInfo
 	if inputFilename == "" && builderFilename != "" {
 		// // generate with ./unpickle.sh
 		// cmd := exec.Command("python3", "-c", "'import json;import pickle;import sys;d=pickle.load(open(sys.argv[-1],\"rb\"));d[\"_dispersion_graph\"]=None;d[\"_replica2part2dev\"]=None;d[\"_last_part_moves\"]=None;print(json.dumps(d));'", builderFilename)
@@ -104,12 +104,12 @@ func run(cmd *cobra.Command, args []string) {
 			if err != nil {
 				logg.Fatal(err.Error())
 			}
-			inputData = parse.Input(bytes.NewReader(stdout))
+			ring = builderfile.Input(bytes.NewReader(stdout))
 
-			equal := reflect.DeepEqual(inputData, pickleData)
+			equal := reflect.DeepEqual(ring, pickleData)
 			if !equal {
 				dmp := diffmatchpatch.New()
-				diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", inputData), fmt.Sprintf("%+v\n", pickleData), false)
+				diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", ring), fmt.Sprintf("%+v\n", pickleData), false)
 				logg.Info("Pickle parsed output and swift-ring-builder output are not equal. What is going on here?!")
 				logg.Fatal(dmp.DiffPrettyText(diffs))
 			}
@@ -117,7 +117,7 @@ func run(cmd *cobra.Command, args []string) {
 			logg.Fatal(err.Error())
 		}
 
-		inputData = parse.MetaData{
+		ring = builderfile.RingInfo{
 			ID:         pickleData.ID,
 			Replicas:   pickleData.Replicas,
 			Regions:    pickleData.Devs[0].Region, // FIXME: make multi region aware
@@ -125,7 +125,7 @@ func run(cmd *cobra.Command, args []string) {
 			Devices:    pickleData.Devs,
 		}
 	} else if inputFilename != "" {
-		misc.ReadYAML(inputFilename, &inputData)
+		misc.ReadYAML(inputFilename, &ring)
 	} else {
 		logg.Fatal("Either --input or --builder needs to be set.")
 	}
@@ -133,13 +133,13 @@ func run(cmd *cobra.Command, args []string) {
 	if ruleFilename == "" {
 		logg.Fatal("--rule needs to be supplied and cannot be empty.")
 	}
-	var ruleData rules.DiskRules
+	var ruleData rules.RingRules
 	misc.ReadYAML(ruleFilename, &ruleData)
 
 	if (checkChanges || executeCommands) && builderFilename == "" {
 		logg.Fatal("--ring needs to be supplied and cannot be empty.")
 	}
-	commandQueue := rules.ApplyRules(inputData, ruleData, builderFilename)
+	commandQueue := ruleData.CalculateChanges(ring, builderFilename)
 	if checkChanges {
 		if len(commandQueue) != 0 {
 			os.Exit(1)

@@ -23,18 +23,18 @@ import (
 	"testing"
 
 	"github.com/sapcc/go-bits/assert"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
 )
 
 func TestApplyRules1(t *testing.T) {
-	var input parse.MetaData
+	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var rules DiskRules
+	var rules RingRules
 	misc.ReadYAML("../../testing/artisan-rules-changes-1.yaml", &rules)
 
-	commandQueue := ApplyRules(input, rules, "/dev/null")
+	commandQueue := rules.CalculateChanges(input, "/dev/null")
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100 166",
@@ -44,13 +44,13 @@ func TestApplyRules1(t *testing.T) {
 }
 
 func TestApplyRules1_1(t *testing.T) {
-	var input parse.MetaData
+	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var rules DiskRules
+	var rules RingRules
 	misc.ReadYAML("../../testing/artisan-rules-changes-1-1.yaml", &rules)
 
-	commandQueue := ApplyRules(input, rules, "/dev/null")
+	commandQueue := rules.CalculateChanges(input, "/dev/null")
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100 166",
@@ -60,13 +60,13 @@ func TestApplyRules1_1(t *testing.T) {
 }
 
 func TestApplyRules2(t *testing.T) {
-	var input parse.MetaData
+	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
 
-	var rules DiskRules
+	var rules RingRules
 	misc.ReadYAML("../../testing/artisan-rules-changes-2.yaml", &rules)
 
-	commandQueue := ApplyRules(input, rules, "/dev/null")
+	commandQueue := rules.CalculateChanges(input, "/dev/null")
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.46.14.52 --port 6001 --device swift-01 --weight 100 200",

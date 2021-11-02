@@ -17,10 +17,11 @@
 *
 *******************************************************************************/
 
-package parse
+package builderfile
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"regexp"
 	"time"
@@ -61,7 +62,7 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone   ip address:
 //          111      1    1  10.46.14.44:6001    10.46.14.44:6001 swift-33 100.00         78   -0.98
 var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*$`)
 
-type Device struct {
+type DeviceInfo struct {
 	ID              uint64
 	Region          uint64
 	Zone            uint64
@@ -79,8 +80,8 @@ type Device struct {
 	meta struct{} // TODO: figure out how the field looks like
 }
 
-// MetaData contains the meta data about the ring file
-type MetaData struct {
+// RingInfo contains the meta data about the ring file
+type RingInfo struct {
 	FileName     string `yaml:"file_name"`
 	BuildVersion uint64 `yaml:"build_version"`
 	ID           string
@@ -99,12 +100,25 @@ type MetaData struct {
 	OverloadFactorPercent float64 `yaml:"overload_factor_Percent"`
 	OverloadFactorDecimal float64 `yaml:"overload_factor_decimal"`
 
-	Devices []Device
+	Devices []DeviceInfo
+}
+
+func (ring RingInfo) FindDevice(nodeIP string, diskNumber int) DeviceInfo {
+	diskName := fmt.Sprintf("swift-%02d", diskNumber)
+	for _, dev := range ring.Devices {
+		if dev.IP == nodeIP && dev.Name == diskName {
+			return dev
+		}
+	}
+
+	logg.Fatal("No device found for ip %s and name %s", nodeIP, diskName)
+
+	return DeviceInfo{}
 }
 
 // Input parses an input and return the data as MetData object
-func Input(input io.Reader) MetaData {
-	var metaData MetaData
+func Input(input io.Reader) RingInfo {
+	var metaData RingInfo
 	// metaData.Devices = make(map[string]Device)
 
 	scanner := bufio.NewScanner(input)
@@ -169,7 +183,7 @@ func Input(input io.Reader) MetaData {
 		matches, _ := rowEntryRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.Devices = append(metaData.Devices, Device{
+			metaData.Devices = append(metaData.Devices, DeviceInfo{
 				ID:              misc.ParseUint(matches["id"]),
 				Region:          misc.ParseUint(matches["region"]),
 				Zone:            misc.ParseUint(matches["zone"]),

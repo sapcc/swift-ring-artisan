@@ -20,13 +20,13 @@
 package convert
 
 import (
-	"github.com/sapcc/swift-ring-artisan/pkg/parse"
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 )
 
 // Convert converts parsed MetaData to DiskRules
-func Convert(inputData parse.MetaData, basePort uint64, baseSize float64) rules.DiskRules {
-	diskRules := rules.DiskRules{
+func Convert(ring builderfile.RingInfo, basePort uint64, baseSize float64) rules.RingRules {
+	diskRules := rules.RingRules{
 		Region:     1, // FIXME: make multi region aware
 		BasePort:   basePort,
 		BaseSizeTB: baseSize,
@@ -34,12 +34,12 @@ func Convert(inputData parse.MetaData, basePort uint64, baseSize float64) rules.
 
 	var (
 		last          string
-		diskRulesZone *rules.Zone
+		diskRulesZone *rules.ZoneRules
 	)
-	for _, device := range inputData.Devices {
+	for _, device := range ring.Devices {
 		// create zone if it does not exist
 		if len(diskRules.Zones) == 0 || diskRules.Zones[len(diskRules.Zones)-1].Zone != device.Zone {
-			diskRules.Zones = append(diskRules.Zones, rules.Zone{Zone: device.Zone})
+			diskRules.Zones = append(diskRules.Zones, rules.ZoneRules{Zone: device.Zone})
 		}
 
 		diskRulesZone = &diskRules.Zones[device.Zone-1]
@@ -51,9 +51,9 @@ func Convert(inputData parse.MetaData, basePort uint64, baseSize float64) rules.
 			continue
 		}
 		if diskRulesZone.Nodes == nil {
-			diskRulesZone.Nodes = make(map[string]rules.Node)
+			diskRulesZone.Nodes = make(map[string]rules.NodeRules)
 		}
-		diskRulesZone.Nodes[device.IP] = rules.Node{
+		diskRulesZone.Nodes[device.IP] = rules.NodeRules{
 			DiskCount: 1,
 			Weight:    &device.Weight,
 		}

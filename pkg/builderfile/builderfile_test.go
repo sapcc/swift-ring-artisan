@@ -17,7 +17,7 @@
 *
 *******************************************************************************/
 
-package parse
+package builderfile
 
 import (
 	"os"
@@ -35,7 +35,7 @@ func TestParse1(t *testing.T) {
 	}
 	defer input.Close()
 
-	var expected MetaData
+	var expected RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &expected)
 
 	metaData := Input(input)
@@ -49,7 +49,7 @@ func TestParse2(t *testing.T) {
 	}
 	defer input.Close()
 
-	var expected MetaData
+	var expected RingInfo
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &expected)
 
 	metaData := Input(input)

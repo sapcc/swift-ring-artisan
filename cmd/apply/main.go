@@ -50,7 +50,7 @@ var (
 func AddCommandTo(parent *cobra.Command) {
 	cmd := &cobra.Command{
 		Use:     "apply -i <file> -r <file>",
-		Example: "  swift-ring-builder -i swift-ring-builder-output.yaml -r swift-ring-artisan-rules.yaml",
+		Example: "  swift-ring-artisan apply -b account.builder -r swift-ring-artisan-rules.yaml",
 		Short:   "Applies rules to the parsed swift-ring-builder file.",
 		Long: `Generates swift-ring-builder commands based on predefined rules which get applied to the parsed output of the swift-ring-builder utility.
 		Rebalance needs to be done manually afterwards.`,

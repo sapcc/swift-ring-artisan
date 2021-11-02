@@ -94,7 +94,7 @@ func run(cmd *cobra.Command, args []string) {
 		pickleData := pickler.DecodeBuilderFile(builderFilename)
 
 		// optional compare pickle parser with cli parser
-		cmd := exec.Command("swift-ring-builder")
+		cmd := exec.Command("sh", "-c", "command -v swift-ring-builder")
 		err := cmd.Run()
 		if err == exec.ErrNotFound {
 			logg.Debug("Did not find swift-ring-builder, skipping consistency check")

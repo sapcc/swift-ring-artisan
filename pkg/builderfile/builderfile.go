@@ -49,11 +49,12 @@ var overloadFactorRx = regroup.MustCompile(`^The overload factor is (?P<percent>
 
 // regex to match the following line:
 // Ring file container.ring.gz is obsolete
-var obsoleteRx = regexp.MustCompile(`^Ring file (?:[\w\/\.-]+\/)?\w+\.ring\.gz is obsolete$`)
+// Ring file container.ring.gz is up-to-date
+var obsoleteRx = regexp.MustCompile(`^Ring file (?:[\w\/\.-]+\/)?\w+\.ring\.gz is (obsolete|up-to-date)$`)
 
 // regex to match the following line:
 // Devices:   id region zone   ip address:port replication ip:port  name weight partitions balance flags meta
-var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone   ip address:port replication ip:port  name weight partitions balance flags meta$`)
+var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone\s+ip address:port replication ip:port  name weight partitions balance flags meta$`)
 
 // regex to match the following line:
 //            0      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-01 100.00        512    0.00

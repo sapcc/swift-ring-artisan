@@ -26,6 +26,7 @@ import (
 	"os/exec"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
@@ -92,6 +93,16 @@ func run(cmd *cobra.Command, args []string) {
 		// }
 
 		pickleData := pickler.DecodeBuilderFile(builderFilename)
+		ring = builderfile.RingInfo{
+			ID:          pickleData.ID,
+			Version:     pickleData.Version,
+			Devices:     pickleData.Devices,
+			DeviceCount: uint64(len(pickleData.Devices)),
+			Dispersion:  pickleData.Dispersion,
+			Partitions:  pickleData.Partitions,
+			Regions:     pickleData.Devices[0].Region, // FIXME: make multi region aware
+			Replicas:    pickleData.Replicas,
+		}
 
 		// optional compare pickle parser with cli parser
 		cmd := exec.Command("sh", "-c", "command -v swift-ring-builder")
@@ -104,12 +115,17 @@ func run(cmd *cobra.Command, args []string) {
 			if err != nil {
 				logg.Fatal(err.Error())
 			}
-			ring = builderfile.Input(bytes.NewReader(stdout))
+			ringParsed := builderfile.Input(bytes.NewReader(stdout))
+			// overwrite some data that the parser method but not the pickler method extracts
+			ringParsed.FileName = ""
+			ringParsed.ReassignedCooldown = 0
+			ringParsed.ReassignedRemaining = time.Time{}
+			ringParsed.Zones = 0
 
-			equal := reflect.DeepEqual(ring, pickleData)
+			equal := reflect.DeepEqual(ringParsed, ring)
 			if !equal {
 				dmp := diffmatchpatch.New()
-				diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", ring), fmt.Sprintf("%+v\n", pickleData), false)
+				diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", ringParsed), fmt.Sprintf("%+v\n", ring), false)
 				logg.Info("Pickle parsed output and swift-ring-builder output are not equal. What is going on here?!")
 				logg.Fatal(dmp.DiffPrettyText(diffs))
 			}
@@ -117,13 +133,6 @@ func run(cmd *cobra.Command, args []string) {
 			logg.Fatal(err.Error())
 		}
 
-		ring = builderfile.RingInfo{
-			ID:         pickleData.ID,
-			Replicas:   pickleData.Replicas,
-			Regions:    pickleData.Devs[0].Region, // FIXME: make multi region aware
-			Dispersion: pickleData.Dispersion,
-			Devices:    pickleData.Devs,
-		}
 	} else if inputFilename != "" {
 		misc.ReadYAML(inputFilename, &ring)
 	} else {

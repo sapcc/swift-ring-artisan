@@ -34,7 +34,9 @@ type PickleData struct {
 	ID         string
 	Replicas   float64
 	Dispersion float64
-	Devs       []builderfile.DeviceInfo
+	Devices    []builderfile.DeviceInfo `mapstructure:"devs"`
+	Partitions uint64                   `mapstructure:"parts"`
+	Version    uint64
 }
 
 func Unmarshal(input interface{}) PickleData {

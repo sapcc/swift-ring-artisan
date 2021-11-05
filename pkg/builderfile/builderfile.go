@@ -73,7 +73,7 @@ type DeviceInfo struct {
 	ReplicationPort uint64 `yaml:"replication_port" mapstructure:"replication_port"`
 	Name            string `mapstructure:"device"` // TODO: rename to Device?
 	Weight          float64
-	Partitions      uint64
+	Partitions      uint64 `mapstructure:"parts"`
 	Balance         float64
 	//lint:ignore U1000 TODO
 	flags struct{} // TODO: figure out how the field looks like
@@ -83,9 +83,9 @@ type DeviceInfo struct {
 
 // RingInfo contains the meta data about the ring file
 type RingInfo struct {
-	FileName     string `yaml:"file_name"`
-	BuildVersion uint64 `yaml:"build_version"`
-	ID           string
+	FileName string `yaml:"file_name"`
+	Version  uint64
+	ID       string
 
 	Partitions  uint64
 	Replicas    float64
@@ -131,7 +131,7 @@ func Input(input io.Reader) RingInfo {
 		if len(matches) > 0 {
 			metaData.FileName = matches["fileName"]
 			// errors can be ignored because the regex matches digits (\d)
-			metaData.BuildVersion = misc.ParseUint(matches["buildVersion"])
+			metaData.Version = misc.ParseUint(matches["buildVersion"])
 			metaData.ID = matches["id"]
 			continue
 		}

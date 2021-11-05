@@ -1,5 +1,5 @@
 file_name: container.builder
-build_version: 1246
+version: 1246
 id: 304a06d5435f4e0eb90c1327a1712209
 partitions: 4096
 replicas: 3

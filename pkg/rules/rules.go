@@ -22,6 +22,7 @@ package rules
 import (
 	"fmt"
 	"math"
+	"sort"
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
@@ -85,17 +86,36 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 			logg.Fatal("Zone ID mismatch between parsed data and rule file.")
 		}
 
-		for nodeIP, nodeRules := range zoneRules.Nodes {
+		var nodeIPs []string
+		for nodeIP := range zoneRules.Nodes {
+			nodeIPs = append(nodeIPs, nodeIP)
+		}
+		sort.Strings(nodeIPs) // for reproducibility in tests
+
+		for _, nodeIP := range nodeIPs {
+			nodeRules := zoneRules.Nodes[nodeIP]
 			for diskNumber := 1; diskNumber <= int(nodeRules.DiskCount); diskNumber++ {
-				disk := ring.FindDevice(nodeIP, diskNumber)
+				disk := ring.FindDevice(zoneRules.Zone, nodeIP, diskNumber)
+				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
+
+				if disk == nil {
+					logg.Debug("Disk was not found, adding it")
+					disk = &builderfile.DeviceInfo{
+						Region: ringRules.Region,
+						Zone:   zoneRules.Zone,
+						IP:     nodeIP,
+						Port:   ringRules.BasePort,
+						Name:   fmt.Sprintf("swift-%02d", diskNumber),
+						Weight: weight,
+					}
+					commandQueue = append(commandQueue, disk.CommandAdd(ringFilename))
+					continue
+				}
 
 				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, nodeRules.Port, disk)
-				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
 				if disk.Weight != weight {
 					logg.Debug("Weight does not match, adding command to change it")
-					commandQueue = append(commandQueue, fmt.Sprintf(
-						"swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %d --device %s --weight %g %g",
-						ringFilename, disk.Region, disk.Zone, disk.IP, disk.Port, disk.Name, disk.Weight, weight))
+					commandQueue = append(commandQueue, disk.CommandSetWeight(ringFilename, weight))
 				}
 			}
 		}

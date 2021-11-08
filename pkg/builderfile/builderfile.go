@@ -104,17 +104,15 @@ type RingInfo struct {
 	Devices []DeviceInfo
 }
 
-func (ring RingInfo) FindDevice(nodeIP string, diskNumber int) DeviceInfo {
+func (ring RingInfo) FindDevice(zone uint64, nodeIP string, diskNumber int) *DeviceInfo {
 	diskName := fmt.Sprintf("swift-%02d", diskNumber)
 	for _, dev := range ring.Devices {
-		if dev.IP == nodeIP && dev.Name == diskName {
-			return dev
+		if dev.Zone == zone && dev.IP == nodeIP && dev.Name == diskName {
+			return &dev
 		}
 	}
 
-	logg.Fatal("No device found for ip %s and name %s", nodeIP, diskName)
-
-	return DeviceInfo{}
+	return nil
 }
 
 // Input parses an input and return the data as MetData object
@@ -209,4 +207,14 @@ func Input(input io.Reader) RingInfo {
 	}
 
 	return metaData
+}
+
+func (device DeviceInfo) CommandAdd(ringFilename string) string {
+	return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g",
+		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)
+}
+
+func (device DeviceInfo) CommandSetWeight(ringFilename string, desiredWeight float64) string {
+	return fmt.Sprintf("swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %d --device %s --weight %g %g",
+		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight, desiredWeight)
 }

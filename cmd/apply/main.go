@@ -22,6 +22,7 @@ package applycmd
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"reflect"
@@ -148,7 +149,10 @@ func run(cmd *cobra.Command, args []string) {
 	if (checkChanges || executeCommands) && builderFilename == "" {
 		logg.Fatal("--ring needs to be supplied and cannot be empty.")
 	}
-	commandQueue := ruleData.CalculateChanges(ring, builderFilename)
+	commandQueue, err := ruleData.CalculateChanges(ring, builderFilename)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	if checkChanges {
 		if len(commandQueue) != 0 {
 			os.Exit(1)

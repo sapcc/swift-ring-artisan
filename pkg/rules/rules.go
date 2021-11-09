@@ -20,6 +20,7 @@
 package rules
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"sort"
@@ -74,17 +75,17 @@ func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) floa
 }
 
 // CalculateChanges to parsed MetaData
-func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) []string {
+func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) ([]string, error) {
 	if ring.Regions == 0 {
-		logg.Fatal("Regions needs to be set.")
+		return nil, errors.New("regions needs to be set")
 	} else if ringRules.Region != ring.Regions || ring.Regions != 1 {
-		logg.Fatal("Only one region is currently supported.")
+		return nil, errors.New("currently only one region is supported")
 	}
 
 	var discoveredDisks, commandQueue []string
 	for zoneID, zoneRules := range ringRules.Zones {
 		if zoneRules.Zone != uint64(zoneID+1) {
-			logg.Fatal("Zone ID mismatch between parsed data and rule file.")
+			return nil, errors.New("zone ID mismatch between parsed data and rule file")
 		}
 
 		var nodeIPs []string
@@ -131,5 +132,5 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 		}
 	}
 
-	return commandQueue
+	return commandQueue, nil
 }

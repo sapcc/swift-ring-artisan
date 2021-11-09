@@ -67,3 +67,12 @@ func ParseFloat(string string) float64 {
 	}
 	return float
 }
+
+func Contains(list []string, searchFor string) bool {
+	for _, entry := range list {
+		if entry == searchFor {
+			return true
+		}
+	}
+	return false
+}

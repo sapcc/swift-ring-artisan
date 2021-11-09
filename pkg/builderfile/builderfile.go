@@ -218,3 +218,8 @@ func (device DeviceInfo) CommandSetWeight(ringFilename string, desiredWeight flo
 	return fmt.Sprintf("swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %d --device %s --weight %g %g",
 		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight, desiredWeight)
 }
+
+func (device DeviceInfo) CommandRemove(ringFilename string) string {
+	return fmt.Sprintf("swift-ring-builder %s remove --region %d --zone %d --ip %s --port %d --device %s --weight %g",
+		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)
+}

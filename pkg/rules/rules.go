@@ -26,6 +26,7 @@ import (
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
+	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 
 // NodeRules is a server containing disks
@@ -80,7 +81,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 		logg.Fatal("Only one region is currently supported.")
 	}
 
-	var commandQueue []string
+	var discoveredDisks, commandQueue []string
 	for zoneID, zoneRules := range ringRules.Zones {
 		if zoneRules.Zone != uint64(zoneID+1) {
 			logg.Fatal("Zone ID mismatch between parsed data and rule file.")
@@ -112,12 +113,21 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 					continue
 				}
 
+				discoveredDisks = append(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", nodeIP, disk.Port, disk.Name))
+
 				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, nodeRules.Port, disk)
 				if disk.Weight != weight {
 					logg.Debug("Weight does not match, adding command to change it")
 					commandQueue = append(commandQueue, disk.CommandSetWeight(ringFilename, weight))
 				}
 			}
+		}
+	}
+
+	// check if all devices in the ring where matched with a rule
+	for _, device := range ring.Devices {
+		if !misc.Contains(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", device.IP, device.Port, device.Name)) {
+			commandQueue = append(commandQueue, device.CommandRemove(ringFilename))
 		}
 	}
 

@@ -116,3 +116,35 @@ func TestAddDisk2(t *testing.T) {
 	}
 	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
 }
+
+func TestDeleteDisk1(t *testing.T) {
+	var input builderfile.RingInfo
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
+
+	var rules RingRules
+	misc.ReadYAML("../../testing/artisan-deletion-1.yaml", &rules)
+
+	commandQueue := rules.CalculateChanges(input, "/dev/null")
+
+	assert.DeepEqual(t, "parsing", commandQueue, []string{
+		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100",
+		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100",
+		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100",
+	})
+}
+
+func TestDeleteDisk2(t *testing.T) {
+	var input builderfile.RingInfo
+	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
+
+	var rules RingRules
+	misc.ReadYAML("../../testing/artisan-deletion-2.yaml", &rules)
+
+	commandQueue := rules.CalculateChanges(input, "/dev/null")
+
+	var expectedCommands []string
+	for i := 1; i <= 40; i++ {
+		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null remove --region 1 --zone 2 --ip 10.46.14.116 --port 6001 --device swift-%02d --weight 100", i))
+	}
+	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
+}

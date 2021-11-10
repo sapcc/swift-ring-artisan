@@ -32,10 +32,10 @@ func TestApplyRules1(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-rules-changes-1.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-changes-1.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -51,10 +51,10 @@ func TestApplyRules1_1(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-rules-changes-1-1.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-changes-1-1.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -70,10 +70,10 @@ func TestApplyRules2(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-rules-changes-2.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-changes-2.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -92,10 +92,10 @@ func TestAddDisk1(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-addition-1.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-addition-1.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -111,10 +111,10 @@ func TestAddDisk2(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-addition-2.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-addition-2.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -136,10 +136,10 @@ func TestDeleteDisk1(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-deletion-1.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-deletion-1.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -155,10 +155,10 @@ func TestDeleteDisk2(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-deletion-2.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-deletion-2.yaml", &ring)
 
-	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -191,10 +191,10 @@ func TestMultipleRegions(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-error-region.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &ring)
 
-	_, err := rules.CalculateChanges(input, "/dev/null")
+	_, err := ring.CalculateChanges(input, "/dev/null")
 	if err == nil {
 		t.Fatal("This test is expected to fail")
 	}

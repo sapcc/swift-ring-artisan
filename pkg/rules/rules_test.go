@@ -21,7 +21,6 @@ package rules
 
 import (
 	"fmt"
-	"log"
 	"testing"
 
 	"github.com/sapcc/go-bits/assert"
@@ -38,7 +37,7 @@ func TestApplyRules1(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
@@ -57,7 +56,7 @@ func TestApplyRules1_1(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
@@ -76,7 +75,7 @@ func TestApplyRules2(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	var expectedCommands []string
@@ -98,7 +97,7 @@ func TestAddDisk1(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
@@ -117,7 +116,7 @@ func TestAddDisk2(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	var expectedCommands []string
@@ -142,7 +141,7 @@ func TestDeleteDisk1(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	assert.DeepEqual(t, "parsing", commandQueue, []string{
@@ -161,7 +160,7 @@ func TestDeleteDisk2(t *testing.T) {
 
 	commandQueue, err := rules.CalculateChanges(input, "/dev/null")
 	if err != nil {
-		log.Fatal(err.Error())
+		t.Fatal(err.Error())
 	}
 
 	var expectedCommands []string

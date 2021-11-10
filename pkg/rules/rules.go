@@ -97,8 +97,11 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 		for _, nodeIP := range nodeIPs {
 			nodeRules := zoneRules.Nodes[nodeIP]
 			for diskNumber := 1; diskNumber <= int(nodeRules.DiskCount); diskNumber++ {
-				disk := ring.FindDevice(zoneRules.Zone, nodeIP, diskNumber)
 				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
+				disk, err := ring.FindDevice(zoneRules.Zone, nodeIP, diskNumber)
+				if err != nil {
+					return nil, err
+				}
 
 				if disk == nil {
 					logg.Debug("Disk was not found, adding it")

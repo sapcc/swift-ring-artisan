@@ -172,12 +172,12 @@ func TestDeleteDisk2(t *testing.T) {
 
 func TestZoneMismatch(t *testing.T) {
 	var input builderfile.RingInfo
-	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
+	misc.ReadYAML("../../testing/builder-output-zone-mismatch.yaml", &input)
 
-	var rules RingRules
-	misc.ReadYAML("../../testing/artisan-error-zones.yaml", &rules)
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &ring)
 
-	_, err := rules.CalculateChanges(input, "/dev/null")
+	_, err := ring.CalculateChanges(input, "/dev/null")
 	if err == nil {
 		t.Fatal("This test is expected to fail")
 	}
@@ -199,6 +199,23 @@ func TestMultipleRegions(t *testing.T) {
 		t.Fatal("This test is expected to fail")
 	}
 	errString := "currently only one region is supported"
+	if err.Error() != errString {
+		t.Fatalf("Expected %q but got %q", errString, err.Error())
+	}
+}
+
+func TestParseReplicationMismatch(t *testing.T) {
+	var input builderfile.RingInfo
+	misc.ReadYAML("../../testing/builder-output-replication-mismatch.yaml", &input)
+
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &ring)
+
+	_, err := ring.CalculateChanges(input, "/dev/null")
+	if err == nil {
+		t.Fatal("This test is expected to fail")
+	}
+	errString := "replication ip and port do not match with the normal ip and port which is required"
 	if err.Error() != errString {
 		t.Fatalf("Expected %q but got %q", errString, err.Error())
 	}

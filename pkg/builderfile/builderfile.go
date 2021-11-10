@@ -21,6 +21,7 @@ package builderfile
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"regexp"
@@ -104,22 +105,30 @@ type RingInfo struct {
 	Devices []DeviceInfo
 }
 
-func (ring RingInfo) FindDevice(zone uint64, nodeIP string, diskNumber int) *DeviceInfo {
+// FindDevice returns a given disk that matches the in
+func (ring RingInfo) FindDevice(zone uint64, nodeIP string, diskNumber int) (*DeviceInfo, error) {
 	diskName := fmt.Sprintf("swift-%02d", diskNumber)
 	for _, dev := range ring.Devices {
-		if dev.Zone == zone && dev.IP == nodeIP && dev.Name == diskName {
-			return &dev
+		// zone is not checked here to detect potential zone mismatches
+		// if there are ever nodes which split disks across multiple zones this will break
+		// if zone would be checked here a command to remove and add a disk on a zone mismatch would be generated
+		if dev.IP == nodeIP && dev.Name == diskName {
+			if dev.Zone != zone {
+				return nil, errors.New("zone ID mismatch between parsed data and rule file")
+			}
+			if dev.IP != dev.ReplicationIP || dev.Port != dev.ReplicationPort {
+				return nil, errors.New("replication ip and port do not match with the normal ip and port which is required")
+			}
+			return &dev, nil
 		}
 	}
 
-	return nil
+	return nil, nil
 }
 
 // Input parses an input and return the data as MetData object
 func Input(input io.Reader) RingInfo {
 	var metaData RingInfo
-	// metaData.Devices = make(map[string]Device)
-
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		line := scanner.Text()

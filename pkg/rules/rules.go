@@ -85,7 +85,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 	var discoveredDisks, commandQueue []string
 	for zoneID, zoneRules := range ringRules.Zones {
 		if zoneRules.Zone != uint64(zoneID+1) {
-			return nil, errors.New("zone ID mismatch between parsed data and rule file")
+			return nil, fmt.Errorf("zone ID mismatch between parsed data %d and rule file %d", zoneRules.Zone, zoneID+1)
 		}
 
 		var nodeIPs []string
@@ -98,7 +98,15 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 			nodeRules := zoneRules.Nodes[nodeIP]
 			for diskNumber := 1; diskNumber <= int(nodeRules.DiskCount); diskNumber++ {
 				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
-				disk, err := ring.FindDevice(zoneRules.Zone, nodeIP, diskNumber)
+				var port uint64
+				if nodeRules.Port != 0 {
+					port = nodeRules.Port
+				} else if ringRules.BasePort != 0 {
+					port = ringRules.BasePort
+				} else {
+					port = 6001
+				}
+				disk, err := ring.FindDevice(zoneRules.Zone, nodeIP, port, diskNumber)
 				if err != nil {
 					return nil, err
 				}
@@ -109,7 +117,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 						Region: ringRules.Region,
 						Zone:   zoneRules.Zone,
 						IP:     nodeIP,
-						Port:   ringRules.BasePort,
+						Port:   port,
 						Name:   fmt.Sprintf("swift-%02d", diskNumber),
 						Weight: weight,
 					}
@@ -119,7 +127,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 				discoveredDisks = append(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", nodeIP, disk.Port, disk.Name))
 
-				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, nodeRules.Port, disk)
+				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, port, disk)
 				if disk.Weight != weight {
 					logg.Debug("Weight does not match, adding command to change it")
 					commandQueue = append(commandQueue, disk.CommandSetWeight(ringFilename, weight))

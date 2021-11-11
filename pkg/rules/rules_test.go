@@ -220,3 +220,20 @@ func TestParseReplicationMismatch(t *testing.T) {
 		t.Fatalf("Expected %q but got %q", errString, err.Error())
 	}
 }
+
+func TestPortMismatch(t *testing.T) {
+	var input builderfile.RingInfo
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
+
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-port-mismatch.yaml", &ring)
+
+	_, err := ring.CalculateChanges(input, "/dev/null")
+	if err == nil {
+		t.Fatal("This test is expected to fail")
+	}
+	errString := "port mismatch between parsed data 6001 and rule file 6002"
+	if err.Error() != errString {
+		t.Fatalf("Expected %q but got %q", errString, err.Error())
+	}
+}

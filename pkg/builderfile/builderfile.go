@@ -106,7 +106,7 @@ type RingInfo struct {
 }
 
 // FindDevice returns a given disk that matches the in
-func (ring RingInfo) FindDevice(zone uint64, nodeIP string, diskNumber int) (*DeviceInfo, error) {
+func (ring RingInfo) FindDevice(zone uint64, nodeIP string, port uint64, diskNumber int) (*DeviceInfo, error) {
 	diskName := fmt.Sprintf("swift-%02d", diskNumber)
 	for _, dev := range ring.Devices {
 		// zone is not checked here to detect potential zone mismatches
@@ -115,6 +115,9 @@ func (ring RingInfo) FindDevice(zone uint64, nodeIP string, diskNumber int) (*De
 		if dev.IP == nodeIP && dev.Name == diskName {
 			if dev.Zone != zone {
 				return nil, fmt.Errorf("zone ID mismatch between parsed data %d and rule file %d", dev.Zone, zone)
+			}
+			if dev.Port != port {
+				return nil, fmt.Errorf("port mismatch between parsed data %d and rule file %d", dev.Port, port)
 			}
 			if dev.IP != dev.ReplicationIP || dev.Port != dev.ReplicationPort {
 				return nil, errors.New("replication ip and port do not match with the normal ip and port which is required")

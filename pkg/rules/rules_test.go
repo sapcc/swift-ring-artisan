@@ -181,7 +181,7 @@ func TestZoneMismatch(t *testing.T) {
 	if err == nil {
 		t.Fatal("This test is expected to fail")
 	}
-	errString := "zone ID mismatch between parsed data and rule file"
+	errString := "zone ID mismatch between parsed data 2 and rule file 1"
 	if err.Error() != errString {
 		t.Fatalf("Expected %q but got %q", errString, err.Error())
 	}

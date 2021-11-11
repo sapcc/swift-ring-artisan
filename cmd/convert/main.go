@@ -55,7 +55,7 @@ Currently this is not possible from within go due to a bug in the yaml library t
 
 func run(cmd *cobra.Command, args []string) {
 	if inputFilename == "" {
-		logg.Fatal("--input needs to be supplied and cannot be empty.")
+		logg.Fatal("--input needs to be supplied and cannot be empty")
 	}
 
 	var ring builderfile.RingInfo

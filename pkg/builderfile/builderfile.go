@@ -114,7 +114,7 @@ func (ring RingInfo) FindDevice(zone uint64, nodeIP string, diskNumber int) (*De
 		// if zone would be checked here a command to remove and add a disk on a zone mismatch would be generated
 		if dev.IP == nodeIP && dev.Name == diskName {
 			if dev.Zone != zone {
-				return nil, errors.New("zone ID mismatch between parsed data and rule file")
+				return nil, fmt.Errorf("zone ID mismatch between parsed data %d and rule file %d", dev.Zone, zone)
 			}
 			if dev.IP != dev.ReplicationIP || dev.Port != dev.ReplicationPort {
 				return nil, errors.New("replication ip and port do not match with the normal ip and port which is required")

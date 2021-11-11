@@ -53,7 +53,7 @@ The output of swift-ring-builder needs to be piped into swift-ring-artisan.`,
 
 func run(cmd *cobra.Command, args []string) {
 	if outputFormat != "" && outputFormat != "json" && outputFormat != "yaml" {
-		logg.Fatal("format needs to be set to json OR yaml.")
+		logg.Fatal("%q format is not supported, please use json or yaml instead", outputFormat)
 	}
 
 	// if a file is supplied read that otherwise listen on stdin

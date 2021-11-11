@@ -109,7 +109,7 @@ func run(cmd *cobra.Command, args []string) {
 		cmd := exec.Command("sh", "-c", "command -v swift-ring-builder")
 		err := cmd.Run()
 		if err == exec.ErrNotFound {
-			logg.Debug("Did not find swift-ring-builder, skipping consistency check")
+			logg.Debug("Did not find swift-ring-builder in PATH, skipping consistency check")
 		} else if err == nil {
 			cmd := exec.Command("swift-ring-builder", builderFilename)
 			stdout, err := cmd.Output()
@@ -137,17 +137,17 @@ func run(cmd *cobra.Command, args []string) {
 	} else if inputFilename != "" {
 		misc.ReadYAML(inputFilename, &ring)
 	} else {
-		logg.Fatal("Either --input or --builder needs to be set.")
+		logg.Fatal("Either --input or --builder needs to be set")
 	}
 
 	if ruleFilename == "" {
-		logg.Fatal("--rule needs to be supplied and cannot be empty.")
+		logg.Fatal("--rule needs to be supplied and cannot be empty")
 	}
 	var ruleData rules.RingRules
 	misc.ReadYAML(ruleFilename, &ruleData)
 
 	if (checkChanges || executeCommands) && builderFilename == "" {
-		logg.Fatal("--ring needs to be supplied and cannot be empty.")
+		logg.Fatal("--ring needs to be supplied and cannot be empty")
 	}
 	commandQueue, err := ruleData.CalculateChanges(ring, builderFilename)
 	if err != nil {

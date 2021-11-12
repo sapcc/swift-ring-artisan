@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"os/exec"
 	"reflect"
+	"sort"
 	"time"
 
 	"github.com/sapcc/go-bits/logg"
@@ -80,6 +81,10 @@ func File(builderFilename string) RingInfo {
 		ringParsed.ReassignedCooldown = 0
 		ringParsed.ReassignedRemaining = time.Time{}
 		ringParsed.Zones = 0
+
+		sort.Slice(ringParsed.Devices, func(i, j int) bool {
+			return ringParsed.Devices[i].ID < ringParsed.Devices[j].ID
+		})
 
 		equal := reflect.DeepEqual(ringParsed, ring)
 		if !equal {

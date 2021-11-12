@@ -53,7 +53,7 @@ func ReadYAML(filename string, variable interface{}) {
 }
 
 func ParseUint(string string) uint64 {
-	uint, err := strconv.ParseUint(string, 10, 32)
+	uint, err := strconv.ParseUint(string, 10, 64)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}
@@ -61,7 +61,7 @@ func ParseUint(string string) uint64 {
 }
 
 func ParseFloat(string string) float64 {
-	float, err := strconv.ParseFloat(string, 32)
+	float, err := strconv.ParseFloat(string, 64)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

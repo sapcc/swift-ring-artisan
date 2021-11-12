@@ -55,6 +55,10 @@ func guessType(input interface{}) interface{} {
 			if key == "_dispersion_graph" || key == "_replica2part2dev" || key == "_last_part_moves" {
 				continue
 			}
+			// skip balance to avoid rounding errors when comparing with text based parser
+			if key == "balance" {
+				continue
+			}
 			data[entry.Key.(string)] = guessType(entry.Value)
 		}
 		return data

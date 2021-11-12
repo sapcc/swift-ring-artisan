@@ -29,10 +29,10 @@ import (
 )
 
 var (
-	basePort       uint64
-	baseSize       float64
-	inputFilename  string
-	outputFilename string
+	basePort        uint64
+	baseSize        float64
+	builderFilename string
+	outputFilename  string
 )
 
 // AddCommandTo adds a command to cobra.Command
@@ -48,18 +48,17 @@ Currently this is not possible from within go due to a bug in the yaml library t
 	}
 	cmd.PersistentFlags().Uint64VarP(&basePort, "port", "p", 6001, "Base port to use for all nodes. Defaults to 6001.")
 	cmd.PersistentFlags().Float64VarP(&baseSize, "size", "s", 6, "Base size to use for the size of the disks. Defaults to 6TB. Should have a suffix like GB or TB.")
-	cmd.PersistentFlags().StringVarP(&inputFilename, "input", "i", "", "Input file from where the parsed data should be read.")
+	cmd.PersistentFlags().StringVarP(&builderFilename, "builder", "b", "", "Builder file to read and apply the changes to.")
 	cmd.PersistentFlags().StringVarP(&outputFilename, "output", "o", "", "Output file to write the rules to.")
 	parent.AddCommand(cmd)
 }
 
 func run(cmd *cobra.Command, args []string) {
-	if inputFilename == "" {
-		logg.Fatal("--input needs to be supplied and cannot be empty")
+	if builderFilename == "" {
+		logg.Fatal("--builder needs to be supplied and cannot be empty")
 	}
 
-	var ring builderfile.RingInfo
-	misc.ReadYAML(inputFilename, &ring)
+	ring := builderfile.File(builderFilename)
 
 	diskRules := convert.Convert(ring, basePort, baseSize)
 

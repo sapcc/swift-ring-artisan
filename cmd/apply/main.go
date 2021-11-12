@@ -20,28 +20,21 @@
 package applycmd
 
 import (
-	"bytes"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"reflect"
 	"strings"
-	"time"
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
-	"github.com/sapcc/swift-ring-artisan/pkg/pickler"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
-	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/spf13/cobra"
 )
 
 var (
 	checkChanges    bool
 	executeCommands bool
-	inputFilename   string
 	outputFilename  string
 	outputFormat    string
 	builderFilename string
@@ -51,94 +44,30 @@ var (
 // AddCommandTo adds a command to cobra.Command
 func AddCommandTo(parent *cobra.Command) {
 	cmd := &cobra.Command{
-		Use:     "apply -i <file> -r <file>",
+		Use:     "apply -b <file> -r <file>",
 		Example: "  swift-ring-artisan apply -b account.builder -r swift-ring-artisan-rules.yaml",
-		Short:   "Applies rules to the parsed swift-ring-builder file.",
+		Short:   "Applies rules to a swift-ring-builder file.",
 		Long: `Generates swift-ring-builder commands based on predefined rules which get applied to the parsed output of the swift-ring-builder utility.
 		Rebalance needs to be done manually afterwards.`,
 		Run: run,
 	}
 	cmd.PersistentFlags().BoolVarP(&checkChanges, "check", "c", false, "Wether to check if the rule file matches the ring. If it does not match the exit code is 1.")
 	cmd.PersistentFlags().BoolVarP(&executeCommands, "execute", "e", false, "Wether to execute the generated commands.")
-	cmd.PersistentFlags().StringVarP(&inputFilename, "input", "i", "", "Input file from where the parsed data should be read.")
 	cmd.PersistentFlags().StringVarP(&outputFormat, "format", "f", "", "Output format. Can be either json or yaml.")
 	cmd.PersistentFlags().StringVarP(&outputFilename, "output", "o", "", "Output file to write the parsed data to.")
-	cmd.PersistentFlags().StringVarP(&builderFilename, "builder", "b", "", "Builder file to apply the changes to.")
+	cmd.PersistentFlags().StringVarP(&builderFilename, "builder", "b", "", "Builder file to read and apply the changes to.")
 	cmd.PersistentFlags().StringVarP(&ruleFilename, "rule", "r", "", "Rule file to apply to the input data.")
 	parent.AddCommand(cmd)
 }
 
-func run(cmd *cobra.Command, args []string) {
+func run(_ *cobra.Command, args []string) {
 	if outputFormat != "" && outputFormat != "json" && outputFormat != "yaml" {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
-
-	var ring builderfile.RingInfo
-	if inputFilename == "" && builderFilename != "" {
-		// // generate with ./unpickle.sh
-		// cmd := exec.Command("python3", "-c", "'import json;import pickle;import sys;d=pickle.load(open(sys.argv[-1],\"rb\"));d[\"_dispersion_graph\"]=None;d[\"_replica2part2dev\"]=None;d[\"_last_part_moves\"]=None;print(json.dumps(d));'", builderFilename)
-		// stdout, err := cmd.Output()
-		// logg.Info("%s %s", cmd, string(stdout))
-		// if err == exec.ErrNotFound {
-		// 	logg.Fatal("Please install python3 to decode the pickle file.")
-		// } else if err != nil {
-		// 	logg.Fatal(err.Error())
-		// }
-
-		// var pickleData PickleData
-		// decoder := json.NewDecoder(bytes.NewReader(stdout))
-		// decoder.DisallowUnknownFields()
-		// err = decoder.Decode(&pickleData)
-		// if err != nil {
-		// 	logg.Fatal(err.Error())
-		// }
-
-		pickleData := pickler.DecodeBuilderFile(builderFilename)
-		ring = builderfile.RingInfo{
-			ID:          pickleData.ID,
-			Version:     pickleData.Version,
-			Devices:     pickleData.Devices,
-			DeviceCount: uint64(len(pickleData.Devices)),
-			Dispersion:  pickleData.Dispersion,
-			Partitions:  pickleData.Partitions,
-			Regions:     pickleData.Devices[0].Region, // FIXME: make multi region aware
-			Replicas:    pickleData.Replicas,
-		}
-
-		// optional compare pickle parser with cli parser
-		cmd := exec.Command("sh", "-c", "command -v swift-ring-builder")
-		err := cmd.Run()
-		if err == exec.ErrNotFound {
-			logg.Debug("Did not find swift-ring-builder in PATH, skipping consistency check")
-		} else if err == nil {
-			cmd := exec.Command("swift-ring-builder", builderFilename)
-			stdout, err := cmd.Output()
-			if err != nil {
-				logg.Fatal(err.Error())
-			}
-			ringParsed := builderfile.Input(bytes.NewReader(stdout))
-			// overwrite some data that the parser method but not the pickler method extracts
-			ringParsed.FileName = ""
-			ringParsed.ReassignedCooldown = 0
-			ringParsed.ReassignedRemaining = time.Time{}
-			ringParsed.Zones = 0
-
-			equal := reflect.DeepEqual(ringParsed, ring)
-			if !equal {
-				dmp := diffmatchpatch.New()
-				diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", ringParsed), fmt.Sprintf("%+v\n", ring), false)
-				logg.Info("Pickle parsed output and swift-ring-builder output are not equal. What is going on here?!")
-				logg.Fatal(dmp.DiffPrettyText(diffs))
-			}
-		} else {
-			logg.Fatal(err.Error())
-		}
-
-	} else if inputFilename != "" {
-		misc.ReadYAML(inputFilename, &ring)
-	} else {
-		logg.Fatal("Either --input or --builder needs to be set")
+	if builderFilename == "" {
+		logg.Fatal("--builder needs to be set")
 	}
+	ring := builderfile.File(builderFilename)
 
 	if ruleFilename == "" {
 		logg.Fatal("--rule needs to be supplied and cannot be empty")
@@ -146,9 +75,6 @@ func run(cmd *cobra.Command, args []string) {
 	var ruleData rules.RingRules
 	misc.ReadYAML(ruleFilename, &ruleData)
 
-	if (checkChanges || executeCommands) && builderFilename == "" {
-		logg.Fatal("--ring needs to be supplied and cannot be empty")
-	}
 	commandQueue, err := ruleData.CalculateChanges(ring, builderFilename)
 	if err != nil {
 		log.Fatal(err.Error())

@@ -17,7 +17,7 @@
 *
 *******************************************************************************/
 
-package pickler
+package builderfile
 
 import (
 	"fmt"
@@ -27,21 +27,20 @@ import (
 	"github.com/nlpodyssey/gopickle/pickle"
 	"github.com/nlpodyssey/gopickle/types"
 	"github.com/sapcc/go-bits/logg"
-	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 )
 
-type PickleData struct {
+type pickleData struct {
 	ID         string
 	Replicas   float64
 	Dispersion float64
-	Devices    []builderfile.DeviceInfo `mapstructure:"devs"`
-	Partitions uint64                   `mapstructure:"parts"`
+	Devices    []DeviceInfo `mapstructure:"devs"`
+	Partitions uint64       `mapstructure:"parts"`
 	Version    uint64
 }
 
-func Unmarshal(input interface{}) PickleData {
+func unmarshal(input interface{}) pickleData {
 	pickle := guessType(input)
-	var mappedData PickleData
+	var mappedData pickleData
 	mapstructure.Decode(pickle, &mappedData)
 	return mappedData
 }
@@ -69,7 +68,6 @@ func guessType(input interface{}) interface{} {
 		return v
 	default:
 		logg.Fatal("Can't translate type %T", v)
-
 	}
 
 	return nil
@@ -85,7 +83,7 @@ func (*Array) Call(args ...interface{}) (interface{}, error) {
 	return args[1].(*types.List), nil
 }
 
-func DecodeBuilderFile(builderFilename string) PickleData {
+func decodeBuilderFile(builderFilename string) pickleData {
 	builderReader, err := os.Open(builderFilename)
 	if err != nil {
 		logg.Fatal("Reading file failed: %s", err.Error())
@@ -103,5 +101,5 @@ func DecodeBuilderFile(builderFilename string) PickleData {
 		logg.Fatal(err.Error())
 	}
 
-	return Unmarshal(pickled)
+	return unmarshal(pickled)
 }

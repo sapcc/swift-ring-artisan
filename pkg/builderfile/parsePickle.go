@@ -61,6 +61,10 @@ func guessType(input interface{}) interface{} {
 	case *types.List:
 		var data []interface{}
 		for _, entry := range *v {
+			// skip empty entries in Devices so that mapstructure does not convert them to empty DeviceInfos
+			if entry == nil {
+				continue
+			}
 			data = append(data, guessType(entry))
 		}
 		return data

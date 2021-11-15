@@ -2,22 +2,22 @@ base_port: 6001
 base_size_tb: 6
 region: 1
 zones:
-- zone: 1
-  nodes:
-    10.46.14.44:
-      disk_count: 40
-      weight: 100
-    10.46.14.52:
-      disk_count: 40
-      weight: 100
-- zone: 3
-  nodes:
-    10.46.14.204:
-      disk_count: 12
-      weight: 100
-    10.46.14.212:
-      disk_count: 12
-      weight: 100
-    10.46.14.220:
-      disk_count: 12
-      weight: 100
+  1:
+    nodes:
+      10.46.14.44:
+        disk_count: 40
+        weight: 100
+      10.46.14.52:
+        disk_count: 40
+        weight: 100
+  3:
+    nodes:
+      10.46.14.204:
+        disk_count: 12
+        weight: 100
+      10.46.14.212:
+        disk_count: 12
+        weight: 100
+      10.46.14.220:
+        disk_count: 12
+        weight: 100

@@ -65,6 +65,10 @@ type RingInfo struct {
 	Devices []DeviceInfo
 }
 
+func (device DeviceInfo) IPAddressPort() string {
+	return fmt.Sprintf("%s:%d", device.IP, device.Port)
+}
+
 func (device DeviceInfo) CommandAdd(ringFilename string) string {
 	return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g",
 		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)

@@ -30,35 +30,35 @@ func Convert(ring builderfile.RingInfo, basePort uint64, baseSize float64) rules
 		Region:     1, // FIXME: make multi region aware
 		BasePort:   basePort,
 		BaseSizeTB: baseSize,
+		Zones:      make(map[uint64]*rules.ZoneRules),
 	}
-
 	var (
 		last          string
 		diskRulesZone *rules.ZoneRules
 	)
 	for _, device := range ring.Devices {
 		// create zone if it does not exist
-		if len(diskRules.Zones) == 0 || diskRules.Zones[len(diskRules.Zones)-1].Zone != device.Zone {
-			diskRules.Zones = append(diskRules.Zones, rules.ZoneRules{Zone: device.Zone})
+		if _, ok := diskRules.Zones[device.Zone]; len(diskRules.Zones) == 0 || !ok {
+			diskRules.Zones[device.Zone] = &rules.ZoneRules{}
 		}
 
-		diskRulesZone = &diskRules.Zones[device.Zone-1]
+		diskRulesZone = diskRules.Zones[device.Zone]
 		// if the last IPAddressPort matches the current, there is another disk on the same note, just increase the count
-		if last != "" && last == device.IP {
-			node := diskRulesZone.Nodes[device.IP]
+		if last != "" && last == device.IPAddressPort() {
+			node := *diskRulesZone.Nodes[device.IP]
 			node.DiskCount++
-			diskRulesZone.Nodes[device.IP] = node
+			diskRulesZone.Nodes[device.IP] = &node
 			continue
 		}
+
 		if diskRulesZone.Nodes == nil {
-			diskRulesZone.Nodes = make(map[string]rules.NodeRules)
+			diskRulesZone.Nodes = make(map[string]*rules.NodeRules)
 		}
-		diskRulesZone.Nodes[device.IP] = rules.NodeRules{
+		diskRulesZone.Nodes[device.IP] = &rules.NodeRules{
 			DiskCount: 1,
 			Weight:    &device.Weight,
 		}
-
-		last = device.IP
+		last = device.IPAddressPort()
 	}
 
 	return diskRules

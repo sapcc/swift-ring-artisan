@@ -41,8 +41,7 @@ type NodeRules struct {
 
 // ZoneRules contains multiple nodes
 type ZoneRules struct {
-	Zone  uint64
-	Nodes map[string]NodeRules
+	Nodes map[string]*NodeRules
 }
 
 // RingRules containing the rules for a region, multiple Zones and dozzens Nodes
@@ -50,7 +49,7 @@ type RingRules struct {
 	BaseSizeTB float64 `yaml:"base_size_tb"`
 	BasePort   uint64  `yaml:"base_port"`
 	Region     uint64
-	Zones      []ZoneRules
+	Zones      map[uint64]*ZoneRules
 }
 
 func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) float64 {
@@ -84,10 +83,6 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	var discoveredDisks, commandQueue []string
 	for zoneID, zoneRules := range ringRules.Zones {
-		if zoneRules.Zone != uint64(zoneID+1) {
-			return nil, fmt.Errorf("zone ID mismatch between parsed data %d and rule file %d", zoneRules.Zone, zoneID+1)
-		}
-
 		var nodeIPs []string
 		for nodeIP := range zoneRules.Nodes {
 			nodeIPs = append(nodeIPs, nodeIP)
@@ -106,7 +101,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				} else {
 					port = 6001
 				}
-				disk, err := ring.FindDevice(zoneRules.Zone, nodeIP, port, diskNumber)
+				disk, err := ring.FindDevice(zoneID, nodeIP, port, diskNumber)
 				if err != nil {
 					return nil, err
 				}
@@ -115,7 +110,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 					logg.Debug("Disk was not found, adding it")
 					disk = &builderfile.DeviceInfo{
 						Region: ringRules.Region,
-						Zone:   zoneRules.Zone,
+						Zone:   zoneID,
 						IP:     nodeIP,
 						Port:   port,
 						Name:   fmt.Sprintf("swift-%02d", diskNumber),

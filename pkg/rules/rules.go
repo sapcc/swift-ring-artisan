@@ -99,7 +99,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				} else if ringRules.BasePort != 0 {
 					port = ringRules.BasePort
 				} else {
-					port = 6001
+					port = 6000
 				}
 				disk, err := ring.FindDevice(zoneID, nodeIP, port, diskNumber)
 				if err != nil {

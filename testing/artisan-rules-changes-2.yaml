@@ -1,4 +1,5 @@
 base_size_tb: 6
+base_port: 6001
 region: 1
 zones:
   1:

@@ -25,10 +25,10 @@ import (
 )
 
 // Convert converts parsed MetaData to DiskRules
-func Convert(ring builderfile.RingInfo, basePort uint64, baseSize float64) rules.RingRules {
+func Convert(ring builderfile.RingInfo, baseSize float64) rules.RingRules {
 	diskRules := rules.RingRules{
 		Region:     1, // FIXME: make multi region aware
-		BasePort:   basePort,
+		BasePort:   ring.Devices[0].Port,
 		BaseSizeTB: baseSize,
 		Zones:      make(map[uint64]*rules.ZoneRules),
 	}

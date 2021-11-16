@@ -1,22 +1,22 @@
 base_size_tb: 6
 region: 1
 zones:
-- zone: 1
-  nodes:
-    10.46.14.44: &40-disks
-      ip: 6001
-      disk_count: 40
-      disk_size_tb: 6
-      weight: 100
-    10.46.14.52: *40-disks
-- zone: 2
-  nodes:
-    10.46.14.116: *40-disks
-- zone: 3
-  nodes:
-    10.46.14.204: &12-disks
-      disk_count: 12
-      disk_size_tb: 6
-      weight: 100
-    10.46.14.212: *12-disks
-    10.46.14.220: *12-disks
+  1:
+    nodes:
+      10.46.14.44: &40-disks
+        port: 6001
+        disk_count: 40
+        disk_size_tb: 6
+        weight: 100
+      10.46.14.52: *40-disks
+  2:
+    nodes:
+      10.46.14.116: *40-disks
+  3:
+    nodes:
+      10.46.14.204: &12-disks
+        disk_count: 12
+        disk_size_tb: 6
+        weight: 100
+      10.46.14.212: *12-disks
+      10.46.14.220: *12-disks

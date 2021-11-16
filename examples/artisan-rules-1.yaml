@@ -1,10 +1,10 @@
 base_size_tb: 6
 region: 1
 zones:
-- zone: 1
-  nodes:
-    10.114.1.202: &disk
-      disk_count: 3
-      disk_size_tb: 6
-      weight: 100
-    10.114.1.203: *disk
+  1:
+    nodes:
+      10.114.1.202: &disk
+        disk_count: 3
+        disk_size_tb: 6
+        weight: 100
+      10.114.1.203: *disk

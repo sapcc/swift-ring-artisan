@@ -79,14 +79,10 @@ func run(_ *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	if checkChanges {
-		if len(commandQueue) != 0 {
-			os.Exit(1)
-		} else {
-			os.Exit(0)
-		}
-	}
 
+	if executeCommands && checkChanges {
+		logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
+	}
 	for _, command := range commandQueue {
 		if executeCommands {
 			args := strings.Split(command, " ")
@@ -98,6 +94,13 @@ func run(_ *cobra.Command, args []string) {
 			logg.Info(string(stdout))
 		} else {
 			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+		}
+	}
+	if checkChanges {
+		if len(commandQueue) != 0 {
+			os.Exit(1)
+		} else {
+			os.Exit(0)
 		}
 	}
 }

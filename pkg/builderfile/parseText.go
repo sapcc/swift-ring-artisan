@@ -174,8 +174,7 @@ func Input(input io.Reader) RingInfo {
 		logg.Fatal("The table entry regex did not match the line: %s", line)
 	}
 
-	err := scanner.Err()
-	if err != nil {
+	if err := scanner.Err(); err != nil {
 		logg.Fatal("Reading input failed: %s", err.Error())
 	}
 

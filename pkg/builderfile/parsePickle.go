@@ -41,7 +41,10 @@ type pickleData struct {
 func unmarshal(input interface{}) pickleData {
 	pickle := guessType(input)
 	var mappedData pickleData
-	mapstructure.Decode(pickle, &mappedData)
+	err := mapstructure.Decode(pickle, &mappedData)
+	if err != nil {
+		logg.Fatal(err.Error())
+	}
 	return mappedData
 }
 

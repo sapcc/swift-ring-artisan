@@ -50,9 +50,10 @@ func Convert(ring builderfile.RingInfo, baseSize float64) rules.RingRules {
 		if diskRulesZone.Nodes == nil {
 			diskRulesZone.Nodes = make(map[string]*rules.NodeRules)
 		}
+		weight := device.Weight
 		diskRulesZone.Nodes[device.IP] = &rules.NodeRules{
 			DiskCount: 1,
-			Weight:    &device.Weight,
+			Weight:    &weight,
 		}
 	}
 

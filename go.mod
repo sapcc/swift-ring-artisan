@@ -6,7 +6,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.2
 	github.com/nlpodyssey/gopickle v0.1.0
 	github.com/oriser/regroup v0.0.0-20210730155327-fca8d7531263
-	github.com/sapcc/go-bits v0.0.0-20211112132321-3dc8d1d7f2af
+	github.com/sapcc/go-bits v0.0.0-20211125211901-34f57c694559
 	github.com/sergi/go-diff v1.2.0
 	github.com/spf13/cobra v1.2.1
 	gopkg.in/yaml.v2 v2.4.0

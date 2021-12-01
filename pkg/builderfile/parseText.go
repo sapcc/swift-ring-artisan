@@ -34,7 +34,8 @@ import (
 
 // regex to match the following line:
 // container.builder, build version 7, id 024e79c994c643d09eb045d488dafb94
-var fileInfoRx = regroup.MustCompile(`^(?:[\w\/\.-]+\/)?(?P<fileName>\w+\.builder), build version (?P<buildVersion>\d+), id (?P<id>[\d\w]{32})$`)
+// account.builder, build version 37, id (not assigned)
+var fileInfoRx = regroup.MustCompile(`^(?:[\w\/\.-]+\/)?(?P<fileName>\w+\.builder), build version (?P<buildVersion>\d+), id (?:(?P<id>[\d\w]{32})|\(not assigned\))$`)
 
 // regex to match the following line:
 // 1024 partitions, 3.000000 replicas, 1 regions, 1 zones, 6 devices, 0.00 balance, 0.00 dispersion

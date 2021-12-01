@@ -72,10 +72,10 @@ func run(_ *cobra.Command, args []string) {
 	if ruleFilename == "" {
 		logg.Fatal("--rule needs to be supplied and cannot be empty")
 	}
-	var ruleData rules.RingRules
-	misc.ReadYAML(ruleFilename, &ruleData)
+	var file map[string]rules.RingRules
+	misc.ReadYAML(ruleFilename, &file)
 
-	commandQueue, err := ruleData.CalculateChanges(ring, builderFilename)
+	commandQueue, err := file[builderFilename].CalculateChanges(ring, builderFilename)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

@@ -20,10 +20,13 @@
 package convertcmd
 
 import (
+	"path/filepath"
+
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/convert"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
+	"github.com/sapcc/swift-ring-artisan/pkg/rules"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -60,7 +63,10 @@ func run(cmd *cobra.Command, args []string) {
 
 	diskRules := convert.Convert(ring, baseSize)
 
-	dataYAML, err := yaml.Marshal(diskRules)
+	filename := filepath.Base(builderFilename)
+	file := map[string]rules.RingRules{filename: diskRules}
+
+	dataYAML, err := yaml.Marshal(file)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

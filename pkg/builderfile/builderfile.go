@@ -21,6 +21,7 @@ package builderfile
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os/exec"
 	"reflect"
@@ -65,34 +66,33 @@ func File(builderFilename string) RingInfo {
 
 	// optional compare pickle parser with cli parser
 	command := exec.Command("swift-ring-builder", builderFilename)
-	if err := command.Run(); err == exec.ErrNotFound {
-		logg.Debug("Did not find swift-ring-builder in PATH, skipping consistency check")
-	} else if err == nil {
-		stdout, err := command.Output()
-		if err != nil {
-			logg.Fatal("while running swift-ring-builder: " + err.Error())
+	stdout, err := command.Output()
+	if err != nil {
+		if errors.Is(err, exec.ErrNotFound) {
+			logg.Debug("Did not find swift-ring-builder in PATH, skipping consistency check")
+			return ring
 		}
-		ringParsed := Input(bytes.NewReader(stdout))
-		// overwrite some data that the parser method but not the pickler method extracts
-		ringParsed.Balance = 0
-		ringParsed.FileName = ""
-		ringParsed.ReassignedCooldown = 0
-		ringParsed.ReassignedRemaining = time.Time{}
-		ringParsed.Zones = 0
+		logg.Fatal("while running swift-ring-builder: " + err.Error())
+	}
 
-		sort.Slice(ringParsed.Devices, func(i, j int) bool {
-			return ringParsed.Devices[i].ID < ringParsed.Devices[j].ID
-		})
+	ringParsed := Input(bytes.NewReader(stdout))
+	// overwrite some data that the parser method but not the pickler method extracts
+	ringParsed.Balance = 0
+	ringParsed.FileName = ""
+	ringParsed.ReassignedCooldown = 0
+	ringParsed.ReassignedRemaining = time.Time{}
+	ringParsed.Zones = 0
 
-		equal := reflect.DeepEqual(ringParsed, ring)
-		if !equal {
-			dmp := diffmatchpatch.New()
-			diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", ringParsed), fmt.Sprintf("%+v\n", ring), false)
-			logg.Info("Pickle parsed output and swift-ring-builder output are not equal. What is going on here?!")
-			logg.Fatal(dmp.DiffPrettyText(diffs))
-		}
-	} else {
-		logg.Fatal(err.Error())
+	sort.Slice(ringParsed.Devices, func(i, j int) bool {
+		return ringParsed.Devices[i].ID < ringParsed.Devices[j].ID
+	})
+
+	equal := reflect.DeepEqual(ringParsed, ring)
+	if !equal {
+		dmp := diffmatchpatch.New()
+		diffs := dmp.DiffMain(fmt.Sprintf("%+v\n", ringParsed), fmt.Sprintf("%+v\n", ring), false)
+		logg.Info("Pickle parsed output and swift-ring-builder output are not equal. What is going on here?!")
+		logg.Fatal(dmp.DiffPrettyText(diffs))
 	}
 
 	return ring

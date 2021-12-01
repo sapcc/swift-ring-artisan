@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math"
 	"os/exec"
 	"reflect"
 	"sort"
@@ -63,6 +64,8 @@ func File(builderFilename string) RingInfo {
 		Regions:     pickleData.Devices[0].Region, // FIXME: make multi region aware
 		Replicas:    pickleData.Replicas,
 	}
+	// round to two decimal places to match the cli output
+	ring.Dispersion = math.Round(ring.Dispersion*100) / 100
 
 	// optional compare pickle parser with cli parser
 	command := exec.Command("swift-ring-builder", builderFilename)

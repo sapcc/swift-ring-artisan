@@ -71,7 +71,7 @@ func File(builderFilename string) RingInfo {
 		command := exec.Command("swift-ring-builder", builderFilename)
 		stdout, err := command.Output()
 		if err != nil {
-			logg.Fatal(err.Error())
+			logg.Fatal("while running swift-ring-builder: " + err.Error())
 		}
 		ringParsed := Input(bytes.NewReader(stdout))
 		// overwrite some data that the parser method but not the pickler method extracts

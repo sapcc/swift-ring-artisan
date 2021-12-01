@@ -64,11 +64,10 @@ func File(builderFilename string) RingInfo {
 	}
 
 	// optional compare pickle parser with cli parser
-	command := exec.Command("sh", "-c", "command -v swift-ring-builder")
+	command := exec.Command("swift-ring-builder", builderFilename)
 	if err := command.Run(); err == exec.ErrNotFound {
 		logg.Debug("Did not find swift-ring-builder in PATH, skipping consistency check")
 	} else if err == nil {
-		command := exec.Command("swift-ring-builder", builderFilename)
 		stdout, err := command.Output()
 		if err != nil {
 			logg.Fatal("while running swift-ring-builder: " + err.Error())

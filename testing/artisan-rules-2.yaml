@@ -15,6 +15,15 @@ zones:
       10.46.14.116:
         disk_count: 40
         weight: 100
+      10.246.192.68:
+        disk_count: 12
+        weight: 133
+      10.246.192.69:
+        disk_count: 12
+        weight: 133
+      10.246.192.70:
+        disk_count: 12
+        weight: 133
   3:
     nodes:
       10.46.14.204:

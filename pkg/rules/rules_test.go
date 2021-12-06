@@ -164,6 +164,15 @@ func TestDeleteDisk2(t *testing.T) {
 	}
 
 	var expectedCommands []string
+	for i := 1; i <= 12; i++ {
+		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null remove --region 1 --zone 2 --ip 10.246.192.68 --port 6001 --device swift-%02d --weight 133", i))
+	}
+	for i := 1; i <= 12; i++ {
+		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null remove --region 1 --zone 2 --ip 10.246.192.69 --port 6001 --device swift-%02d --weight 133", i))
+	}
+	for i := 1; i <= 12; i++ {
+		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null remove --region 1 --zone 2 --ip 10.246.192.70 --port 6001 --device swift-%02d --weight 133", i))
+	}
 	for i := 1; i <= 40; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null remove --region 1 --zone 2 --ip 10.46.14.116 --port 6001 --device swift-%02d --weight 100", i))
 	}

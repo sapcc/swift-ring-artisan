@@ -1,13 +1,13 @@
 file_name: container.builder
-version: 1246
+version: 1542
 id: 304a06d5435f4e0eb90c1327a1712209
 partitions: 4096
 replicas: 3
 regions: 1
 zones: 3
-device_count: 156
-balance: 1.56
-dispersion: 17.97
+device_count: 192
+balance: 1.21
+dispersion: 16.11
 reassigned_cooldown: 24
 reassigned_remaining: 0000-01-01T00:00:00Z
 overload_factor_Percent: 0
@@ -22,8 +22,10 @@ devices:
   replication_port: 6001
   name: swift-01
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 66
   region: 1
   zone: 1
@@ -33,8 +35,10 @@ devices:
   replication_port: 6001
   name: swift-02
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 67
   region: 1
   zone: 1
@@ -44,8 +48,10 @@ devices:
   replication_port: 6001
   name: swift-03
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 68
   region: 1
   zone: 1
@@ -55,8 +61,10 @@ devices:
   replication_port: 6001
   name: swift-04
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 69
   region: 1
   zone: 1
@@ -66,8 +74,10 @@ devices:
   replication_port: 6001
   name: swift-05
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 70
   region: 1
   zone: 1
@@ -77,8 +87,10 @@ devices:
   replication_port: 6001
   name: swift-06
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 71
   region: 1
   zone: 1
@@ -88,8 +100,10 @@ devices:
   replication_port: 6001
   name: swift-07
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 72
   region: 1
   zone: 1
@@ -99,8 +113,10 @@ devices:
   replication_port: 6001
   name: swift-08
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 73
   region: 1
   zone: 1
@@ -110,8 +126,10 @@ devices:
   replication_port: 6001
   name: swift-09
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 74
   region: 1
   zone: 1
@@ -121,8 +139,10 @@ devices:
   replication_port: 6001
   name: swift-10
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 75
   region: 1
   zone: 1
@@ -132,8 +152,10 @@ devices:
   replication_port: 6001
   name: swift-11
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 76
   region: 1
   zone: 1
@@ -143,8 +165,10 @@ devices:
   replication_port: 6001
   name: swift-12
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 77
   region: 1
   zone: 1
@@ -154,8 +178,10 @@ devices:
   replication_port: 6001
   name: swift-13
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 78
   region: 1
   zone: 1
@@ -165,8 +191,10 @@ devices:
   replication_port: 6001
   name: swift-14
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 79
   region: 1
   zone: 1
@@ -176,8 +204,10 @@ devices:
   replication_port: 6001
   name: swift-15
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 80
   region: 1
   zone: 1
@@ -187,8 +217,10 @@ devices:
   replication_port: 6001
   name: swift-16
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 81
   region: 1
   zone: 1
@@ -198,8 +230,10 @@ devices:
   replication_port: 6001
   name: swift-17
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 82
   region: 1
   zone: 1
@@ -209,8 +243,10 @@ devices:
   replication_port: 6001
   name: swift-18
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 83
   region: 1
   zone: 1
@@ -220,8 +256,10 @@ devices:
   replication_port: 6001
   name: swift-19
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 84
   region: 1
   zone: 1
@@ -231,8 +269,10 @@ devices:
   replication_port: 6001
   name: swift-20
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 85
   region: 1
   zone: 1
@@ -242,8 +282,10 @@ devices:
   replication_port: 6001
   name: swift-21
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 86
   region: 1
   zone: 1
@@ -253,8 +295,10 @@ devices:
   replication_port: 6001
   name: swift-22
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 87
   region: 1
   zone: 1
@@ -264,8 +308,10 @@ devices:
   replication_port: 6001
   name: swift-23
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 88
   region: 1
   zone: 1
@@ -275,8 +321,10 @@ devices:
   replication_port: 6001
   name: swift-24
   weight: 100
-  partitions: 80
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 89
   region: 1
   zone: 1
@@ -286,8 +334,10 @@ devices:
   replication_port: 6001
   name: swift-25
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 90
   region: 1
   zone: 1
@@ -297,8 +347,10 @@ devices:
   replication_port: 6001
   name: swift-26
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 91
   region: 1
   zone: 1
@@ -308,8 +360,10 @@ devices:
   replication_port: 6001
   name: swift-27
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 92
   region: 1
   zone: 1
@@ -319,8 +373,10 @@ devices:
   replication_port: 6001
   name: swift-28
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 107
   region: 1
   zone: 1
@@ -330,8 +386,10 @@ devices:
   replication_port: 6001
   name: swift-29
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 108
   region: 1
   zone: 1
@@ -341,8 +399,10 @@ devices:
   replication_port: 6001
   name: swift-30
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 109
   region: 1
   zone: 1
@@ -352,8 +412,10 @@ devices:
   replication_port: 6001
   name: swift-31
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 110
   region: 1
   zone: 1
@@ -363,8 +425,10 @@ devices:
   replication_port: 6001
   name: swift-32
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 111
   region: 1
   zone: 1
@@ -374,8 +438,10 @@ devices:
   replication_port: 6001
   name: swift-33
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 112
   region: 1
   zone: 1
@@ -385,8 +451,10 @@ devices:
   replication_port: 6001
   name: swift-34
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 113
   region: 1
   zone: 1
@@ -396,8 +464,10 @@ devices:
   replication_port: 6001
   name: swift-35
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 114
   region: 1
   zone: 1
@@ -407,8 +477,10 @@ devices:
   replication_port: 6001
   name: swift-36
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 115
   region: 1
   zone: 1
@@ -418,8 +490,10 @@ devices:
   replication_port: 6001
   name: swift-37
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 116
   region: 1
   zone: 1
@@ -429,8 +503,10 @@ devices:
   replication_port: 6001
   name: swift-38
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 117
   region: 1
   zone: 1
@@ -440,8 +516,10 @@ devices:
   replication_port: 6001
   name: swift-39
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 118
   region: 1
   zone: 1
@@ -451,8 +529,10 @@ devices:
   replication_port: 6001
   name: swift-40
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift01-cp001
 - id: 0
   region: 1
   zone: 1
@@ -462,8 +542,10 @@ devices:
   replication_port: 6001
   name: swift-01
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 1
   region: 1
   zone: 1
@@ -473,8 +555,10 @@ devices:
   replication_port: 6001
   name: swift-02
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 2
   region: 1
   zone: 1
@@ -484,8 +568,10 @@ devices:
   replication_port: 6001
   name: swift-03
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 3
   region: 1
   zone: 1
@@ -495,8 +581,10 @@ devices:
   replication_port: 6001
   name: swift-04
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 4
   region: 1
   zone: 1
@@ -506,8 +594,10 @@ devices:
   replication_port: 6001
   name: swift-05
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 5
   region: 1
   zone: 1
@@ -517,8 +607,10 @@ devices:
   replication_port: 6001
   name: swift-06
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 6
   region: 1
   zone: 1
@@ -528,8 +620,10 @@ devices:
   replication_port: 6001
   name: swift-07
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 7
   region: 1
   zone: 1
@@ -539,8 +633,10 @@ devices:
   replication_port: 6001
   name: swift-08
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 8
   region: 1
   zone: 1
@@ -550,8 +646,10 @@ devices:
   replication_port: 6001
   name: swift-09
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 135
   region: 1
   zone: 1
@@ -561,8 +659,10 @@ devices:
   replication_port: 6001
   name: swift-10
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 136
   region: 1
   zone: 1
@@ -572,8 +672,10 @@ devices:
   replication_port: 6001
   name: swift-11
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 137
   region: 1
   zone: 1
@@ -583,8 +685,10 @@ devices:
   replication_port: 6001
   name: swift-12
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 138
   region: 1
   zone: 1
@@ -594,8 +698,10 @@ devices:
   replication_port: 6001
   name: swift-13
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 139
   region: 1
   zone: 1
@@ -605,8 +711,10 @@ devices:
   replication_port: 6001
   name: swift-14
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 140
   region: 1
   zone: 1
@@ -616,8 +724,10 @@ devices:
   replication_port: 6001
   name: swift-15
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 141
   region: 1
   zone: 1
@@ -627,8 +737,10 @@ devices:
   replication_port: 6001
   name: swift-16
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 142
   region: 1
   zone: 1
@@ -638,8 +750,10 @@ devices:
   replication_port: 6001
   name: swift-17
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 143
   region: 1
   zone: 1
@@ -649,8 +763,10 @@ devices:
   replication_port: 6001
   name: swift-18
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 144
   region: 1
   zone: 1
@@ -660,8 +776,10 @@ devices:
   replication_port: 6001
   name: swift-19
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 145
   region: 1
   zone: 1
@@ -671,8 +789,10 @@ devices:
   replication_port: 6001
   name: swift-20
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 146
   region: 1
   zone: 1
@@ -682,8 +802,10 @@ devices:
   replication_port: 6001
   name: swift-21
   weight: 100
-  partitions: 80
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 147
   region: 1
   zone: 1
@@ -693,8 +815,10 @@ devices:
   replication_port: 6001
   name: swift-22
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 148
   region: 1
   zone: 1
@@ -704,8 +828,10 @@ devices:
   replication_port: 6001
   name: swift-23
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 149
   region: 1
   zone: 1
@@ -715,8 +841,10 @@ devices:
   replication_port: 6001
   name: swift-24
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 150
   region: 1
   zone: 1
@@ -726,8 +854,10 @@ devices:
   replication_port: 6001
   name: swift-25
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 151
   region: 1
   zone: 1
@@ -737,8 +867,10 @@ devices:
   replication_port: 6001
   name: swift-26
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 152
   region: 1
   zone: 1
@@ -748,8 +880,10 @@ devices:
   replication_port: 6001
   name: swift-27
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 153
   region: 1
   zone: 1
@@ -759,8 +893,10 @@ devices:
   replication_port: 6001
   name: swift-28
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 154
   region: 1
   zone: 1
@@ -770,8 +906,10 @@ devices:
   replication_port: 6001
   name: swift-29
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 155
   region: 1
   zone: 1
@@ -781,8 +919,10 @@ devices:
   replication_port: 6001
   name: swift-30
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 156
   region: 1
   zone: 1
@@ -792,8 +932,10 @@ devices:
   replication_port: 6001
   name: swift-31
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 157
   region: 1
   zone: 1
@@ -803,8 +945,10 @@ devices:
   replication_port: 6001
   name: swift-32
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 158
   region: 1
   zone: 1
@@ -814,8 +958,10 @@ devices:
   replication_port: 6001
   name: swift-33
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 159
   region: 1
   zone: 1
@@ -825,8 +971,10 @@ devices:
   replication_port: 6001
   name: swift-34
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 160
   region: 1
   zone: 1
@@ -836,8 +984,10 @@ devices:
   replication_port: 6001
   name: swift-35
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 161
   region: 1
   zone: 1
@@ -847,8 +997,10 @@ devices:
   replication_port: 6001
   name: swift-36
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 162
   region: 1
   zone: 1
@@ -858,8 +1010,10 @@ devices:
   replication_port: 6001
   name: swift-37
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 163
   region: 1
   zone: 1
@@ -869,8 +1023,10 @@ devices:
   replication_port: 6001
   name: swift-38
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 164
   region: 1
   zone: 1
@@ -880,8 +1036,10 @@ devices:
   replication_port: 6001
   name: swift-39
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
 - id: 165
   region: 1
   zone: 1
@@ -891,8 +1049,478 @@ devices:
   replication_port: 6001
   name: swift-40
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift02-cp001
+- id: 45
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-01
+  weight: 133
+  partitions: 81
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 46
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-02
+  weight: 133
+  partitions: 81
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 47
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-03
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 48
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-04
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 49
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-05
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 50
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-06
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 51
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-07
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 52
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-08
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 53
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-09
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 54
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-10
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 55
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-11
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 56
+  region: 1
+  zone: 2
+  ip: 10.246.192.68
+  port: 6001
+  replication_ip: 10.246.192.68
+  replication_port: 6001
+  name: swift-12
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node001-st047
+- id: 57
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-01
+  weight: 133
+  partitions: 81
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 58
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-02
+  weight: 133
+  partitions: 81
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 59
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-03
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 60
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-04
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 61
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-05
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 62
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-06
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 63
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-07
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 64
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-08
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 93
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-09
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 94
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-10
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 95
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-11
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 96
+  region: 1
+  zone: 2
+  ip: 10.246.192.69
+  port: 6001
+  replication_ip: 10.246.192.69
+  replication_port: 6001
+  name: swift-12
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node002-st047
+- id: 97
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-01
+  weight: 133
+  partitions: 81
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 98
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-02
+  weight: 133
+  partitions: 81
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 99
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-03
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 100
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-04
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 101
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-05
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 102
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-06
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 103
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-07
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 104
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-08
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 105
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-09
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 106
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-10
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 119
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-11
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
+- id: 120
+  region: 1
+  zone: 2
+  ip: 10.246.192.70
+  port: 6001
+  replication_ip: 10.246.192.70
+  replication_port: 6001
+  name: swift-12
+  weight: 133
+  partitions: 80
+  balance: 0
+  meta:
+    hostname: node003-st047
 - id: 166
   region: 1
   zone: 2
@@ -902,8 +1530,10 @@ devices:
   replication_port: 6001
   name: swift-01
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 167
   region: 1
   zone: 2
@@ -913,8 +1543,10 @@ devices:
   replication_port: 6001
   name: swift-02
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 168
   region: 1
   zone: 2
@@ -924,8 +1556,10 @@ devices:
   replication_port: 6001
   name: swift-03
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 169
   region: 1
   zone: 2
@@ -935,8 +1569,10 @@ devices:
   replication_port: 6001
   name: swift-04
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 170
   region: 1
   zone: 2
@@ -946,8 +1582,10 @@ devices:
   replication_port: 6001
   name: swift-05
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 171
   region: 1
   zone: 2
@@ -957,8 +1595,10 @@ devices:
   replication_port: 6001
   name: swift-06
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 172
   region: 1
   zone: 2
@@ -968,8 +1608,10 @@ devices:
   replication_port: 6001
   name: swift-07
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 173
   region: 1
   zone: 2
@@ -979,8 +1621,10 @@ devices:
   replication_port: 6001
   name: swift-08
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 174
   region: 1
   zone: 2
@@ -990,8 +1634,10 @@ devices:
   replication_port: 6001
   name: swift-09
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 175
   region: 1
   zone: 2
@@ -1001,8 +1647,10 @@ devices:
   replication_port: 6001
   name: swift-10
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 176
   region: 1
   zone: 2
@@ -1012,8 +1660,10 @@ devices:
   replication_port: 6001
   name: swift-11
   weight: 100
-  partitions: 80
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 177
   region: 1
   zone: 2
@@ -1023,8 +1673,10 @@ devices:
   replication_port: 6001
   name: swift-12
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 178
   region: 1
   zone: 2
@@ -1034,8 +1686,10 @@ devices:
   replication_port: 6001
   name: swift-13
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 179
   region: 1
   zone: 2
@@ -1045,8 +1699,10 @@ devices:
   replication_port: 6001
   name: swift-14
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 180
   region: 1
   zone: 2
@@ -1056,8 +1712,10 @@ devices:
   replication_port: 6001
   name: swift-15
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 181
   region: 1
   zone: 2
@@ -1067,8 +1725,10 @@ devices:
   replication_port: 6001
   name: swift-16
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 182
   region: 1
   zone: 2
@@ -1078,8 +1738,10 @@ devices:
   replication_port: 6001
   name: swift-17
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 183
   region: 1
   zone: 2
@@ -1089,8 +1751,10 @@ devices:
   replication_port: 6001
   name: swift-18
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 184
   region: 1
   zone: 2
@@ -1100,8 +1764,10 @@ devices:
   replication_port: 6001
   name: swift-19
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 185
   region: 1
   zone: 2
@@ -1111,8 +1777,10 @@ devices:
   replication_port: 6001
   name: swift-20
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 186
   region: 1
   zone: 2
@@ -1122,8 +1790,10 @@ devices:
   replication_port: 6001
   name: swift-21
   weight: 100
-  partitions: 80
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 187
   region: 1
   zone: 2
@@ -1133,8 +1803,10 @@ devices:
   replication_port: 6001
   name: swift-22
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 188
   region: 1
   zone: 2
@@ -1144,8 +1816,10 @@ devices:
   replication_port: 6001
   name: swift-23
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 189
   region: 1
   zone: 2
@@ -1155,8 +1829,10 @@ devices:
   replication_port: 6001
   name: swift-24
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 190
   region: 1
   zone: 2
@@ -1166,8 +1842,10 @@ devices:
   replication_port: 6001
   name: swift-25
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 191
   region: 1
   zone: 2
@@ -1177,8 +1855,10 @@ devices:
   replication_port: 6001
   name: swift-26
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 192
   region: 1
   zone: 2
@@ -1188,8 +1868,10 @@ devices:
   replication_port: 6001
   name: swift-27
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 193
   region: 1
   zone: 2
@@ -1199,8 +1881,10 @@ devices:
   replication_port: 6001
   name: swift-28
   weight: 100
-  partitions: 80
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 194
   region: 1
   zone: 2
@@ -1210,8 +1894,10 @@ devices:
   replication_port: 6001
   name: swift-29
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 195
   region: 1
   zone: 2
@@ -1221,8 +1907,10 @@ devices:
   replication_port: 6001
   name: swift-30
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 196
   region: 1
   zone: 2
@@ -1232,8 +1920,10 @@ devices:
   replication_port: 6001
   name: swift-31
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 197
   region: 1
   zone: 2
@@ -1243,8 +1933,10 @@ devices:
   replication_port: 6001
   name: swift-32
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 198
   region: 1
   zone: 2
@@ -1254,8 +1946,10 @@ devices:
   replication_port: 6001
   name: swift-33
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 199
   region: 1
   zone: 2
@@ -1265,8 +1959,10 @@ devices:
   replication_port: 6001
   name: swift-34
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 200
   region: 1
   zone: 2
@@ -1276,8 +1972,10 @@ devices:
   replication_port: 6001
   name: swift-35
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 201
   region: 1
   zone: 2
@@ -1287,8 +1985,10 @@ devices:
   replication_port: 6001
   name: swift-36
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 202
   region: 1
   zone: 2
@@ -1298,8 +1998,10 @@ devices:
   replication_port: 6001
   name: swift-37
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 203
   region: 1
   zone: 2
@@ -1309,8 +2011,10 @@ devices:
   replication_port: 6001
   name: swift-38
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 204
   region: 1
   zone: 2
@@ -1320,8 +2024,10 @@ devices:
   replication_port: 6001
   name: swift-39
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 205
   region: 1
   zone: 2
@@ -1331,8 +2037,10 @@ devices:
   replication_port: 6001
   name: swift-40
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: nodeswift03-cp001
 - id: 9
   region: 1
   zone: 3
@@ -1342,8 +2050,10 @@ devices:
   replication_port: 6001
   name: swift-01
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 10
   region: 1
   zone: 3
@@ -1353,8 +2063,10 @@ devices:
   replication_port: 6001
   name: swift-02
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 11
   region: 1
   zone: 3
@@ -1364,8 +2076,10 @@ devices:
   replication_port: 6001
   name: swift-03
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 12
   region: 1
   zone: 3
@@ -1375,8 +2089,10 @@ devices:
   replication_port: 6001
   name: swift-04
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 61
+  balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 13
   region: 1
   zone: 3
@@ -1386,8 +2102,10 @@ devices:
   replication_port: 6001
   name: swift-05
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 14
   region: 1
   zone: 3
@@ -1397,8 +2115,10 @@ devices:
   replication_port: 6001
   name: swift-06
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 15
   region: 1
   zone: 3
@@ -1408,8 +2128,10 @@ devices:
   replication_port: 6001
   name: swift-07
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 16
   region: 1
   zone: 3
@@ -1419,8 +2141,10 @@ devices:
   replication_port: 6001
   name: swift-08
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 17
   region: 1
   zone: 3
@@ -1430,8 +2154,10 @@ devices:
   replication_port: 6001
   name: swift-09
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 18
   region: 1
   zone: 3
@@ -1441,8 +2167,10 @@ devices:
   replication_port: 6001
   name: swift-10
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 19
   region: 1
   zone: 3
@@ -1452,8 +2180,10 @@ devices:
   replication_port: 6001
   name: swift-11
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 20
   region: 1
   zone: 3
@@ -1463,8 +2193,10 @@ devices:
   replication_port: 6001
   name: swift-12
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node001-swf001
 - id: 21
   region: 1
   zone: 3
@@ -1474,8 +2206,10 @@ devices:
   replication_port: 6001
   name: swift-01
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 22
   region: 1
   zone: 3
@@ -1485,8 +2219,10 @@ devices:
   replication_port: 6001
   name: swift-02
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 23
   region: 1
   zone: 3
@@ -1496,8 +2232,10 @@ devices:
   replication_port: 6001
   name: swift-03
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 61
+  balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 24
   region: 1
   zone: 3
@@ -1507,8 +2245,10 @@ devices:
   replication_port: 6001
   name: swift-04
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 25
   region: 1
   zone: 3
@@ -1518,8 +2258,10 @@ devices:
   replication_port: 6001
   name: swift-05
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 26
   region: 1
   zone: 3
@@ -1529,8 +2271,10 @@ devices:
   replication_port: 6001
   name: swift-06
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 27
   region: 1
   zone: 3
@@ -1540,8 +2284,10 @@ devices:
   replication_port: 6001
   name: swift-07
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 28
   region: 1
   zone: 3
@@ -1551,8 +2297,10 @@ devices:
   replication_port: 6001
   name: swift-08
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 29
   region: 1
   zone: 3
@@ -1562,8 +2310,10 @@ devices:
   replication_port: 6001
   name: swift-09
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 30
   region: 1
   zone: 3
@@ -1573,8 +2323,10 @@ devices:
   replication_port: 6001
   name: swift-10
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 31
   region: 1
   zone: 3
@@ -1584,8 +2336,10 @@ devices:
   replication_port: 6001
   name: swift-11
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 32
   region: 1
   zone: 3
@@ -1595,8 +2349,10 @@ devices:
   replication_port: 6001
   name: swift-12
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node002-swf001
 - id: 33
   region: 1
   zone: 3
@@ -1606,8 +2362,10 @@ devices:
   replication_port: 6001
   name: swift-01
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 34
   region: 1
   zone: 3
@@ -1617,8 +2375,10 @@ devices:
   replication_port: 6001
   name: swift-02
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 35
   region: 1
   zone: 3
@@ -1628,8 +2388,10 @@ devices:
   replication_port: 6001
   name: swift-03
   weight: 100
-  partitions: 79
+  partitions: 61
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 36
   region: 1
   zone: 3
@@ -1639,8 +2401,10 @@ devices:
   replication_port: 6001
   name: swift-04
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 37
   region: 1
   zone: 3
@@ -1650,8 +2414,10 @@ devices:
   replication_port: 6001
   name: swift-05
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 38
   region: 1
   zone: 3
@@ -1661,8 +2427,10 @@ devices:
   replication_port: 6001
   name: swift-06
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 39
   region: 1
   zone: 3
@@ -1672,8 +2440,10 @@ devices:
   replication_port: 6001
   name: swift-07
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 40
   region: 1
   zone: 3
@@ -1683,8 +2453,10 @@ devices:
   replication_port: 6001
   name: swift-08
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 41
   region: 1
   zone: 3
@@ -1694,8 +2466,10 @@ devices:
   replication_port: 6001
   name: swift-09
   weight: 100
-  partitions: 79
+  partitions: 60
   balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 42
   region: 1
   zone: 3
@@ -1705,8 +2479,10 @@ devices:
   replication_port: 6001
   name: swift-10
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 43
   region: 1
   zone: 3
@@ -1716,8 +2492,10 @@ devices:
   replication_port: 6001
   name: swift-11
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node003-swf001
 - id: 44
   region: 1
   zone: 3
@@ -1727,5 +2505,7 @@ devices:
   replication_port: 6001
   name: swift-12
   weight: 100
-  partitions: 78
-  balance: -0
+  partitions: 60
+  balance: 0
+  meta:
+    hostname: node003-swf001

@@ -20,6 +20,7 @@
 package builderfile
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -36,10 +37,9 @@ type DeviceInfo struct {
 	Weight          float64
 	Partitions      uint64 `mapstructure:"parts"`
 	Balance         float64
+	Meta            *map[string]string `yaml:"meta,omitempty"`
 	//lint:ignore U1000 TODO
 	flags struct{} // TODO: figure out how the field looks like
-	//lint:ignore U1000 TODO
-	meta struct{} // TODO: figure out how the field looks like
 }
 
 // RingInfo contains the meta data about the ring file
@@ -72,6 +72,20 @@ func (device DeviceInfo) IPAddressPort() string {
 func (device DeviceInfo) CommandAdd(ringFilename string) string {
 	return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g",
 		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)
+}
+
+func (device DeviceInfo) CommandSetMeta(ringFilename string, desiredMeta map[string]string) string {
+	var meta []byte
+	meta, _ = json.Marshal(desiredMeta)
+	return fmt.Sprintf("swift-ring-builder %s set_info --region %d --zone %d --ip %s --port %d --device %s --change-meta %s",
+		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, meta)
+}
+
+func (device DeviceInfo) CommandSetMetaNode(ringFilename string, desiredMeta map[string]string) string {
+	var meta []byte
+	meta, _ = json.Marshal(desiredMeta)
+	return fmt.Sprintf("swift-ring-builder %s set_info --region %d --zone %d --ip %s --port %d --change-meta %s --yes",
+		ringFilename, device.Region, device.Zone, device.IP, device.Port, meta)
 }
 
 func (device DeviceInfo) CommandSetWeight(ringFilename string, desiredWeight float64) string {

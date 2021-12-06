@@ -21,6 +21,7 @@ package builderfile
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -63,7 +64,8 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone\s+ip address:
 //            1      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-02 100.00        512    0.00
 //            2      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-03 100.00        512    0.00
 //          111      1    1  10.46.14.44:6001    10.46.14.44:6001 swift-33 100.00         78   -0.98
-var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*$`)
+//           65      1    1   10.46.14.44:6002    10.46.14.44:6002 swift-01 100.00         64   -5.63       {"hostname":"nodeswift01-cp001"}
+var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*(?P<meta>\{"hostname":"\w+-\w+"\})?$`)
 
 // FindDevice returns a given disk that matches the in
 func (ring RingInfo) FindDevice(zone uint64, nodeIP string, port uint64, diskNumber int) (*DeviceInfo, error) {
@@ -154,6 +156,15 @@ func Input(input io.Reader) RingInfo {
 		matches, _ := rowEntryRx.Groups(line)
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
+			var meta *map[string]string
+			if matches["meta"] != "" {
+				// logg.Info("%#v", matches["meta"])
+				err := json.Unmarshal([]byte(matches["meta"]), &meta)
+				if err != nil {
+					logg.Fatal("Unmsharshaling meta from swift-ring-builder output failed: %s %s", matches["meta"], err.Error())
+				}
+			}
+
 			metaData.Devices = append(metaData.Devices, DeviceInfo{
 				ID:              misc.ParseUint(matches["id"]),
 				Region:          misc.ParseUint(matches["region"]),
@@ -168,6 +179,7 @@ func Input(input io.Reader) RingInfo {
 				// disabled because the information cannot easily be extracted from the pickle file
 				// which causes mismatches when comparing the outputs
 				// Balance:         misc.ParseFloat(matches["balance"]),
+				Meta: meta,
 			})
 			continue
 		}

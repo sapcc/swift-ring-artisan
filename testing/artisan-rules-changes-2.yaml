@@ -17,6 +17,15 @@ zones:
         disk_count: 40
         disk_size_tb: 10
         weight: 150
+      10.246.192.68:
+        disk_count: 12
+        weight: 133
+      10.246.192.69:
+        disk_count: 12
+        weight: 133
+      10.246.192.70:
+        disk_count: 12
+        weight: 133
   3:
     nodes:
       10.46.14.204: &12-disks

@@ -20,6 +20,7 @@
 package builderfile
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -60,6 +61,17 @@ func guessType(input interface{}) interface{} {
 			}
 			// skip balance to avoid rounding errors when comparing with text based parser
 			if key == "balance" {
+				continue
+			}
+			if key == "meta" {
+				var meta *map[string]string
+				if value := entry.Value.(string); value != "" {
+					err := json.Unmarshal([]byte(value), &meta)
+					if err != nil {
+						logg.Fatal("Unmarshalling meta failed: ", err.Error())
+					}
+				}
+				data[entry.Key.(string)] = meta
 				continue
 			}
 			data[entry.Key.(string)] = guessType(entry.Value)

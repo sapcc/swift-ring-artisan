@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"reflect"
 	"sort"
 
 	"github.com/sapcc/go-bits/logg"
@@ -32,11 +33,11 @@ import (
 
 // NodeRules is a server containing disks
 type NodeRules struct {
-	Port       uint64   `yaml:"port,omitempty"`
-	Meta       struct{} `yaml:"meta,omitempty"` // TODO: figure out how the field looks like
-	DiskCount  uint64   `yaml:"disk_count"`
-	DiskSizeTB float64  `yaml:"disk_size_tb,omitempty"`
-	Weight     *float64 `yaml:"weight,omitempty"`
+	Port       uint64             `yaml:"port,omitempty"`
+	Meta       *map[string]string `yaml:"meta,omitempty"`
+	DiskCount  uint64             `yaml:"disk_count"`
+	DiskSizeTB float64            `yaml:"disk_size_tb,omitempty"`
+	Weight     *float64           `yaml:"weight,omitempty"`
 }
 
 // ZoneRules contains multiple nodes
@@ -126,6 +127,12 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				if disk.Weight != weight {
 					logg.Debug("Weight does not match, adding command to change it")
 					commandQueue = append(commandQueue, disk.CommandSetWeight(ringFilename, weight))
+				}
+
+				if nodeRules.Meta != nil && !reflect.DeepEqual(disk.Meta, nodeRules.Meta) {
+					logg.Debug("Meta does not match, adding command to change it")
+					commandQueue = append(commandQueue, disk.CommandSetMetaNode(ringFilename, *nodeRules.Meta))
+					shortCircuit = true
 				}
 			}
 		}

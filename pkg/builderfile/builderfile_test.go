@@ -39,7 +39,7 @@ func TestParse1(t *testing.T) {
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &expected)
 
 	metaData := Input(input)
-	assert.DeepEqual(t, "parsing", metaData, expected)
+	assert.DeepEqual(t, "parsing", expected, metaData)
 }
 
 func TestParse2(t *testing.T) {
@@ -53,5 +53,5 @@ func TestParse2(t *testing.T) {
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &expected)
 
 	metaData := Input(input)
-	assert.DeepEqual(t, "parsing", metaData, expected)
+	assert.DeepEqual(t, "parsing", expected, metaData)
 }

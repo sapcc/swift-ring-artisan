@@ -132,7 +132,6 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				if nodeRules.Meta != nil && !reflect.DeepEqual(disk.Meta, nodeRules.Meta) {
 					logg.Debug("Meta does not match, adding command to change it")
 					commandQueue = append(commandQueue, disk.CommandSetMetaNode(ringFilename, *nodeRules.Meta))
-					shortCircuit = true
 				}
 			}
 		}

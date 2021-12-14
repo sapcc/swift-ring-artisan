@@ -23,6 +23,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
@@ -75,32 +76,37 @@ func run(_ *cobra.Command, args []string) {
 	var file map[string]rules.RingRules
 	misc.ReadYAML(ruleFilename, &file)
 
-	commandQueue, err := file[builderFilename].CalculateChanges(ring, builderFilename)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	builderBaseFilename := filepath.Base(builderFilename)
+	if rules, ok := file[builderBaseFilename]; ok {
+		commandQueue, err := rules.CalculateChanges(ring, builderBaseFilename)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 
-	if executeCommands && checkChanges {
-		logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
-	}
-	for _, command := range commandQueue {
-		if executeCommands {
-			args := strings.Split(command, " ")
-			cmd := exec.Command(args[0], args[1:]...)
-			stdout, err := cmd.Output()
-			if err != nil {
-				logg.Fatal("Command \"%s\" failed: %v", command, err.Error())
+		if executeCommands && checkChanges {
+			logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
+		}
+		for _, command := range commandQueue {
+			if executeCommands {
+				args := strings.Split(command, " ")
+				cmd := exec.Command(args[0], args[1:]...)
+				stdout, err := cmd.Output()
+				if err != nil {
+					logg.Fatal("Command \"%s\" failed: %v", command, err.Error())
+				}
+				logg.Info(string(stdout))
+			} else {
+				misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
 			}
-			logg.Info(string(stdout))
-		} else {
-			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
 		}
-	}
-	if checkChanges {
-		if len(commandQueue) != 0 {
-			os.Exit(1)
-		} else {
-			os.Exit(0)
+		if checkChanges {
+			if len(commandQueue) != 0 {
+				os.Exit(1)
+			} else {
+				os.Exit(0)
+			}
 		}
+	} else {
+		logg.Fatal("%s is missing key for %s", ruleFilename, builderBaseFilename)
 	}
 }

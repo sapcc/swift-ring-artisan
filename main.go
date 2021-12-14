@@ -47,6 +47,8 @@ func main() {
 			cmd.Help()
 		},
 	}
+	rootCmd.PersistentFlags().BoolVarP(&logg.ShowDebug, "debug", "d", false, "Enable debug log")
+
 	applycmd.AddCommandTo(rootCmd)
 	convertcmd.AddCommandTo(rootCmd)
 

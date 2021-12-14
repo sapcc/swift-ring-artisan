@@ -83,7 +83,15 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 	}
 
 	var discoveredDisks, commandQueue []string
-	for zoneID, zoneRules := range ringRules.Zones {
+
+	var zoneIDs []uint64
+	for zoneID := range ringRules.Zones {
+		zoneIDs = append(zoneIDs, zoneID)
+	}
+	sort.Slice(zoneIDs, func(i, j int) bool { return zoneIDs[i] < zoneIDs[j] }) // for reproducibility in tests
+
+	for _, zoneID := range zoneIDs {
+		zoneRules := ringRules.Zones[zoneID]
 		var nodeIPs []string
 		for nodeIP := range zoneRules.Nodes {
 			nodeIPs = append(nodeIPs, nodeIP)

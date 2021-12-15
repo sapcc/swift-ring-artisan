@@ -82,7 +82,7 @@ func run(_ *cobra.Command, args []string) {
 		logg.Fatal("%s is missing key for %s", ruleFilename, builderBaseFilename)
 	}
 
-	commandQueue, err := rules.CalculateChanges(ring, builderBaseFilename)
+	commandQueue, err := rules.CalculateChanges(ring, builderFilename)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

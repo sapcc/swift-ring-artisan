@@ -26,6 +26,7 @@ import (
 	"github.com/sapcc/go-bits/logg"
 	applycmd "github.com/sapcc/swift-ring-artisan/cmd/apply"
 	convertcmd "github.com/sapcc/swift-ring-artisan/cmd/convert"
+	parsecmd "github.com/sapcc/swift-ring-artisan/cmd/parse"
 	"github.com/spf13/cobra"
 )
 
@@ -51,6 +52,7 @@ func main() {
 
 	applycmd.AddCommandTo(rootCmd)
 	convertcmd.AddCommandTo(rootCmd)
+	parsecmd.AddCommandTo(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		logg.Fatal(err.Error())

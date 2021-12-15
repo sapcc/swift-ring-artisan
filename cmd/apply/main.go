@@ -20,6 +20,7 @@
 package applycmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -105,8 +106,11 @@ func run(_ *cobra.Command, args []string) {
 		promptAnswer = misc.AskConfirmation("Do you want to apply the changes by executing the above commands?")
 	}
 
+	rebalanceRequired := false
 	if executeCommands || promptAnswer {
 		for _, command := range commandQueue {
+			// rebalance not required, if commandQueue only contains 'set_info' commands
+			rebalanceRequired = rebalanceRequired || !strings.Contains(command, "set_info")
 			args := strings.Split(command, " ")
 			cmd := exec.Command(args[0], args[1:]...)
 			stdout, err := cmd.Output()
@@ -121,10 +125,14 @@ func run(_ *cobra.Command, args []string) {
 
 	if isInteractive {
 		promptAnswer := false
-		promptAnswer = misc.AskConfirmation("Do you want to rebalance now?")
+		action := "write_ring"
+		if rebalanceRequired {
+			action = "rebalance"
+		}
+		promptAnswer = misc.AskConfirmation(fmt.Sprintf("Do you want to %s now?", action))
 
 		if promptAnswer {
-			cmd := exec.Command("swift-ring-builder", builderFilename, "rebalance")
+			cmd := exec.Command("swift-ring-builder", builderFilename, action)
 			stdout, err := cmd.Output()
 			if err != nil {
 				logg.Fatal("Command %q failed: %v", strings.Join(cmd.Args, " "), err.Error())

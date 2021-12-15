@@ -86,29 +86,51 @@ func run(_ *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	if len(commandQueue) == 0 {
+		os.Exit(0)
+	}
 
 	if executeCommands && checkChanges {
 		logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
 	}
 	for _, command := range commandQueue {
-		if executeCommands {
+		misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+	}
+
+	promptAnswer := false
+	fileInfo, _ := os.Stdin.Stat()
+	// evaluates to true if program is run in an interactive shell and not piped
+	isInteractive := (fileInfo.Mode() & os.ModeCharDevice) != 0
+	if isInteractive {
+		promptAnswer = misc.AskConfirmation("Do you want to apply the changes by executing the above commands?")
+	}
+
+	if executeCommands || promptAnswer {
+		for _, command := range commandQueue {
 			args := strings.Split(command, " ")
 			cmd := exec.Command(args[0], args[1:]...)
 			stdout, err := cmd.Output()
 			if err != nil {
-				logg.Fatal("Command \"%s\" failed: %v", command, err.Error())
+				logg.Fatal("Command %q failed: %v", command, err.Error())
 			}
 			logg.Info(string(stdout))
-		} else {
-			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
 		}
-	}
-	if checkChanges {
-		if len(commandQueue) != 0 {
-			os.Exit(1)
-		} else {
-			os.Exit(0)
-		}
+	} else {
+		os.Exit(1)
 	}
 
+	if isInteractive {
+		promptAnswer := false
+		promptAnswer = misc.AskConfirmation("Do you want to rebalance now?")
+
+		if promptAnswer {
+			cmd := exec.Command("swift-ring-builder", builderFilename, "rebalance")
+			stdout, err := cmd.Output()
+			if err != nil {
+				logg.Fatal("Command %q failed: %v", strings.Join(cmd.Args, " "), err.Error())
+			}
+			logg.Info(string(stdout))
+		}
+	}
+	os.Exit(0)
 }

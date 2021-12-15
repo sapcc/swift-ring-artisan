@@ -20,10 +20,12 @@
 package misc
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/sapcc/go-bits/logg"
 	"gopkg.in/yaml.v2"
@@ -75,4 +77,19 @@ func Contains(list []string, searchFor string) bool {
 		}
 	}
 	return false
+}
+
+func AskConfirmation(text string) bool {
+	fmt.Printf("%s [y/N]: ", text)
+	response, err := bufio.NewReader(os.Stdin).ReadString('\n')
+	if err != nil {
+		logg.Fatal(err.Error())
+	}
+
+	response = strings.ToLower(strings.TrimSpace(response))
+	if response == "y" || response == "yes" {
+		return true
+	} else {
+		return false
+	}
 }

@@ -77,36 +77,38 @@ func run(_ *cobra.Command, args []string) {
 	misc.ReadYAML(ruleFilename, &file)
 
 	builderBaseFilename := filepath.Base(builderFilename)
-	if rules, ok := file[builderBaseFilename]; ok {
-		commandQueue, err := rules.CalculateChanges(ring, builderBaseFilename)
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		if executeCommands && checkChanges {
-			logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
-		}
-		for _, command := range commandQueue {
-			if executeCommands {
-				args := strings.Split(command, " ")
-				cmd := exec.Command(args[0], args[1:]...)
-				stdout, err := cmd.Output()
-				if err != nil {
-					logg.Fatal("Command \"%s\" failed: %v", command, err.Error())
-				}
-				logg.Info(string(stdout))
-			} else {
-				misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
-			}
-		}
-		if checkChanges {
-			if len(commandQueue) != 0 {
-				os.Exit(1)
-			} else {
-				os.Exit(0)
-			}
-		}
-	} else {
+	rules, ok := file[builderBaseFilename]
+	if !ok {
 		logg.Fatal("%s is missing key for %s", ruleFilename, builderBaseFilename)
 	}
+
+	commandQueue, err := rules.CalculateChanges(ring, builderBaseFilename)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	if executeCommands && checkChanges {
+		logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
+	}
+	for _, command := range commandQueue {
+		if executeCommands {
+			args := strings.Split(command, " ")
+			cmd := exec.Command(args[0], args[1:]...)
+			stdout, err := cmd.Output()
+			if err != nil {
+				logg.Fatal("Command \"%s\" failed: %v", command, err.Error())
+			}
+			logg.Info(string(stdout))
+		} else {
+			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+		}
+	}
+	if checkChanges {
+		if len(commandQueue) != 0 {
+			os.Exit(1)
+		} else {
+			os.Exit(0)
+		}
+	}
+
 }

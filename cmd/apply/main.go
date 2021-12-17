@@ -98,6 +98,11 @@ func run(_ *cobra.Command, args []string) {
 		misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
 	}
 
+	// exit early when only checking for changes to skip executing commands
+	if checkChanges {
+		os.Exit(0)
+	}
+
 	promptAnswer := false
 	fileInfo, _ := os.Stdin.Stat()
 	// evaluates to true if program is run in an interactive shell and not piped

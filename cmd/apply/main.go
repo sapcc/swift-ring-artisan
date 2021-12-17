@@ -119,10 +119,10 @@ func run(_ *cobra.Command, args []string) {
 			args := strings.Split(command, " ")
 			cmd := exec.Command(args[0], args[1:]...)
 			stdout, err := cmd.Output()
+			logg.Info(string(stdout))
 			if err != nil {
 				logg.Fatal("Command %q failed: %v", command, err.Error())
 			}
-			logg.Info(string(stdout))
 		}
 	} else {
 		os.Exit(1)
@@ -139,10 +139,12 @@ func run(_ *cobra.Command, args []string) {
 		if promptAnswer {
 			cmd := exec.Command("swift-ring-builder", builderFilename, action)
 			stdout, err := cmd.Output()
-			if err != nil {
+			logg.Info(string(stdout))
+			if exitError, ok := err.(*exec.ExitError); ok {
+				os.Exit(exitError.ExitCode())
+			} else if err != nil {
 				logg.Fatal("Command %q failed: %v", strings.Join(cmd.Args, " "), err.Error())
 			}
-			logg.Info(string(stdout))
 		}
 	}
 	os.Exit(0)

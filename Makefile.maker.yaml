@@ -17,8 +17,6 @@ githubWorkflows:
   ci:
     enabled: true
     coveralls: true
-    postgres:
-      enabled: true
   license:
     enabled: true
   spellCheck:

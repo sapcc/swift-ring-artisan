@@ -121,7 +121,7 @@ func TestAddDisk2(t *testing.T) {
 
 	var expectedCommands []string
 	for i := 1; i <= 12; i++ {
-		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null add --region 1 --zone 4 --ip 10.46.14.161 --port 6001 --device swift-%02d --weight 166", i))
+		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null add --region 1 --zone 4 --ip 10.46.14.161 --port 6001 --device swift-%02d --weight 166 --meta {\"hostname\":\"node1\"}", i))
 	}
 	for i := 1; i <= 12; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null add --region 1 --zone 4 --ip 10.46.14.248 --port 6001 --device swift-%02d --weight 166", i))

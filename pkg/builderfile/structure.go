@@ -70,6 +70,13 @@ func (device DeviceInfo) IPAddressPort() string {
 }
 
 func (device DeviceInfo) CommandAdd(ringFilename string) string {
+	if device.Meta != nil {
+		var meta []byte
+		meta, _ = json.Marshal(device.Meta)
+		return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g --meta %s",
+			ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight, meta)
+	}
+
 	return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g",
 		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)
 }

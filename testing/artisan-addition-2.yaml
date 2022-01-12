@@ -41,6 +41,8 @@ zones:
         disk_count: 12
         weight: 166
       10.46.14.161:
+        meta:
+          hostname: node1
         disk_count: 12
         weight: 166
       10.46.14.248:

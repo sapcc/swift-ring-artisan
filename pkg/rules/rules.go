@@ -125,6 +125,9 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 						Name:   fmt.Sprintf("swift-%02d", diskNumber),
 						Weight: weight,
 					}
+					if nodeRules.Meta != nil {
+						disk.Meta = nodeRules.Meta
+					}
 					commandQueue = append(commandQueue, disk.CommandAdd(ringFilename))
 					continue
 				}

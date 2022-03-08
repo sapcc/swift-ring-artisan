@@ -22,7 +22,6 @@ package misc
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -44,7 +43,7 @@ func WriteToStdoutOrFile(data []byte, filename string) {
 }
 
 func ReadYAML(filename string, variable interface{}) {
-	ruleFile, err := ioutil.ReadFile(filename)
+	ruleFile, err := os.ReadFile(filename)
 	if err != nil {
 		logg.Fatal(err.Error())
 	}

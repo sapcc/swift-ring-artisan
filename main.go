@@ -33,7 +33,7 @@ import (
 
 // ParseBool is like strconv.ParseBool() but doesn't return any error.
 func ParseBool(str string) bool {
-	v, _ := strconv.ParseBool(str)
+	v, _ := strconv.ParseBool(str) //nolint:errcheck
 	return v
 }
 
@@ -46,7 +46,7 @@ func main() {
 		Long:  "swift-ring-artisan is a declarative frontend for swift-ring-builder. This binary also contains a tool to parse the output of swift-ring-builder to a machine readable format.",
 		Args:  cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
-			cmd.Help()
+			cmd.Help() //nolint:errcheck
 		},
 	}
 	rootCmd.PersistentFlags().BoolVarP(&logg.ShowDebug, "debug", "d", false, "Enable debug log")

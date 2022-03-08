@@ -105,7 +105,11 @@ func run(_ *cobra.Command, args []string) {
 	}
 
 	promptAnswer := false
-	fileInfo, _ := os.Stdin.Stat()
+	fileInfo, err := os.Stdin.Stat()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	// evaluates to true if program is run in an interactive shell and not piped
 	isInteractive := (fileInfo.Mode() & os.ModeCharDevice) != 0
 	if isInteractive {

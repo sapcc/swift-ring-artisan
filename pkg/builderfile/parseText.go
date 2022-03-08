@@ -100,18 +100,18 @@ func Input(input io.Reader) RingInfo {
 		line := scanner.Text()
 		logg.Debug("Processing line: %s\n", line)
 
+		//nolint:errcheck // errors can be ignored because the regex matches digits (\d)
 		matches, _ := fileInfoRx.Groups(line)
 		if len(matches) > 0 {
 			metaData.FileName = matches["fileName"]
-			// errors can be ignored because the regex matches digits (\d)
 			metaData.Version = misc.ParseUint(matches["buildVersion"])
 			metaData.ID = matches["id"]
 			continue
 		}
 
+		//nolint:errcheck // errors can be ignored because the regex matches digits (\d)
 		matches, _ = statsRx.Groups(line)
 		if len(matches) > 0 {
-			// errors can be ignored because the regex matches digits (\d)
 			metaData.Partitions = misc.ParseUint(matches["partitions"])
 			metaData.Replicas = misc.ParseFloat(matches["replicas"])
 			metaData.Regions = misc.ParseUint(matches["regions"])
@@ -122,15 +122,15 @@ func Input(input io.Reader) RingInfo {
 			continue
 		}
 
+		//nolint:errcheck // errors can be ignored because the regex matches digits (\d)
 		matches, _ = remainingTimeRx.Groups(line)
 		if len(matches) > 0 {
-			// errors can be ignored because the regex matches digits (\d)
 			metaData.ReassignedCooldown = misc.ParseUint(matches["reassignedCooldown"])
-			metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"])
+			metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"]) //nolint:errcheck
 			continue
 		}
 
-		matches, _ = overloadFactorRx.Groups(line)
+		matches, _ = overloadFactorRx.Groups(line) //nolint:errcheck
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
 			metaData.OverloadFactorPercent = misc.ParseFloat(matches["percent"])
@@ -154,7 +154,7 @@ func Input(input io.Reader) RingInfo {
 		line := scanner.Text()
 		logg.Debug("Processing line: %s\n", line)
 
-		matches, _ := rowEntryRx.Groups(line)
+		matches, _ := rowEntryRx.Groups(line) //nolint:errcheck
 		if len(matches) > 0 {
 			// errors can be ignored because the regex matches digits (\d)
 			var meta *map[string]string

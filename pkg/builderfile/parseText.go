@@ -30,6 +30,7 @@ import (
 
 	"github.com/oriser/regroup"
 	"github.com/sapcc/go-bits/logg"
+
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 

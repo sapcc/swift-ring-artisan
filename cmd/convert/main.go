@@ -23,12 +23,13 @@ import (
 	"path/filepath"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v2"
+
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/convert"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
-	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 var (

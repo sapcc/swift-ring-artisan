@@ -25,6 +25,7 @@ import (
 
 	"github.com/sapcc/go-bits/assert"
 	"github.com/sapcc/go-bits/logg"
+
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 

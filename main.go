@@ -24,10 +24,11 @@ import (
 	"strconv"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/spf13/cobra"
+
 	applycmd "github.com/sapcc/swift-ring-artisan/cmd/apply"
 	convertcmd "github.com/sapcc/swift-ring-artisan/cmd/convert"
 	parsecmd "github.com/sapcc/swift-ring-artisan/cmd/parse"
-	"github.com/spf13/cobra"
 )
 
 // ParseBool is like strconv.ParseBool() but doesn't return any error.

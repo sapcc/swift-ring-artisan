@@ -28,10 +28,11 @@ import (
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/spf13/cobra"
+
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 	"github.com/sapcc/swift-ring-artisan/pkg/rules"
-	"github.com/spf13/cobra"
 )
 
 var (

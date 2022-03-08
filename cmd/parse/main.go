@@ -25,9 +25,10 @@ import (
 	"os"
 
 	"github.com/sapcc/go-bits/logg"
-	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
+
+	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 )
 
 var (

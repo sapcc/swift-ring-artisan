@@ -38,7 +38,7 @@ type DeviceInfo struct {
 	Partitions      uint64 `mapstructure:"parts"`
 	Balance         float64
 	Meta            *map[string]string `yaml:"meta,omitempty"`
-	//lint:ignore U1000 TODO
+	//nolint:unused,structcheck
 	flags struct{} // TODO: figure out how the field looks like
 }
 
@@ -72,7 +72,7 @@ func (device DeviceInfo) IPAddressPort() string {
 func (device DeviceInfo) CommandAdd(ringFilename string) string {
 	if device.Meta != nil {
 		var meta []byte
-		meta, _ = json.Marshal(device.Meta)
+		meta, _ = json.Marshal(device.Meta) //nolint:errcheck
 		return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g --meta %s",
 			ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight, meta)
 	}
@@ -83,14 +83,14 @@ func (device DeviceInfo) CommandAdd(ringFilename string) string {
 
 func (device DeviceInfo) CommandSetMeta(ringFilename string, desiredMeta map[string]string) string {
 	var meta []byte
-	meta, _ = json.Marshal(desiredMeta)
+	meta, _ = json.Marshal(desiredMeta) //nolint:errcheck
 	return fmt.Sprintf("swift-ring-builder %s set_info --region %d --zone %d --ip %s --port %d --device %s --change-meta %s",
 		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, meta)
 }
 
 func (device DeviceInfo) CommandSetMetaNode(ringFilename string, desiredMeta map[string]string) string {
 	var meta []byte
-	meta, _ = json.Marshal(desiredMeta)
+	meta, _ = json.Marshal(desiredMeta) //nolint:errcheck
 	return fmt.Sprintf("swift-ring-builder %s set_info --region %d --zone %d --ip %s --port %d --change-meta %s --yes",
 		ringFilename, device.Region, device.Zone, device.IP, device.Port, meta)
 }

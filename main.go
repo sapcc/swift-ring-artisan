@@ -24,15 +24,16 @@ import (
 	"strconv"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/spf13/cobra"
+
 	applycmd "github.com/sapcc/swift-ring-artisan/cmd/apply"
 	convertcmd "github.com/sapcc/swift-ring-artisan/cmd/convert"
 	parsecmd "github.com/sapcc/swift-ring-artisan/cmd/parse"
-	"github.com/spf13/cobra"
 )
 
 // ParseBool is like strconv.ParseBool() but doesn't return any error.
 func ParseBool(str string) bool {
-	v, _ := strconv.ParseBool(str)
+	v, _ := strconv.ParseBool(str) //nolint:errcheck
 	return v
 }
 
@@ -45,7 +46,7 @@ func main() {
 		Long:  "swift-ring-artisan is a declarative frontend for swift-ring-builder. This binary also contains a tool to parse the output of swift-ring-builder to a machine readable format.",
 		Args:  cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
-			cmd.Help()
+			cmd.Help() //nolint:errcheck
 		},
 	}
 	rootCmd.PersistentFlags().BoolVarP(&logg.ShowDebug, "debug", "d", false, "Enable debug log")

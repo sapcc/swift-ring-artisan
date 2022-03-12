@@ -27,6 +27,7 @@ import (
 	"sort"
 
 	"github.com/sapcc/go-bits/logg"
+
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )

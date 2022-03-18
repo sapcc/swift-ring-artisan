@@ -20,6 +20,8 @@ githubWorkflow:
   ci:
     enabled: true
     coveralls: true
+  codeQL:
+    enabled: true
   license:
     enabled: true
   spellCheck:

@@ -5,6 +5,9 @@
     "docker:enableMajor",
     "regexManagers:dockerfileVersions"
   ],
+  "github-actions": {
+    "enabled": false
+  },
   "assignees": [
     "SuperSandro2000"
   ],
@@ -14,6 +17,21 @@
   "postUpdateOptions": [
     "gomodTidy1.17",
     "gomodUpdateImportPaths"
+  ],
+  "packageRules": [
+    {
+      "enabled": false,
+      "matchPackagePrefixes": [
+        "k8s.io/"
+      ],
+      "allowedVersions": "<0.23"
+    },
+    {
+      "matchPackagePrefixes": [
+        "github.com/sapcc/go-bits"
+      ],
+      "automerge": true
+    }
   ],
   "prHourlyLimit": 0
 }

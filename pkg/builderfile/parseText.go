@@ -61,11 +61,12 @@ var obsoleteRx = regexp.MustCompile(`^Ring file (?:[\w\/\.-]+\/)?\w+\.ring\.gz i
 var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone\s+ip address:port replication ip:port  name weight partitions balance flags meta$`)
 
 // regex to match the following line:
-//            0      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-01 100.00        512    0.00
-//            1      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-02 100.00        512    0.00
-//            2      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-03 100.00        512    0.00
-//          111      1    1  10.46.14.44:6001    10.46.14.44:6001 swift-33 100.00         78   -0.98
-//           65      1    1   10.46.14.44:6002    10.46.14.44:6002 swift-01 100.00         64   -5.63       {"hostname":"nodeswift01-cp001"}
+//
+//	  0      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-01 100.00        512    0.00
+//	  1      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-02 100.00        512    0.00
+//	  2      1    1 10.114.1.202:6001   10.114.1.202:6001 swift-03 100.00        512    0.00
+//	111      1    1  10.46.14.44:6001    10.46.14.44:6001 swift-33 100.00         78   -0.98
+//	 65      1    1   10.46.14.44:6002    10.46.14.44:6002 swift-01 100.00         64   -5.63       {"hostname":"nodeswift01-cp001"}
 var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*(?P<meta>\{"hostname":"\w+-\w+"\})?$`)
 
 // FindDevice returns a given disk that matches the in

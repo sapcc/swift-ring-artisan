@@ -34,7 +34,8 @@ else
 endif
 
 install: FORCE build/swift-ring-artisan
-	install -D -m 0755 build/swift-ring-artisan "$(DESTDIR)$(PREFIX)/bin/swift-ring-artisan"
+	install -d -m 0755 "$(DESTDIR)$(PREFIX)/bin"
+	install -m 0755 build/swift-ring-artisan "$(DESTDIR)$(PREFIX)/bin/swift-ring-artisan"
 
 # which packages to test with "go test"
 GO_TESTPKGS := $(shell go list -f '{{if or .TestGoFiles .XTestGoFiles}}{{.ImportPath}}{{end}}' ./...)

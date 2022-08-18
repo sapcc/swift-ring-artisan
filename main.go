@@ -24,6 +24,7 @@ import (
 	"strconv"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/go-bits/must"
 	"github.com/spf13/cobra"
 
 	applycmd "github.com/sapcc/swift-ring-artisan/cmd/apply"
@@ -55,7 +56,5 @@ func main() {
 	convertcmd.AddCommandTo(rootCmd)
 	parsecmd.AddCommandTo(rootCmd)
 
-	if err := rootCmd.Execute(); err != nil {
-		logg.Fatal(err.Error())
-	}
+	must.Succeed(rootCmd.Execute())
 }

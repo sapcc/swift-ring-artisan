@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/go-bits/must"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 
@@ -67,9 +68,6 @@ func run(cmd *cobra.Command, args []string) {
 	filename := filepath.Base(builderFilename)
 	file := map[string]rules.RingRules{filename: diskRules}
 
-	dataYAML, err := yaml.Marshal(file)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
+	dataYAML := must.Return(yaml.Marshal(file))
 	misc.WriteToStdoutOrFile(dataYAML, outputFilename)
 }

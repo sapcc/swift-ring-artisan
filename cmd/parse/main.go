@@ -25,6 +25,7 @@ import (
 	"os"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/go-bits/must"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 
@@ -64,10 +65,7 @@ func run(cmd *cobra.Command, args []string) {
 	}
 
 	metaData := builderfile.Input(input)
-	metaDataOutput, err := yaml.Marshal(metaData)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
+	metaDataOutput := must.Return(yaml.Marshal(metaData))
 
 	if outputFile == "" {
 		fmt.Printf("%+v", string(metaDataOutput))

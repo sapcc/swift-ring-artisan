@@ -38,7 +38,7 @@ type DeviceInfo struct {
 	Partitions      uint64 `mapstructure:"parts"`
 	Balance         float64
 	Meta            *map[string]string `yaml:"meta,omitempty"`
-	//nolint:unused,structcheck
+	//nolint:unused
 	flags struct{} // TODO: figure out how the field looks like
 }
 

@@ -21,13 +21,13 @@ package applycmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/go-bits/must"
 	"github.com/spf13/cobra"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
@@ -79,15 +79,12 @@ func run(_ *cobra.Command, args []string) {
 	misc.ReadYAML(ruleFilename, &file)
 
 	builderBaseFilename := filepath.Base(builderFilename)
-	rules, ok := file[builderBaseFilename]
+	ringRules, ok := file[builderBaseFilename]
 	if !ok {
 		logg.Fatal("%s is missing key for %s", ruleFilename, builderBaseFilename)
 	}
 
-	commandQueue, err := rules.CalculateChanges(ring, builderFilename)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	commandQueue := must.Return(ringRules.CalculateChanges(ring, builderFilename))
 	if len(commandQueue) == 0 {
 		os.Exit(0)
 	}
@@ -105,10 +102,7 @@ func run(_ *cobra.Command, args []string) {
 	}
 
 	promptAnswer := false
-	fileInfo, err := os.Stdin.Stat()
-	if err != nil {
-		log.Fatal(err.Error())
-	}
+	fileInfo := must.Return(os.Stdin.Stat())
 
 	// evaluates to true if program is run in an interactive shell and not piped
 	isInteractive := (fileInfo.Mode() & os.ModeCharDevice) != 0
@@ -122,7 +116,7 @@ func run(_ *cobra.Command, args []string) {
 			// rebalance not required, if commandQueue only contains 'set_info' commands
 			rebalanceRequired = rebalanceRequired || !strings.Contains(command, "set_info")
 			args := strings.Split(command, " ")
-			cmd := exec.Command(args[0], args[1:]...)
+			cmd := exec.Command(args[0], args[1:]...) //nolint:gosec // input is user supplied and self executed
 			stdout, err := cmd.Output()
 			logg.Info(string(stdout))
 			if err != nil {

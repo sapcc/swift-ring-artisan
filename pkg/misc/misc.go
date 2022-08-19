@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/go-bits/must"
 	"gopkg.in/yaml.v2"
 )
 
@@ -43,30 +44,19 @@ func WriteToStdoutOrFile(data []byte, filename string) {
 }
 
 func ReadYAML(filename string, variable interface{}) {
-	ruleFile, err := os.ReadFile(filename)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
-	err = yaml.UnmarshalStrict(ruleFile, variable)
+	ruleFile := must.Return(os.ReadFile(filename))
+	err := yaml.UnmarshalStrict(ruleFile, variable)
 	if err != nil {
 		logg.Fatal("Parsing file %s failed: %s", filename, err.Error())
 	}
 }
 
-func ParseUint(string string) uint64 {
-	uint, err := strconv.ParseUint(string, 10, 64)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
-	return uint
+func ParseUint(str string) uint64 {
+	return must.Return(strconv.ParseUint(str, 10, 64))
 }
 
-func ParseFloat(string string) float64 {
-	float, err := strconv.ParseFloat(string, 64)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
-	return float
+func ParseFloat(str string) float64 {
+	return must.Return(strconv.ParseFloat(str, 64))
 }
 
 func Contains(list []string, searchFor string) bool {
@@ -80,15 +70,8 @@ func Contains(list []string, searchFor string) bool {
 
 func AskConfirmation(text string) bool {
 	fmt.Printf("%s [y/N]: ", text)
-	response, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
+	response := must.Return(bufio.NewReader(os.Stdin).ReadString('\n'))
 
 	response = strings.ToLower(strings.TrimSpace(response))
-	if response == "y" || response == "yes" {
-		return true
-	} else {
-		return false
-	}
+	return response == "y" || response == "yes"
 }

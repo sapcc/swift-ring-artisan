@@ -28,6 +28,7 @@ import (
 	"github.com/nlpodyssey/gopickle/pickle"
 	"github.com/nlpodyssey/gopickle/types"
 	"github.com/sapcc/go-bits/logg"
+	"github.com/sapcc/go-bits/must"
 )
 
 type pickleData struct {
@@ -40,12 +41,8 @@ type pickleData struct {
 }
 
 func unmarshal(input interface{}) pickleData {
-	pickle := guessType(input)
 	var mappedData pickleData
-	err := mapstructure.Decode(pickle, &mappedData)
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
+	must.Succeed(mapstructure.Decode(guessType(input), &mappedData))
 	return mappedData
 }
 
@@ -120,10 +117,7 @@ func decodeBuilderFile(builderFilename string) pickleData {
 		}
 		return nil, fmt.Errorf("class not found :(")
 	}
-	pickled, err := u.Load()
-	if err != nil {
-		logg.Fatal(err.Error())
-	}
+	pickled := must.Return(u.Load())
 
 	return unmarshal(pickled)
 }

@@ -98,6 +98,9 @@ func run(_ *cobra.Command, args []string) {
 
 	// exit early when only checking for changes to skip executing commands
 	if checkChanges {
+		if len(commandQueue) > 0 {
+			os.Exit(1)
+		}
 		os.Exit(0)
 	}
 

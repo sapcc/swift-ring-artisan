@@ -34,11 +34,12 @@ import (
 
 // NodeRules is a server containing disks
 type NodeRules struct {
-	Port       uint64             `yaml:"port,omitempty"`
-	Meta       *map[string]string `yaml:"meta,omitempty"`
-	DiskCount  uint64             `yaml:"disk_count"`
-	DiskSizeTB float64            `yaml:"disk_size_tb,omitempty"`
-	Weight     *float64           `yaml:"weight,omitempty"`
+	Port           uint64             `yaml:"port,omitempty"`
+	Meta           *map[string]string `yaml:"meta,omitempty"`
+	DiskCount      uint64             `yaml:"disk_count"`
+	DiskSizeTB     float64            `yaml:"disk_size_tb,omitempty"`
+	Weight         *float64           `yaml:"weight,omitempty"`
+	ReportedWeight *float64           `yaml:"reported_weight,omitempty"`
 }
 
 // ZoneRules contains multiple nodes

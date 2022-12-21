@@ -52,6 +52,7 @@ type RingRules struct {
 	BaseSizeTB float64 `yaml:"base_size_tb"`
 	BasePort   uint64  `yaml:"base_port"`
 	Region     uint64
+	Overload   float64
 	Zones      map[uint64]*ZoneRules
 }
 
@@ -86,6 +87,11 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	var discoveredDisks, commandQueue []string
 
+	if ring.OverloadFactorDecimal != ringRules.Overload {
+		logg.Debug("Overload does not match, adding command to change it")
+		commandQueue = append(commandQueue, ring.CommandSetOverload(ringFilename, ringRules.Overload))
+	}
+
 	var zoneIDs []uint64
 	for zoneID := range ringRules.Zones {
 		zoneIDs = append(zoneIDs, zoneID)
@@ -94,6 +100,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	for _, zoneID := range zoneIDs {
 		zoneRules := ringRules.Zones[zoneID]
+
 		var nodeIPs []string
 		for nodeIP := range zoneRules.Nodes {
 			nodeIPs = append(nodeIPs, nodeIP)

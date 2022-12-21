@@ -38,6 +38,7 @@ type pickleData struct {
 	Devices    []DeviceInfo `mapstructure:"devs"`
 	Partitions uint64       `mapstructure:"parts"`
 	Version    uint64
+	Overload   float64
 }
 
 func unmarshal(input interface{}) pickleData {

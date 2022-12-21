@@ -180,6 +180,23 @@ func TestDeleteDisk2(t *testing.T) {
 	assert.DeepEqual(t, "parsing", expectedCommands, commandQueue)
 }
 
+func TestSetOverload(t *testing.T) {
+	var input builderfile.RingInfo
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
+
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-rules-overload.yaml", &ring)
+
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	var expectedCommands []string
+	expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null set_overload %.6f", 0.1))
+	assert.DeepEqual(t, "parsing", expectedCommands, commandQueue)
+}
+
 func TestZoneMismatch(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-zone-mismatch.yaml", &input)

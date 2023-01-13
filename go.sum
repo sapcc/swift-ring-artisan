@@ -18,8 +18,8 @@ github.com/oriser/regroup v0.0.0-20210730155327-fca8d7531263/go.mod h1:odkMeLkWS
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/sapcc/go-bits v0.0.0-20230101201537-12465ca06570 h1:clh+Gd5uYycehvLUuOz/blnmuJ/IF2yx2kq3kfP7sPY=
-github.com/sapcc/go-bits v0.0.0-20230101201537-12465ca06570/go.mod h1:xsNbTVzDPJ46nPplFMszEHaPM9+NVwB3Jx/XFBqPkNI=
+github.com/sapcc/go-bits v0.0.0-20230106150032-a47ac4215fc5 h1:gZNsqJPdTArUOjZJQl1TSxClLpUHV1pd+8H6Gj5Aj3w=
+github.com/sapcc/go-bits v0.0.0-20230106150032-a47ac4215fc5/go.mod h1:xsNbTVzDPJ46nPplFMszEHaPM9+NVwB3Jx/XFBqPkNI=
 github.com/sergi/go-diff v1.2.0 h1:XU+rvMAioB0UC3q1MFrIQy4Vo5/4VsRDQQXHsEya6xQ=
 github.com/sergi/go-diff v1.2.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
 github.com/spf13/cobra v1.6.1 h1:o94oiPyS4KD1mPy2fmcYYHHfCxLqYjJOhGsCHFZtEzA=

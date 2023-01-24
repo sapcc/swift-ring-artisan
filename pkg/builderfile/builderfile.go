@@ -55,14 +55,15 @@ func File(builderFilename string) RingInfo {
 
 	pickleData := decodeBuilderFile(builderFilename)
 	ring := RingInfo{
-		ID:          pickleData.ID,
-		Version:     pickleData.Version,
-		Devices:     pickleData.Devices,
-		DeviceCount: uint64(len(pickleData.Devices)),
-		Dispersion:  pickleData.Dispersion,
-		Partitions:  pickleData.Partitions,
-		Regions:     pickleData.Devices[0].Region, // FIXME: make multi region aware
-		Replicas:    pickleData.Replicas,
+		ID:                    pickleData.ID,
+		Version:               pickleData.Version,
+		Devices:               pickleData.Devices,
+		DeviceCount:           uint64(len(pickleData.Devices)),
+		Dispersion:            pickleData.Dispersion,
+		Partitions:            pickleData.Partitions,
+		Regions:               pickleData.Devices[0].Region, // FIXME: make multi region aware
+		Replicas:              pickleData.Replicas,
+		OverloadFactorDecimal: pickleData.Overload,
 	}
 	// round to two decimal places to match the cli output
 	ring.Dispersion = math.Round(ring.Dispersion*100) / 100

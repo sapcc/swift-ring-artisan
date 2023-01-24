@@ -69,6 +69,10 @@ func (device DeviceInfo) IPAddressPort() string {
 	return fmt.Sprintf("%s:%d", device.IP, device.Port)
 }
 
+func (ring RingInfo) CommandSetOverload(ringFilename string, desiredOverload float64) string {
+	return fmt.Sprintf("swift-ring-builder %s set_overload %f", ringFilename, desiredOverload)
+}
+
 func (device DeviceInfo) CommandAdd(ringFilename string) string {
 	if device.Meta != nil {
 		var meta []byte

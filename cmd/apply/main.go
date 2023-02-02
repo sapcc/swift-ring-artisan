@@ -92,8 +92,10 @@ func run(_ *cobra.Command, args []string) {
 	if executeCommands && checkChanges {
 		logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
 	}
-	for _, command := range commandQueue {
-		misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+	if !executeCommands {
+		for _, command := range commandQueue {
+			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)
+		}
 	}
 
 	// exit early when only checking for changes to skip executing commands
@@ -109,7 +111,7 @@ func run(_ *cobra.Command, args []string) {
 
 	// evaluates to true if program is run in an interactive shell and not piped
 	isInteractive := (fileInfo.Mode() & os.ModeCharDevice) != 0
-	if isInteractive {
+	if !executeCommands && isInteractive {
 		promptAnswer = misc.AskConfirmation("Do you want to apply the changes by executing the above commands?")
 	}
 
@@ -130,24 +132,33 @@ func run(_ *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	if isInteractive {
-		promptAnswer := false
-		action := "write_ring"
-		if rebalanceRequired {
-			action = "rebalance"
-		}
+	promptAnswer = false
+	action := "write_ring"
+	if rebalanceRequired {
+		action = "rebalance"
+	}
+	if !executeCommands && isInteractive {
 		promptAnswer = misc.AskConfirmation(fmt.Sprintf("Do you want to %s now?", action))
+	}
 
-		if promptAnswer {
-			cmd := exec.Command("swift-ring-builder", builderFilename, action)
-			stdout, err := cmd.Output()
-			logg.Info(string(stdout))
-			if exitError, ok := err.(*exec.ExitError); ok {
-				os.Exit(exitError.ExitCode())
-			} else if err != nil {
-				logg.Fatal("Command %q failed: %v", strings.Join(cmd.Args, " "), err.Error())
+	if executeCommands || promptAnswer {
+		cmd := exec.Command("swift-ring-builder", builderFilename, action)
+		logg.Info(fmt.Sprintf("%s %s", builderFilename, action))
+		stdout, err := cmd.Output()
+		// For better readablitity, split multiline outputs to separate loglines
+		output := strings.Split(string(stdout), "\n")
+		for _, line := range output {
+			if line != "" {
+				logg.Info(line)
 			}
 		}
+
+		if exitError, ok := err.(*exec.ExitError); ok {
+			os.Exit(exitError.ExitCode())
+		} else if err != nil {
+			logg.Fatal("Command %q failed: %v", strings.Join(cmd.Args, " "), err.Error())
+		}
 	}
+
 	os.Exit(0)
 }

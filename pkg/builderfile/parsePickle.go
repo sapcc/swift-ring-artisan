@@ -53,7 +53,7 @@ func guessType(input interface{}) interface{} {
 		data := make(map[string]interface{})
 		for _, entry := range *v {
 			key := entry.Key.(string) //nolint:errcheck
-			// skip keys which have have tuple indexed Dicts
+			// skip keys which have tuple indexed Dicts
 			if key == "_dispersion_graph" || key == "_replica2part2dev" || key == "_last_part_moves" {
 				continue
 			}

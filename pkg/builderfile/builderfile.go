@@ -86,6 +86,7 @@ func File(builderFilename string) RingInfo {
 	ringParsed.ReassignedCooldown = 0
 	ringParsed.ReassignedRemaining = time.Time{}
 	ringParsed.Zones = 0
+	ringParsed.OverloadFactorPercent = 0 // rely on OverloadFactorDecimal
 
 	sort.Slice(ringParsed.Devices, func(i, j int) bool {
 		return ringParsed.Devices[i].ID < ringParsed.Devices[j].ID

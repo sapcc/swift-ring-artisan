@@ -87,8 +87,9 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	var discoveredDisks, commandQueue []string
 
-	if ring.OverloadFactorDecimal != ringRules.Overload {
-		logg.Debug("Overload does not match, adding command to change it")
+	// Special handling for floating point comparison
+	if diff := math.Abs(ring.OverloadFactorDecimal - ringRules.Overload); diff > 0.000001 {
+		logg.Debug("Overload does not match, adding command to change it from %f to %f", ring.OverloadFactorDecimal, ringRules.Overload)
 		commandQueue = append(commandQueue, ring.CommandSetOverload(ringFilename, ringRules.Overload))
 	}
 

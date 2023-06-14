@@ -11,7 +11,7 @@ github.com/nlpodyssey/gopickle/types
 # github.com/oriser/regroup v0.0.0-20230527212431-1b00c9bdbc5b
 ## explicit; go 1.18
 github.com/oriser/regroup
-# github.com/sapcc/go-bits v0.0.0-20230608160309-15c04a12a7c0
+# github.com/sapcc/go-bits v0.0.0-20230614140115-83eb3a701632
 ## explicit; go 1.20
 github.com/sapcc/go-bits/assert
 github.com/sapcc/go-bits/logg

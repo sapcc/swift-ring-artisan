@@ -153,6 +153,7 @@ func run(_ *cobra.Command, args []string) {
 			}
 		}
 
+		//nolint:errorlint // not applicable
 		if exitError, ok := err.(*exec.ExitError); ok {
 			os.Exit(exitError.ExitCode())
 		} else if err != nil {

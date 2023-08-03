@@ -26,6 +26,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sapcc/go-bits/errext"
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/go-bits/must"
 	"github.com/spf13/cobra"
@@ -63,7 +64,9 @@ func AddCommandTo(parent *cobra.Command) {
 	parent.AddCommand(cmd)
 }
 
-func run(_ *cobra.Command, args []string) {
+func run(cmd *cobra.Command, args []string) {
+	_, _ = cmd, args
+
 	if outputFormat != "" && outputFormat != "json" && outputFormat != "yaml" {
 		logg.Fatal("format needs to be set to json OR yaml.")
 	}
@@ -153,8 +156,7 @@ func run(_ *cobra.Command, args []string) {
 			}
 		}
 
-		//nolint:errorlint // not applicable
-		if exitError, ok := err.(*exec.ExitError); ok {
+		if exitError, ok := errext.As[*exec.ExitError](err); ok {
 			os.Exit(exitError.ExitCode())
 		} else if err != nil {
 			logg.Fatal("Command %q failed: %v", strings.Join(cmd.Args, " "), err.Error())

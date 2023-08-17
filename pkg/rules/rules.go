@@ -27,6 +27,7 @@ import (
 	"sort"
 
 	"github.com/sapcc/go-bits/logg"
+	"golang.org/x/exp/slices"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
@@ -40,6 +41,8 @@ type NodeRules struct {
 	DiskSizeTB     float64            `yaml:"disk_size_tb,omitempty"`
 	Weight         *float64           `yaml:"weight,omitempty"`
 	ReportedWeight *float64           `yaml:"reported_weight,omitempty"`
+	//BrokenDisks lists device names like "swift-02" that shall be treated as non-existent.
+	BrokenDisks []string `yaml:"broken_disks,omitempty"`
 }
 
 // ZoneRules contains multiple nodes
@@ -110,7 +113,12 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 		for _, nodeIP := range nodeIPs {
 			nodeRules := zoneRules.Nodes[nodeIP]
-			for diskNumber := 1; diskNumber <= int(nodeRules.DiskCount); diskNumber++ {
+			for diskNumber := uint64(1); diskNumber <= nodeRules.DiskCount; diskNumber++ {
+				diskName := fmt.Sprintf("swift-%02d", diskNumber)
+				if slices.Contains(nodeRules.BrokenDisks, diskName) {
+					continue
+				}
+
 				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
 				var port uint64
 				if nodeRules.Port != 0 {
@@ -132,7 +140,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 						Zone:   zoneID,
 						IP:     nodeIP,
 						Port:   port,
-						Name:   fmt.Sprintf("swift-%02d", diskNumber),
+						Name:   diskName,
 						Weight: weight,
 					}
 					if nodeRules.Meta != nil {

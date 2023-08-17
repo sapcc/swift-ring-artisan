@@ -180,6 +180,23 @@ func TestDeleteDisk2(t *testing.T) {
 	assert.DeepEqual(t, "parsing", expectedCommands, commandQueue)
 }
 
+func TestDeleteBrokenDisk1(t *testing.T) {
+	var input builderfile.RingInfo
+	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
+
+	var ring RingRules
+	misc.ReadYAML("../../testing/artisan-broken-1.yaml", &ring)
+
+	commandQueue, err := ring.CalculateChanges(input, "/dev/null")
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+
+	assert.DeepEqual(t, "parsing", []string{
+		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100",
+	}, commandQueue)
+}
+
 func TestSetOverload(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)

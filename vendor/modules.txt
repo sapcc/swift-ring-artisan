@@ -27,7 +27,7 @@ github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
 ## explicit; go 1.12
 github.com/spf13/pflag
-# golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
+# golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 ## explicit; go 1.20
 golang.org/x/exp/constraints
 golang.org/x/exp/slices

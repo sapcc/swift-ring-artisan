@@ -24,10 +24,10 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"slices"
 	"sort"
 
 	"github.com/sapcc/go-bits/logg"
-	"golang.org/x/exp/slices"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"

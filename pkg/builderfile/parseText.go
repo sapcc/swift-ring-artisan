@@ -127,7 +127,7 @@ func Input(input io.Reader) RingInfo {
 		matches, _ = remainingTimeRx.Groups(line)
 		if len(matches) > 0 {
 			metaData.ReassignedCooldown = misc.ParseUint(matches["reassignedCooldown"])
-			metaData.ReassignedRemaining, _ = time.Parse("15:04:05", matches["reassignedRemaining"]) //nolint:errcheck
+			metaData.ReassignedRemaining, _ = time.Parse(time.TimeOnly, matches["reassignedRemaining"]) //nolint:errcheck
 			continue
 		}
 

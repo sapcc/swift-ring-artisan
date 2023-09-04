@@ -70,6 +70,16 @@ type ZoneRules struct {
 	Nodes map[string]*NodeRules
 }
 
+func (zoneRules ZoneRules) getNodeIPs() []string {
+	var nodeIPs []string
+	for nodeIP := range zoneRules.Nodes {
+		nodeIPs = append(nodeIPs, nodeIP)
+	}
+	sort.Strings(nodeIPs) // for reproducibility in tests
+
+	return nodeIPs
+}
+
 // RingRules containing the rules for a region, multiple Zones and dozzens Nodes
 type RingRules struct {
 	BaseSizeTB float64 `yaml:"base_size_tb"`
@@ -110,17 +120,9 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 	for _, zone := range zones {
 		zoneRules := ringRules.Zones[zone]
 
-	for _, zoneID := range zoneIDs {
-		zoneRules := ringRules.Zones[zoneID]
-
-		var nodeIPs []string
-		for nodeIP := range zoneRules.Nodes {
-			nodeIPs = append(nodeIPs, nodeIP)
-		}
-		sort.Strings(nodeIPs) // for reproducibility in tests
-
-		for _, nodeIP := range nodeIPs {
+		for _, nodeIP := range zoneRules.getNodeIPs() {
 			nodeRules := zoneRules.Nodes[nodeIP]
+
 			for diskNumber := uint64(1); diskNumber <= nodeRules.DiskCount; diskNumber++ {
 				diskName := fmt.Sprintf("swift-%02d", diskNumber)
 				if slices.Contains(nodeRules.BrokenDisks, diskName) {

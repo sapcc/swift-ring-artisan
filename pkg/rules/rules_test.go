@@ -41,11 +41,11 @@ func TestApplyRules1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", []string{
+	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100 166",
-	}, commandQueue)
+	})
 }
 
 func TestApplyRules1_1(t *testing.T) {
@@ -60,11 +60,11 @@ func TestApplyRules1_1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", []string{
+	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100 166",
-	}, commandQueue)
+	})
 }
 
 func TestApplyRules2(t *testing.T) {
@@ -86,7 +86,7 @@ func TestApplyRules2(t *testing.T) {
 	for i := 1; i <= 40; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null set_weight --region 1 --zone 2 --ip 10.46.14.116 --port 6001 --device swift-%02d --weight 100 150", i))
 	}
-	assert.DeepEqual(t, "parsing", expectedCommands, commandQueue)
+	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
 }
 
 func TestAddDisk1(t *testing.T) {
@@ -101,11 +101,11 @@ func TestAddDisk1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", []string{
+	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null add --region 1 --zone 1 --ip 10.114.1.204 --port 6001 --device swift-01 --weight 100",
 		"swift-ring-builder /dev/null add --region 1 --zone 1 --ip 10.114.1.204 --port 6001 --device swift-02 --weight 100",
 		"swift-ring-builder /dev/null add --region 1 --zone 1 --ip 10.114.1.204 --port 6001 --device swift-03 --weight 100",
-	}, commandQueue)
+	})
 }
 
 func TestAddDisk2(t *testing.T) {
@@ -130,7 +130,7 @@ func TestAddDisk2(t *testing.T) {
 	for i := 1; i <= 12; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null add --region 1 --zone 4 --ip 10.46.14.42 --port 6001 --device swift-%02d --weight 166", i))
 	}
-	assert.DeepEqual(t, "parsing", expectedCommands, commandQueue)
+	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
 }
 
 func TestDeleteDisk1(t *testing.T) {
@@ -145,11 +145,11 @@ func TestDeleteDisk1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", []string{
+	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100",
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100",
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100",
-	}, commandQueue)
+	})
 }
 
 func TestDeleteDisk2(t *testing.T) {
@@ -177,7 +177,7 @@ func TestDeleteDisk2(t *testing.T) {
 	for i := 1; i <= 40; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null remove --region 1 --zone 2 --ip 10.46.14.116 --port 6001 --device swift-%02d --weight 100", i))
 	}
-	assert.DeepEqual(t, "parsing", expectedCommands, commandQueue)
+	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
 }
 
 func TestDeleteBrokenDisk1(t *testing.T) {
@@ -192,9 +192,9 @@ func TestDeleteBrokenDisk1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", []string{
+	assert.DeepEqual(t, "parsing", commandQueue, []string{
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100",
-	}, commandQueue)
+	})
 }
 
 func TestSetOverload(t *testing.T) {

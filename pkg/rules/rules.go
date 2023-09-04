@@ -80,6 +80,16 @@ func (zoneRules ZoneRules) getNodeIPs() []string {
 	return nodeIPs
 }
 
+type discoveredDisk struct {
+	NodeIP   string
+	DiskPort uint64
+	DiskName string
+}
+
+func getDiscoveredDisk(nodeIP string, diskPort uint64, diskName string) discoveredDisk {
+	return discoveredDisk{NodeIP: nodeIP, DiskPort: diskPort, DiskName: diskName}
+}
+
 // RingRules containing the rules for a region, multiple Zones and dozzens Nodes
 type RingRules struct {
 	BaseSizeTB float64 `yaml:"base_size_tb"`
@@ -108,7 +118,10 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 		return nil, errors.New("currently only one region is supported")
 	}
 
-	var discoveredDisks, commandQueue []string
+	var (
+		discoveredDisks []discoveredDisk
+		commandQueue    []string
+	)
 
 	// Special handling for floating point comparison
 	if diff := math.Abs(ring.OverloadFactorDecimal - ringRules.Overload); diff > 0.000001 {
@@ -160,7 +173,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 					continue
 				}
 
-				discoveredDisks = append(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", nodeIP, disk.Port, disk.Name))
+				discoveredDisks = append(discoveredDisks, getDiscoveredDisk(nodeIP, disk.Port, disk.Name))
 
 				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, port, disk)
 				if disk.Weight != weight {
@@ -178,7 +191,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	// check if all devices in the ring where matched with a rule
 	for _, device := range ring.Devices {
-		if !slices.Contains(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", device.IP, device.Port, device.Name)) {
+		if !slices.Contains(discoveredDisks, getDiscoveredDisk(device.NodeIP, device.Port, device.Name)) {
 			commandQueue = append(commandQueue, device.CommandRemove(ringFilename))
 		}
 	}

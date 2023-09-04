@@ -70,8 +70,7 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone\s+ip address:
 var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*(?P<meta>\{"hostname":"\w+-\w+"\})?$`)
 
 // FindDevice returns a given disk that matches the in
-func (ring RingInfo) FindDevice(zone uint64, nodeIP string, port, diskNumber uint64) (*DeviceInfo, error) {
-	diskName := fmt.Sprintf("swift-%02d", diskNumber)
+func (ring RingInfo) FindDevice(zone uint64, nodeIP string, port uint64, diskName string) (*DeviceInfo, error) {
 	for _, dev := range ring.Devices {
 		// zone is not checked here to detect potential zone mismatches
 		// if there are ever nodes which split disks across multiple zones this will break

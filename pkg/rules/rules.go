@@ -127,7 +127,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				} else {
 					port = 6000
 				}
-				disk, err := ring.FindDevice(zoneID, nodeIP, port, diskNumber)
+				disk, err := ring.FindDevice(zoneID, nodeIP, port, diskName)
 				if err != nil {
 					return nil, err
 				}

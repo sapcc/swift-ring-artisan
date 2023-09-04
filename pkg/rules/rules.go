@@ -111,17 +111,14 @@ func (ringRules RingRules) getZones() []uint64 {
 }
 
 // CalculateChanges to parsed MetaData
-func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) ([]string, error) {
+func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) (commandQueue, confirmations []string, err error) {
 	if ring.Regions == 0 {
-		return nil, errors.New("regions needs to be set")
+		return nil, nil, errors.New("regions needs to be set")
 	} else if ringRules.Region != ring.Regions || ring.Regions != 1 {
-		return nil, errors.New("currently only one region is supported")
+		return nil, nil, errors.New("currently only one region is supported")
 	}
 
-	var (
-		discoveredDisks []discoveredDisk
-		commandQueue    []string
-	)
+	var discoveredDisks []discoveredDisk
 
 	// Special handling for floating point comparison
 	if diff := math.Abs(ring.OverloadFactorDecimal - ringRules.Overload); diff > 0.000001 {
@@ -153,7 +150,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				}
 				disk, err := ring.FindDevice(zone, nodeIP, port, diskName)
 				if err != nil {
-					return nil, err
+					return nil, nil, err
 				}
 
 				if disk == nil {
@@ -192,9 +189,22 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 	// check if all devices in the ring where matched with a rule
 	for _, device := range ring.Devices {
 		if !slices.Contains(discoveredDisks, getDiscoveredDisk(device.NodeIP, device.Port, device.Name)) {
+			isNodeRemoved := false
+			for _, zone := range zones {
+				nodeIPs := ringRules.Zones[zone].getNodeIPs()
+				if !slices.Contains(nodeIPs, device.NodeIP) {
+					isNodeRemoved = true
+				}
+			}
+
+			if device.Weight != 0 && isNodeRemoved {
+				msg := fmt.Sprintf("Do you want to remove disk %s on node %s without first scaling its weight to 0? This poses a data loss risk.", device.Name, device.NodeIP)
+				confirmations = append(confirmations, msg)
+			}
+
 			commandQueue = append(commandQueue, device.CommandRemove(ringFilename))
 		}
 	}
 
-	return commandQueue, nil
+	return commandQueue, confirmations, nil
 }

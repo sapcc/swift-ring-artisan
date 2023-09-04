@@ -87,7 +87,10 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Fatal("%s is missing key for %s", ruleFilename, builderBaseFilename)
 	}
 
-	commandQueue := must.Return(ringRules.CalculateChanges(ring, builderFilename))
+	commandQueue, confirmations, err := ringRules.CalculateChanges(ring, builderFilename)
+	if err != nil {
+		logg.Fatal(err.Error())
+	}
 	if len(commandQueue) == 0 {
 		os.Exit(0)
 	}
@@ -95,6 +98,17 @@ func run(cmd *cobra.Command, args []string) {
 	if executeCommands && checkChanges {
 		logg.Fatal("Cannot execute commands and check if builder and ring file matches.")
 	}
+
+	if len(confirmations) > 0 {
+		for _, confirmation := range confirmations {
+			logg.Info(confirmation)
+		}
+
+		if !misc.Prompt("Please type upper-case YES to continue.", []string{"YES"}) {
+			logg.Fatal("Aborting")
+		}
+	}
+
 	if !executeCommands {
 		for _, command := range commandQueue {
 			misc.WriteToStdoutOrFile([]byte(command+"\n"), outputFilename)

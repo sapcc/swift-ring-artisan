@@ -6,7 +6,10 @@ zones:
     nodes:
       10.114.1.202:
         disk_count: 3
-        weight: 100
+        weight: 0
       10.114.1.203:
         disk_count: 3
-        disk_size_tb: 10
+        weight: 100
+      # 10.114.1.204:
+      #   disk_count: 3
+      #   weight: 100

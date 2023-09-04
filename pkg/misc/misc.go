@@ -28,6 +28,7 @@ import (
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/go-bits/must"
+	"golang.org/x/exp/slices"
 	"gopkg.in/yaml.v2"
 )
 
@@ -59,10 +60,14 @@ func ParseFloat(str string) float64 {
 	return must.Return(strconv.ParseFloat(str, 64))
 }
 
-func AskConfirmation(text string) bool {
-	fmt.Printf("%s [y/N]: ", text)
+func AskConfirmation(question string) bool {
+	return Prompt(fmt.Sprintf("%s [y/N]: ", question), []string{"y", "yes"})
+}
+
+func Prompt(text string, acceptedResponses []string) bool {
+	fmt.Print(text)
 	response := must.Return(bufio.NewReader(os.Stdin).ReadString('\n'))
 
 	response = strings.ToLower(strings.TrimSpace(response))
-	return response == "y" || response == "yes"
+	return slices.Contains(acceptedResponses, response)
 }

@@ -59,15 +59,6 @@ func ParseFloat(str string) float64 {
 	return must.Return(strconv.ParseFloat(str, 64))
 }
 
-func Contains(list []string, searchFor string) bool {
-	for _, entry := range list {
-		if entry == searchFor {
-			return true
-		}
-	}
-	return false
-}
-
 func AskConfirmation(text string) bool {
 	fmt.Printf("%s [y/N]: ", text)
 	response := must.Return(bufio.NewReader(os.Stdin).ReadString('\n'))

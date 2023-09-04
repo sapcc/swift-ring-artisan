@@ -30,7 +30,6 @@ import (
 	"github.com/sapcc/go-bits/logg"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
-	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
 
 // NodeRules is a server containing disks
@@ -168,7 +167,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	// check if all devices in the ring where matched with a rule
 	for _, device := range ring.Devices {
-		if !misc.Contains(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", device.IP, device.Port, device.Name)) {
+		if !slices.Contains(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", device.IP, device.Port, device.Name)) {
 			commandQueue = append(commandQueue, device.CommandRemove(ringFilename))
 		}
 	}

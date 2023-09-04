@@ -44,20 +44,6 @@ type NodeRules struct {
 	BrokenDisks []string `yaml:"broken_disks,omitempty"`
 }
 
-// ZoneRules contains multiple nodes
-type ZoneRules struct {
-	Nodes map[string]*NodeRules
-}
-
-// RingRules containing the rules for a region, multiple Zones and dozzens Nodes
-type RingRules struct {
-	BaseSizeTB float64 `yaml:"base_size_tb"`
-	BasePort   uint64  `yaml:"base_port"`
-	Region     uint64
-	Overload   float64
-	Zones      map[uint64]*ZoneRules
-}
-
 func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) float64 {
 	var weight float64
 	if nodeRules.Weight == nil && baseSizeTB == 0 {
@@ -79,6 +65,31 @@ func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) floa
 	return weight
 }
 
+// ZoneRules contains multiple nodes
+type ZoneRules struct {
+	Nodes map[string]*NodeRules
+}
+
+// RingRules containing the rules for a region, multiple Zones and dozzens Nodes
+type RingRules struct {
+	BaseSizeTB float64 `yaml:"base_size_tb"`
+	BasePort   uint64  `yaml:"base_port"`
+	Region     uint64
+	Overload   float64
+	Zones      map[uint64]*ZoneRules
+}
+
+func (ringRules RingRules) getZones() []uint64 {
+	var zones []uint64
+
+	for zone := range ringRules.Zones {
+		zones = append(zones, zone)
+	}
+	slices.Sort(zones)
+
+	return zones
+}
+
 // CalculateChanges to parsed MetaData
 func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) ([]string, error) {
 	if ring.Regions == 0 {
@@ -95,11 +106,9 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 		commandQueue = append(commandQueue, ring.CommandSetOverload(ringFilename, ringRules.Overload))
 	}
 
-	var zoneIDs []uint64
-	for zoneID := range ringRules.Zones {
-		zoneIDs = append(zoneIDs, zoneID)
-	}
-	sort.Slice(zoneIDs, func(i, j int) bool { return zoneIDs[i] < zoneIDs[j] }) // for reproducibility in tests
+	zones := ringRules.getZones()
+	for _, zone := range zones {
+		zoneRules := ringRules.Zones[zone]
 
 	for _, zoneID := range zoneIDs {
 		zoneRules := ringRules.Zones[zoneID]
@@ -127,7 +136,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				} else {
 					port = 6000
 				}
-				disk, err := ring.FindDevice(zoneID, nodeIP, port, diskName)
+				disk, err := ring.FindDevice(zone, nodeIP, port, diskName)
 				if err != nil {
 					return nil, err
 				}
@@ -136,7 +145,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 					logg.Debug("Disk was not found, adding it")
 					disk = &builderfile.DeviceInfo{
 						Region: ringRules.Region,
-						Zone:   zoneID,
+						Zone:   zone,
 						NodeIP: nodeIP,
 						Port:   port,
 						Name:   diskName,

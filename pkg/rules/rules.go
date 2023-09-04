@@ -137,7 +137,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 					disk = &builderfile.DeviceInfo{
 						Region: ringRules.Region,
 						Zone:   zoneID,
-						IP:     nodeIP,
+						NodeIP: nodeIP,
 						Port:   port,
 						Name:   diskName,
 						Weight: weight,

@@ -29,11 +29,11 @@ type DeviceInfo struct {
 	ID              uint64
 	Region          uint64
 	Zone            uint64
-	IP              string // TODO: remove
+	NodeIP          string `yaml:"ip" mapstructure:"ip"`
 	Port            uint64
 	ReplicationIP   string `yaml:"replication_ip" mapstructure:"replication_ip"`
 	ReplicationPort uint64 `yaml:"replication_port" mapstructure:"replication_port"`
-	Name            string `mapstructure:"device"` // TODO: rename to Device?
+	Name            string `mapstructure:"device"`
 	Weight          float64
 	Partitions      uint64 `mapstructure:"parts"`
 	Balance         float64
@@ -66,7 +66,7 @@ type RingInfo struct {
 }
 
 func (device DeviceInfo) IPAddressPort() string {
-	return fmt.Sprintf("%s:%d", device.IP, device.Port)
+	return fmt.Sprintf("%s:%d", device.NodeIP, device.Port)
 }
 
 func (ring RingInfo) CommandSetOverload(ringFilename string, desiredOverload float64) string {
@@ -78,33 +78,33 @@ func (device DeviceInfo) CommandAdd(ringFilename string) string {
 		var meta []byte
 		meta, _ = json.Marshal(device.Meta) //nolint:errcheck
 		return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g --meta %s",
-			ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight, meta)
+			ringFilename, device.Region, device.Zone, device.NodeIP, device.Port, device.Name, device.Weight, meta)
 	}
 
 	return fmt.Sprintf("swift-ring-builder %s add --region %d --zone %d --ip %s --port %d --device %s --weight %g",
-		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)
+		ringFilename, device.Region, device.Zone, device.NodeIP, device.Port, device.Name, device.Weight)
 }
 
 func (device DeviceInfo) CommandSetMeta(ringFilename string, desiredMeta map[string]string) string {
 	var meta []byte
 	meta, _ = json.Marshal(desiredMeta) //nolint:errcheck
 	return fmt.Sprintf("swift-ring-builder %s set_info --region %d --zone %d --ip %s --port %d --device %s --change-meta %s",
-		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, meta)
+		ringFilename, device.Region, device.Zone, device.NodeIP, device.Port, device.Name, meta)
 }
 
 func (device DeviceInfo) CommandSetMetaNode(ringFilename string, desiredMeta map[string]string) string {
 	var meta []byte
 	meta, _ = json.Marshal(desiredMeta) //nolint:errcheck
 	return fmt.Sprintf("swift-ring-builder %s set_info --region %d --zone %d --ip %s --port %d --change-meta %s --yes",
-		ringFilename, device.Region, device.Zone, device.IP, device.Port, meta)
+		ringFilename, device.Region, device.Zone, device.NodeIP, device.Port, meta)
 }
 
 func (device DeviceInfo) CommandSetWeight(ringFilename string, desiredWeight float64) string {
 	return fmt.Sprintf("swift-ring-builder %s set_weight --region %d --zone %d --ip %s --port %d --device %s --weight %g %g",
-		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight, desiredWeight)
+		ringFilename, device.Region, device.Zone, device.NodeIP, device.Port, device.Name, device.Weight, desiredWeight)
 }
 
 func (device DeviceInfo) CommandRemove(ringFilename string) string {
 	return fmt.Sprintf("swift-ring-builder %s remove --region %d --zone %d --ip %s --port %d --device %s --weight %g",
-		ringFilename, device.Region, device.Zone, device.IP, device.Port, device.Name, device.Weight)
+		ringFilename, device.Region, device.Zone, device.NodeIP, device.Port, device.Name, device.Weight)
 }

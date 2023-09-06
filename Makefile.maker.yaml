@@ -1,5 +1,8 @@
 # Configuration file for <https://github.com/sapcc/go-makefile-maker>
 
+metadata:
+  url: https://github.com/sapcc/swift-ring-artisan
+
 binaries:
   - name:        swift-ring-artisan
     fromPackage: .

@@ -44,20 +44,6 @@ type NodeRules struct {
 	BrokenDisks []string `yaml:"broken_disks,omitempty"`
 }
 
-// ZoneRules contains multiple nodes
-type ZoneRules struct {
-	Nodes map[string]*NodeRules
-}
-
-// RingRules containing the rules for a region, multiple Zones and dozzens Nodes
-type RingRules struct {
-	BaseSizeTB float64 `yaml:"base_size_tb"`
-	BasePort   uint64  `yaml:"base_port"`
-	Region     uint64
-	Overload   float64
-	Zones      map[uint64]*ZoneRules
-}
-
 func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) float64 {
 	var weight float64
 	if nodeRules.Weight == nil && baseSizeTB == 0 {
@@ -79,15 +65,60 @@ func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) floa
 	return weight
 }
 
+// ZoneRules contains multiple nodes
+type ZoneRules struct {
+	Nodes map[string]*NodeRules
+}
+
+func (zoneRules ZoneRules) getNodeIPs() []string {
+	var nodeIPs []string
+	for nodeIP := range zoneRules.Nodes {
+		nodeIPs = append(nodeIPs, nodeIP)
+	}
+	sort.Strings(nodeIPs) // for reproducibility in tests
+
+	return nodeIPs
+}
+
+type discoveredDisk struct {
+	NodeIP   string
+	DiskPort uint64
+	DiskName string
+}
+
+func getDiscoveredDisk(nodeIP string, diskPort uint64, diskName string) discoveredDisk {
+	return discoveredDisk{NodeIP: nodeIP, DiskPort: diskPort, DiskName: diskName}
+}
+
+// RingRules containing the rules for a region, multiple Zones and dozzens Nodes
+type RingRules struct {
+	BaseSizeTB float64 `yaml:"base_size_tb"`
+	BasePort   uint64  `yaml:"base_port"`
+	Region     uint64
+	Overload   float64
+	Zones      map[uint64]*ZoneRules
+}
+
+func (ringRules RingRules) getZones() []uint64 {
+	var zones []uint64
+
+	for zone := range ringRules.Zones {
+		zones = append(zones, zone)
+	}
+	slices.Sort(zones)
+
+	return zones
+}
+
 // CalculateChanges to parsed MetaData
-func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) ([]string, error) {
+func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilename string) (commandQueue, confirmations []string, err error) {
 	if ring.Regions == 0 {
-		return nil, errors.New("regions needs to be set")
+		return nil, nil, errors.New("regions needs to be set")
 	} else if ringRules.Region != ring.Regions || ring.Regions != 1 {
-		return nil, errors.New("currently only one region is supported")
+		return nil, nil, errors.New("currently only one region is supported")
 	}
 
-	var discoveredDisks, commandQueue []string
+	var discoveredDisks []discoveredDisk
 
 	// Special handling for floating point comparison
 	if diff := math.Abs(ring.OverloadFactorDecimal - ringRules.Overload); diff > 0.000001 {
@@ -95,23 +126,13 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 		commandQueue = append(commandQueue, ring.CommandSetOverload(ringFilename, ringRules.Overload))
 	}
 
-	var zoneIDs []uint64
-	for zoneID := range ringRules.Zones {
-		zoneIDs = append(zoneIDs, zoneID)
-	}
-	sort.Slice(zoneIDs, func(i, j int) bool { return zoneIDs[i] < zoneIDs[j] }) // for reproducibility in tests
+	zones := ringRules.getZones()
+	for _, zone := range zones {
+		zoneRules := ringRules.Zones[zone]
 
-	for _, zoneID := range zoneIDs {
-		zoneRules := ringRules.Zones[zoneID]
-
-		var nodeIPs []string
-		for nodeIP := range zoneRules.Nodes {
-			nodeIPs = append(nodeIPs, nodeIP)
-		}
-		sort.Strings(nodeIPs) // for reproducibility in tests
-
-		for _, nodeIP := range nodeIPs {
+		for _, nodeIP := range zoneRules.getNodeIPs() {
 			nodeRules := zoneRules.Nodes[nodeIP]
+
 			for diskNumber := uint64(1); diskNumber <= nodeRules.DiskCount; diskNumber++ {
 				diskName := fmt.Sprintf("swift-%02d", diskNumber)
 				if slices.Contains(nodeRules.BrokenDisks, diskName) {
@@ -127,17 +148,17 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 				} else {
 					port = 6000
 				}
-				disk, err := ring.FindDevice(zoneID, nodeIP, port, diskNumber)
+				disk, err := ring.FindDevice(zone, nodeIP, port, diskName)
 				if err != nil {
-					return nil, err
+					return nil, nil, err
 				}
 
 				if disk == nil {
 					logg.Debug("Disk was not found, adding it")
 					disk = &builderfile.DeviceInfo{
 						Region: ringRules.Region,
-						Zone:   zoneID,
-						IP:     nodeIP,
+						Zone:   zone,
+						NodeIP: nodeIP,
 						Port:   port,
 						Name:   diskName,
 						Weight: weight,
@@ -149,7 +170,7 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 					continue
 				}
 
-				discoveredDisks = append(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", nodeIP, disk.Port, disk.Name))
+				discoveredDisks = append(discoveredDisks, getDiscoveredDisk(nodeIP, disk.Port, disk.Name))
 
 				logg.Debug("Applying rule %+v to disk %s:%d %+v", nodeRules, nodeIP, port, disk)
 				if disk.Weight != weight {
@@ -167,10 +188,23 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 	// check if all devices in the ring where matched with a rule
 	for _, device := range ring.Devices {
-		if !slices.Contains(discoveredDisks, fmt.Sprintf("%s\000%d\000%s", device.IP, device.Port, device.Name)) {
+		if !slices.Contains(discoveredDisks, getDiscoveredDisk(device.NodeIP, device.Port, device.Name)) {
+			isNodeRemoved := false
+			for _, zone := range zones {
+				nodeIPs := ringRules.Zones[zone].getNodeIPs()
+				if !slices.Contains(nodeIPs, device.NodeIP) {
+					isNodeRemoved = true
+				}
+			}
+
+			if device.Weight != 0 && isNodeRemoved {
+				msg := fmt.Sprintf("Do you want to remove disk %s on node %s without first scaling its weight to 0? This poses a data loss risk.", device.Name, device.NodeIP)
+				confirmations = append(confirmations, msg)
+			}
+
 			commandQueue = append(commandQueue, device.CommandRemove(ringFilename))
 		}
 	}
 
-	return commandQueue, nil
+	return commandQueue, confirmations, nil
 }

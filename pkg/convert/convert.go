@@ -42,8 +42,8 @@ func Convert(ring builderfile.RingInfo, baseSize float64) rules.RingRules {
 
 		diskRulesZone = diskRules.Zones[device.Zone]
 		// if the last IPAddressPort matches the current, there is another disk on the same note, just increase the count
-		if _, ok := diskRulesZone.Nodes[device.IP]; ok {
-			diskRulesZone.Nodes[device.IP].DiskCount++
+		if _, ok := diskRulesZone.Nodes[device.NodeIP]; ok {
+			diskRulesZone.Nodes[device.NodeIP].DiskCount++
 			continue
 		}
 
@@ -51,7 +51,7 @@ func Convert(ring builderfile.RingInfo, baseSize float64) rules.RingRules {
 			diskRulesZone.Nodes = make(map[string]*rules.NodeRules)
 		}
 		weight := device.Weight
-		diskRulesZone.Nodes[device.IP] = &rules.NodeRules{
+		diskRulesZone.Nodes[device.NodeIP] = &rules.NodeRules{
 			DiskCount: 1,
 			Weight:    &weight,
 		}

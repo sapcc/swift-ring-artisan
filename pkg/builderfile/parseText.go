@@ -70,20 +70,19 @@ var tableHeaderRx = regexp.MustCompile(`^Devices:   id region zone\s+ip address:
 var rowEntryRx = regroup.MustCompile(`^\s+(?P<id>\d+)\s+(?P<region>\d+)\s+(?P<zone>\d+)\s+(?P<ip>(?:\d+\.){3}\d+):(?P<port>\d+)\s+(?P<replicationIp>(?:\d+\.){3}\d+):(?P<replicationPort>\d+)\s+(?P<name>[\w+-]+)\s+(?P<weight>\d+\.\d+)\s+(?P<partitions>\d+)\s+(?P<balance>-?\d+\.\d+)\s*(?P<meta>\{"hostname":"\w+-\w+"\})?$`)
 
 // FindDevice returns a given disk that matches the in
-func (ring RingInfo) FindDevice(zone uint64, nodeIP string, port, diskNumber uint64) (*DeviceInfo, error) {
-	diskName := fmt.Sprintf("swift-%02d", diskNumber)
+func (ring RingInfo) FindDevice(zone uint64, nodeIP string, port uint64, diskName string) (*DeviceInfo, error) {
 	for _, dev := range ring.Devices {
 		// zone is not checked here to detect potential zone mismatches
 		// if there are ever nodes which split disks across multiple zones this will break
 		// if zone would be checked here a command to remove and add a disk on a zone mismatch would be generated
-		if dev.IP == nodeIP && dev.Name == diskName {
+		if dev.NodeIP == nodeIP && dev.Name == diskName {
 			if dev.Zone != zone {
 				return nil, fmt.Errorf("zone ID mismatch between parsed data %d and rule file %d", dev.Zone, zone)
 			}
 			if dev.Port != port {
 				return nil, fmt.Errorf("port mismatch between parsed data %d and rule file %d", dev.Port, port)
 			}
-			if dev.IP != dev.ReplicationIP || dev.Port != dev.ReplicationPort {
+			if dev.NodeIP != dev.ReplicationIP || dev.Port != dev.ReplicationPort {
 				return nil, errors.New("replication ip and port do not match with the normal ip and port which is required")
 			}
 			return &dev, nil
@@ -171,7 +170,7 @@ func Input(input io.Reader) RingInfo {
 				ID:              misc.ParseUint(matches["id"]),
 				Region:          misc.ParseUint(matches["region"]),
 				Zone:            misc.ParseUint(matches["zone"]),
-				IP:              matches["ip"],
+				NodeIP:          matches["ip"],
 				Port:            misc.ParseUint(matches["port"]),
 				ReplicationIP:   matches["replicationIp"],
 				ReplicationPort: misc.ParseUint(matches["replicationPort"]),

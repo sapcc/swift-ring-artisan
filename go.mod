@@ -9,7 +9,7 @@ require (
 	github.com/sapcc/go-bits v0.0.0-20230928220509-f2536e6449cf
 	github.com/sergi/go-diff v1.3.1
 	github.com/spf13/cobra v1.7.0
-	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
+	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	gopkg.in/yaml.v2 v2.4.0
 )
 

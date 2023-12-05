@@ -4,8 +4,8 @@ github.com/inconshreveable/mousetrap
 # github.com/mitchellh/mapstructure v1.5.0
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
-# github.com/nlpodyssey/gopickle v0.2.0
-## explicit; go 1.15
+# github.com/nlpodyssey/gopickle v0.3.0
+## explicit; go 1.17
 github.com/nlpodyssey/gopickle/pickle
 github.com/nlpodyssey/gopickle/types
 # github.com/oriser/regroup v0.0.0-20230527212431-1b00c9bdbc5b
@@ -31,6 +31,16 @@ github.com/spf13/pflag
 ## explicit; go 1.20
 golang.org/x/exp/constraints
 golang.org/x/exp/slices
+# golang.org/x/text v0.14.0
+## explicit; go 1.18
+golang.org/x/text/encoding
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/unicode
+golang.org/x/text/encoding/unicode/utf32
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/runes
+golang.org/x/text/transform
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2

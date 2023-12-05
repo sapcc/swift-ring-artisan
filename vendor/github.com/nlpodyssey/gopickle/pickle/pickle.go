@@ -122,11 +122,22 @@ func (u *Unpickler) findClass(module, name string) (interface{}, error) {
 		case "OrderedDict":
 			return &types.OrderedDictClass{}, nil
 		}
-
+	case "builtins":
+		switch name {
+		case "list":
+			return &types.List{}, nil
+		case "dict":
+			return &types.Dict{}, nil
+		}
 	case "__builtin__":
 		switch name {
 		case "object":
 			return &types.ObjectClass{}, nil
+		}
+	case "array":
+		switch name {
+		case "_array_reconstructor":
+			return &types.Array{}, nil
 		}
 	case "copy_reg":
 		switch name {

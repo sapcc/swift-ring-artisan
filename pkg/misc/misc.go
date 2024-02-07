@@ -23,12 +23,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/sapcc/go-bits/logg"
 	"github.com/sapcc/go-bits/must"
-	"golang.org/x/exp/slices"
 	"gopkg.in/yaml.v2"
 )
 

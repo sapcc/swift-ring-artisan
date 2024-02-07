@@ -61,7 +61,7 @@ func ParseFloat(str string) float64 {
 }
 
 func AskConfirmation(question string) bool {
-	return Prompt(fmt.Sprintf("%s [y/N]: ", question), []string{"y", "yes"})
+	return Prompt(question+" [y/N]: ", []string{"y", "yes"})
 }
 
 func Prompt(text string, acceptedResponses []string) bool {

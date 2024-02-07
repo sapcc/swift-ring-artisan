@@ -21,7 +21,7 @@ package builderfile
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"os"
 
 	"github.com/mitchellh/mapstructure"
@@ -116,7 +116,7 @@ func decodeBuilderFile(builderFilename string) pickleData {
 		if module == "array" && name == "array" {
 			return &Array{}, nil
 		}
-		return nil, fmt.Errorf("class not found :(")
+		return nil, errors.New("class not found :(")
 	}
 	pickled := must.Return(u.Load())
 

@@ -40,21 +40,22 @@ type NodeRules struct {
 	DiskSizeTB     float64            `yaml:"disk_size_tb,omitempty"`
 	Weight         *float64           `yaml:"weight,omitempty"`
 	ReportedWeight *float64           `yaml:"reported_weight,omitempty"`
-	//BrokenDisks lists device names like "swift-02" that shall be treated as non-existent.
+	// BrokenDisks lists device names like "swift-02" that shall be treated as non-existent.
 	BrokenDisks []string `yaml:"broken_disks,omitempty"`
 }
 
 func (nodeRules NodeRules) DesiredWeight(baseSizeTB float64, nodeIP string) float64 {
 	var weight float64
-	if nodeRules.Weight == nil && baseSizeTB == 0 {
+	switch {
+	case nodeRules.Weight == nil && baseSizeTB == 0:
 		logg.Fatal("Applying rule %+v to disk %s:%d failed because not enough data is present to calculate the weight", nodeRules, nodeIP, nodeRules.Port)
-	} else if nodeRules.Weight == nil && baseSizeTB != 0 {
+	case nodeRules.Weight == nil && baseSizeTB != 0:
 		if nodeRules.DiskSizeTB == 0 {
 			weight = 100
 		} else {
 			weight = math.Floor(nodeRules.DiskSizeTB / baseSizeTB * 100)
 		}
-	} else {
+	default:
 		weight = *nodeRules.Weight
 	}
 
@@ -141,11 +142,12 @@ func (ringRules RingRules) CalculateChanges(ring builderfile.RingInfo, ringFilen
 
 				weight := nodeRules.DesiredWeight(ringRules.BaseSizeTB, nodeIP)
 				var port uint64
-				if nodeRules.Port != 0 {
+				switch {
+				case nodeRules.Port != 0:
 					port = nodeRules.Port
-				} else if ringRules.BasePort != 0 {
+				case ringRules.BasePort != 0:
 					port = ringRules.BasePort
-				} else {
+				default:
 					port = 6000
 				}
 				disk, err := ring.FindDevice(zone, nodeIP, port, diskName)

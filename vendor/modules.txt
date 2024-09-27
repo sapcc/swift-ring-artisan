@@ -8,7 +8,7 @@ github.com/mitchellh/mapstructure
 ## explicit; go 1.17
 github.com/nlpodyssey/gopickle/pickle
 github.com/nlpodyssey/gopickle/types
-# github.com/oriser/regroup v0.0.0-20230527212431-1b00c9bdbc5b
+# github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e
 ## explicit; go 1.18
 github.com/oriser/regroup
 # github.com/sapcc/go-bits v0.0.0-20240925150026-37945f71a03e

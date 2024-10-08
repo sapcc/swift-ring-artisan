@@ -3,9 +3,13 @@
 with pkgs;
 
 mkShell {
-  buildInputs = [
-    go_1_17
-    go-tools
-    python3Packages.swift
+  nativeBuildInputs = [
+    go-licence-detector
+    go_1_23
+    golangci-lint
+    gotools # goimports
+
+    # keep this line if you use bash
+    bashInteractive
   ];
 }

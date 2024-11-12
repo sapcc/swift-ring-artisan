@@ -52,7 +52,7 @@ func guessType(input interface{}) interface{} {
 	case *types.Dict:
 		data := make(map[string]interface{})
 		for _, entry := range *v {
-			key := entry.Key.(string) //nolint:errcheck
+			key := entry.Key.(string)
 			// skip keys which have tuple indexed Dicts
 			if key == "_dispersion_graph" || key == "_replica2part2dev" || key == "_last_part_moves" {
 				continue
@@ -63,7 +63,7 @@ func guessType(input interface{}) interface{} {
 			}
 			if key == "meta" {
 				var meta *map[string]string
-				//nolint:errcheck
+
 				if value := entry.Value.(string); value != "" {
 					err := json.Unmarshal([]byte(value), &meta)
 					if err != nil {

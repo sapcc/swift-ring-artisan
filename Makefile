@@ -39,7 +39,7 @@ GO_BUILDENV =
 build-all: build/swift-ring-artisan
 
 build/swift-ring-artisan: FORCE
-	@env $(GO_BUILDENV) go build $(GO_BUILDFLAGS) -ldflags '-s -w $(GO_LDFLAGS)' -o build/swift-ring-artisan .
+	env $(GO_BUILDENV) go build $(GO_BUILDFLAGS) -ldflags '-s -w $(GO_LDFLAGS)' -o build/swift-ring-artisan .
 
 DESTDIR =
 ifeq ($(shell uname -s),Darwin)

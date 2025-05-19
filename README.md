@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2025 SAP SE or an SAP affiliate company
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Swift-Ring-Artisan
 
 [![CI](https://github.com/sapcc/swift-ring-artisan/actions/workflows/ci.yaml/badge.svg)](https://github.com/sapcc/swift-ring-artisan/actions/workflows/ci.yaml)

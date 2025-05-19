@@ -28,6 +28,15 @@ renovate:
     - majewsky
     - SuperSandro2000
 
+reuse:
+  annotations:
+    - paths:
+      - examples/*.yaml
+      - testing/*.yaml
+      - testing/*.txt
+      SPDX-FileCopyrightText: SAP SE or an SAP affiliate company
+      SPDX-License-Identifier: Apache-2.0
+
 verbatim: |
   generate: build/swift-ring-artisan
     ./build/swift-ring-artisan parse testing/builder-output.txt -o testing/builder-output.yaml

@@ -25,16 +25,16 @@ type pickleData struct {
 	Overload   float64
 }
 
-func unmarshal(input interface{}) pickleData {
+func unmarshal(input any) pickleData {
 	var mappedData pickleData
 	must.Succeed(mapstructure.Decode(guessType(input), &mappedData))
 	return mappedData
 }
 
-func guessType(input interface{}) interface{} {
+func guessType(input any) any {
 	switch v := input.(type) {
 	case *types.Dict:
-		data := make(map[string]interface{})
+		data := make(map[string]any)
 		for _, entry := range *v {
 			key := entry.Key.(string)
 			// skip keys which have tuple indexed Dicts
@@ -61,7 +61,7 @@ func guessType(input interface{}) interface{} {
 		}
 		return data
 	case *types.List:
-		var data []interface{}
+		var data []any
 		for _, entry := range *v {
 			// skip empty entries in Devices so that mapstructure does not convert them to empty DeviceInfos
 			if entry == nil {
@@ -83,7 +83,7 @@ type Array types.List
 
 var _ types.Callable = &Array{}
 
-func (*Array) Call(args ...interface{}) (interface{}, error) {
+func (*Array) Call(args ...any) (any, error) {
 	// TODO: make fully functional
 	// args[0] contains a type like B or H which is not taken into account
 	return args[1].(*types.List), nil
@@ -96,7 +96,7 @@ func decodeBuilderFile(builderFilename string) pickleData {
 	}
 	defer builderReader.Close()
 	u := pickle.NewUnpickler(builderReader)
-	u.FindClass = func(module, name string) (interface{}, error) {
+	u.FindClass = func(module, name string) (any, error) {
 		if module == "array" && name == "array" {
 			return &Array{}, nil
 		}

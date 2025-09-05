@@ -45,8 +45,14 @@ install-go-licence-detector: FORCE
 install-addlicense: FORCE
 	@if ! hash addlicense 2>/dev/null; then printf "\e[1;36m>> Installing addlicense (this may take a while)...\e[0m\n"; go install github.com/google/addlicense@latest; fi
 
+# install-reuse: FORCE
+#	@if ! hash reuse 2>/dev/null; then if ! hash pip3 2>/dev/null; then printf "\e[1;31m>> Cannot install reuse because no pip3 was found. Either install it using your package manager or install pip3\e[0m\n"; else printf "\e[1;36m>> Installing reuse...\e[0m\n"; pip3 install --user reuse; fi; fi
 install-reuse: FORCE
-	@if ! hash reuse 2>/dev/null; then if ! hash pip3 2>/dev/null; then printf "\e[1;31m>> Cannot install reuse because no pip3 was found. Either install it using your package manager or install pip3\e[0m\n"; else printf "\e[1;36m>> Installing reuse...\e[0m\n"; pip3 install --user reuse; fi; fi
+	@if ! hash reuse 2>/dev/null; then \
+		if grep -qi debian /etc/os-release 2>/dev/null; then apt-get update && apt-get install -y python3-pip; fi; \
+		if grep -qi alpine /etc/os-release 2>/dev/null; then apk add --no-cache py3-pip; fi; \
+		pip3 install --user reuse; \
+	fi
 
 prepare-static-check: FORCE install-golangci-lint install-modernize install-shellcheck install-go-licence-detector install-addlicense install-reuse
 

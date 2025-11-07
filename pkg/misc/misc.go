@@ -28,7 +28,7 @@ func WriteToStdoutOrFile(data []byte, filename string) {
 	}
 }
 
-func ReadYAML(filename string, variable interface{}) {
+func ReadYAML(filename string, variable any) {
 	ruleFile := must.Return(os.ReadFile(filename))
 	err := yaml.UnmarshalStrict(ruleFile, variable)
 	if err != nil {

@@ -147,8 +147,7 @@ func run(cmd *cobra.Command, args []string) {
 		logg.Info(fmt.Sprintf("%s %s", builderFilename, action))
 		stdout, err := cmd.Output()
 		// For better readablitity, split multiline outputs to separate loglines
-		output := strings.Split(string(stdout), "\n")
-		for _, line := range output {
+		for line := range strings.SplitSeq(string(stdout), "\n") {
 			if line != "" {
 				logg.Info(line)
 			}

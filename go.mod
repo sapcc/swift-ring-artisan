@@ -8,7 +8,7 @@ require (
 	github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e
 	github.com/sapcc/go-bits v0.0.0-20251204133412-746f1e02903e
 	github.com/sergi/go-diff v1.4.0
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v2 v2.4.0
 )
 

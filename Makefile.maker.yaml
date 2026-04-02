@@ -12,7 +12,9 @@ coverageTest:
   only: '/internal|/pkg'
 
 golang:
-  autoupdateableDeps: ^github.com/(?:sapcc|sap-cloud-infrastructure)/
+  autoupdateDependencies:
+    enabled: true
+    matchModule: ^github.com/(?:sapcc|sap-cloud-infrastructure)/
   setGoModVersion: true
 
 golangciLint:

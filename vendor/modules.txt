@@ -11,11 +11,10 @@ github.com/nlpodyssey/gopickle/types
 # github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e
 ## explicit; go 1.18
 github.com/oriser/regroup
-# github.com/sapcc/go-bits v0.0.0-20260514170017-1116652010c6
+# github.com/sapcc/go-bits v0.0.0-20260519090007-308851876285
 ## explicit; go 1.26
 github.com/sapcc/go-bits/assert
 github.com/sapcc/go-bits/errext
-github.com/sapcc/go-bits/internal/testdiff
 github.com/sapcc/go-bits/logg
 github.com/sapcc/go-bits/must
 github.com/sapcc/go-bits/osext
@@ -32,7 +31,7 @@ github.com/spf13/pflag
 ## explicit; go 1.20
 golang.org/x/exp/constraints
 golang.org/x/exp/slices
-# golang.org/x/text v0.36.0
+# golang.org/x/text v0.37.0
 ## explicit; go 1.25.0
 golang.org/x/text/encoding
 golang.org/x/text/encoding/internal

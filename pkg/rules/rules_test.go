@@ -122,7 +122,7 @@ func TestAddDisk2(t *testing.T) {
 	assert.Equal(t, confirmations, []string(nil))
 }
 
-func TestSetWeigthZero(t *testing.T) {
+func TestSetWeightZero(t *testing.T) {
 	var input builderfile.RingInfo
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &input)
 

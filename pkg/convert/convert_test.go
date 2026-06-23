@@ -6,7 +6,7 @@ package convert
 import (
 	"testing"
 
-	"github.com/sapcc/go-bits/assert"
+	"go.xyrillian.de/gg/assert"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
@@ -21,7 +21,7 @@ func TestParse1(t *testing.T) {
 	misc.ReadYAML("../../testing/artisan-rules-1.yaml", &expected)
 
 	metaData := Convert(input, 6)
-	assert.DeepEqual(t, "parsing", metaData, expected)
+	assert.Equal(t, metaData, expected)
 }
 
 func TestParse2(t *testing.T) {
@@ -32,5 +32,5 @@ func TestParse2(t *testing.T) {
 	misc.ReadYAML("../../testing/artisan-rules-2.yaml", &expected)
 
 	metaData := Convert(input, 6)
-	assert.DeepEqual(t, "parsing", metaData, expected)
+	assert.Equal(t, metaData, expected)
 }

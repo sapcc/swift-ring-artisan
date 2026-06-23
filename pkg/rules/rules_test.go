@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/sapcc/go-bits/assert"
+	"go.xyrillian.de/gg/assert"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/builderfile"
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
@@ -25,12 +25,12 @@ func TestApplyRules1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100 166",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestApplyRules2(t *testing.T) {
@@ -45,12 +45,12 @@ func TestApplyRules2(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100 166",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100 166",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestApplyRules3(t *testing.T) {
@@ -72,8 +72,8 @@ func TestApplyRules3(t *testing.T) {
 	for i := 1; i <= 40; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null set_weight --region 1 --zone 2 --ip 10.46.14.116 --port 6001 --device swift-%02d --weight 100 150", i))
 	}
-	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, commandQueue, expectedCommands)
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestAddDisk1(t *testing.T) {
@@ -88,12 +88,12 @@ func TestAddDisk1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null add --region 1 --zone 1 --ip 10.114.1.204 --port 6001 --device swift-01 --weight 100",
 		"swift-ring-builder /dev/null add --region 1 --zone 1 --ip 10.114.1.204 --port 6001 --device swift-02 --weight 100",
 		"swift-ring-builder /dev/null add --region 1 --zone 1 --ip 10.114.1.204 --port 6001 --device swift-03 --weight 100",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestAddDisk2(t *testing.T) {
@@ -118,8 +118,8 @@ func TestAddDisk2(t *testing.T) {
 	for i := 1; i <= 12; i++ {
 		expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null add --region 1 --zone 4 --ip 10.46.14.42 --port 6001 --device swift-%02d --weight 166", i))
 	}
-	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, commandQueue, expectedCommands)
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestSetWeigthZero(t *testing.T) {
@@ -134,12 +134,12 @@ func TestSetWeigthZero(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.202 --port 6001 --device swift-01 --weight 100 0",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.202 --port 6001 --device swift-02 --weight 100 0",
 		"swift-ring-builder /dev/null set_weight --region 1 --zone 1 --ip 10.114.1.202 --port 6001 --device swift-03 --weight 100 0",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestDeleteDisk1(t *testing.T) {
@@ -154,12 +154,12 @@ func TestDeleteDisk1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 100",
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100",
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 100",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string{
+	assert.Equal(t, confirmations, []string{
 		"Do you want to remove disk swift-01 on node 10.114.1.203 without first scaling its weight to 0? This poses a data loss risk.",
 		"Do you want to remove disk swift-02 on node 10.114.1.203 without first scaling its weight to 0? This poses a data loss risk.",
 		"Do you want to remove disk swift-03 on node 10.114.1.203 without first scaling its weight to 0? This poses a data loss risk.",
@@ -178,12 +178,12 @@ func TestDeleteDisk2(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-01 --weight 0",
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 0",
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-03 --weight 0",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestDeleteDisk4(t *testing.T) {
@@ -225,8 +225,8 @@ func TestDeleteDisk4(t *testing.T) {
 	for i := 1; i <= 40; i++ {
 		expectedConfirmations = append(expectedConfirmations, fmt.Sprintf("Do you want to remove disk swift-%02d on node 10.46.14.116 without first scaling its weight to 0? This poses a data loss risk.", i))
 	}
-	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
-	assert.DeepEqual(t, "parsing", confirmations, expectedConfirmations)
+	assert.Equal(t, commandQueue, expectedCommands)
+	assert.Equal(t, confirmations, expectedConfirmations)
 }
 
 func TestDeleteBrokenDisk1(t *testing.T) {
@@ -241,10 +241,10 @@ func TestDeleteBrokenDisk1(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	assert.DeepEqual(t, "parsing", commandQueue, []string{
+	assert.Equal(t, commandQueue, []string{
 		"swift-ring-builder /dev/null remove --region 1 --zone 1 --ip 10.114.1.203 --port 6001 --device swift-02 --weight 100",
 	})
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestSetOverload(t *testing.T) {
@@ -259,10 +259,10 @@ func TestSetOverload(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	var expectedCommands []string
-	expectedCommands = append(expectedCommands, fmt.Sprintf("swift-ring-builder /dev/null set_overload %.6f", 0.1))
-	assert.DeepEqual(t, "parsing", commandQueue, expectedCommands)
-	assert.DeepEqual(t, "parsing", confirmations, []string(nil))
+	assert.Equal(t, commandQueue, []string{
+		fmt.Sprintf("swift-ring-builder /dev/null set_overload %.6f", 0.1),
+	})
+	assert.Equal(t, confirmations, []string(nil))
 }
 
 func TestZoneMismatch(t *testing.T) {

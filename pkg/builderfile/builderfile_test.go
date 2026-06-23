@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/sapcc/go-bits/assert"
 	"github.com/sapcc/go-bits/logg"
+	"go.xyrillian.de/gg/assert"
 
 	"github.com/sapcc/swift-ring-artisan/pkg/misc"
 )
@@ -24,7 +24,7 @@ func TestParse1(t *testing.T) {
 	misc.ReadYAML("../../testing/builder-output-1.yaml", &expected)
 
 	metaData := Input(input)
-	assert.DeepEqual(t, "parsing", metaData, expected)
+	assert.Equal(t, metaData, expected)
 }
 
 func TestParse2(t *testing.T) {
@@ -38,5 +38,5 @@ func TestParse2(t *testing.T) {
 	misc.ReadYAML("../../testing/builder-output-2.yaml", &expected)
 
 	metaData := Input(input)
-	assert.DeepEqual(t, "parsing", metaData, expected)
+	assert.Equal(t, metaData, expected)
 }

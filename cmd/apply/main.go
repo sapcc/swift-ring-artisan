@@ -39,8 +39,8 @@ func AddCommandTo(parent *cobra.Command) {
 		Rebalance needs to be done manually afterwards.`,
 		Run: run,
 	}
-	cmd.PersistentFlags().BoolVarP(&checkChanges, "check", "c", false, "Wether to check if the rule file matches the ring. If it does not match the exit code is 1.")
-	cmd.PersistentFlags().BoolVarP(&executeCommands, "execute", "e", false, "Wether to execute the generated commands.")
+	cmd.PersistentFlags().BoolVarP(&checkChanges, "check", "c", false, "Whether to check if the rule file matches the ring. If it does not match the exit code is 1.")
+	cmd.PersistentFlags().BoolVarP(&executeCommands, "execute", "e", false, "Whether to execute the generated commands.")
 	cmd.PersistentFlags().StringVarP(&outputFormat, "format", "f", "", "Output format. Can be either json or yaml.")
 	cmd.PersistentFlags().StringVarP(&outputFilename, "output", "o", "", "Output file to write the parsed data to.")
 	cmd.PersistentFlags().StringVarP(&builderFilename, "builder", "b", "", "Builder file to read and apply the changes to.")

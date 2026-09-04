@@ -16,12 +16,11 @@ github.com/nlpodyssey/gopickle v0.3.0 h1:BLUE5gxFLyyNOPzlXxt6GoHEMMxD0qhsE4p0CIQ
 github.com/nlpodyssey/gopickle v0.3.0/go.mod h1:f070HJ/yR+eLi5WmM1OXJEGaTpuJEUiib19olXgYha0=
 github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e h1:cL0lMYYEbfEUBghQd4ytnl8B8Ktdm+JremTyAagegZ0=
 github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e/go.mod h1:tUOeYZJlwO7jSmM5ko1jTCiQaWQMvh58IENEfjwYzh8=
+github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
-github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/sapcc/go-bits v0.0.0-20260827091731-7669cbdb53fb h1:jORKY0SgUAhXCq40zGSDRaBzDk2zUX+p2wsJeCYxITk=
-github.com/sapcc/go-bits v0.0.0-20260827091731-7669cbdb53fb/go.mod h1:X2M3A28UnHSRGlRmiztvmBhdETrplwDFn7QLyxCOYtA=
+github.com/sapcc/go-bits v0.0.0-20260903192122-1774475e70e3 h1:UJBdl9Nd8Q2mvzWp4ArZDqEdzT6J3EcMFtm6IpCD56A=
+github.com/sapcc/go-bits v0.0.0-20260903192122-1774475e70e3/go.mod h1:vkuud4jRPWr/S2dW2409gclx56CjuFbm4N5NXyDRKlI=
 github.com/sergi/go-diff v1.4.0 h1:n/SP9D5ad1fORl+llWyN+D6qoUETXNZARKjyY2/KVCw=
 github.com/sergi/go-diff v1.4.0/go.mod h1:A0bzQcvG0E7Rwjx0REVgAGH58e96+X0MeOfepqsbeW4=
 github.com/spf13/cobra v1.10.2 h1:DMTTonx5m65Ic0GOoRY2c16WCbHxOOw6xxezuLaBpcU=

@@ -19,8 +19,8 @@ github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e/go.mod h1:tUOeYZJlw
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
-github.com/sapcc/go-bits v0.0.0-20260907125021-ceb8c12b73ac h1:8ovms/TWSjRTA/jRwg9mF5zoAfGH0KzcTRkCniT5qag=
-github.com/sapcc/go-bits v0.0.0-20260907125021-ceb8c12b73ac/go.mod h1:ZRRGye944ZCWVHAwSYkviHqdtlCrdtnu2DiHmiZ39kA=
+github.com/sapcc/go-bits v0.0.0-20260908173957-572b68774a1c h1:YbC9anwoorrpRB81cqHEmaV1GqPmEFXmmRsjOBJ7+3c=
+github.com/sapcc/go-bits v0.0.0-20260908173957-572b68774a1c/go.mod h1:AtxdH4JGpevt5HK/E+x7rAgwI8znwDNyDZjjzv/GN8I=
 github.com/sergi/go-diff v1.4.0 h1:n/SP9D5ad1fORl+llWyN+D6qoUETXNZARKjyY2/KVCw=
 github.com/sergi/go-diff v1.4.0/go.mod h1:A0bzQcvG0E7Rwjx0REVgAGH58e96+X0MeOfepqsbeW4=
 github.com/spf13/cobra v1.10.2 h1:DMTTonx5m65Ic0GOoRY2c16WCbHxOOw6xxezuLaBpcU=
@@ -31,8 +31,8 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-go.xyrillian.de/gg v1.14.0 h1:S19Jk3V1dcF9WdXQi7OGWjboVj8/40I4+/G1lZ6i4TI=
-go.xyrillian.de/gg v1.14.0/go.mod h1:DoO4fQSWIrBRlNlCjVyrYM0kAEBt/Jg2GkMH+cGRZ0k=
+go.xyrillian.de/gg v1.15.0 h1:y+RNTAf9I19yGS9tcTzo2OgsJ+zV0yEDc9cGlhdBal0=
+go.xyrillian.de/gg v1.15.0/go.mod h1:DoO4fQSWIrBRlNlCjVyrYM0kAEBt/Jg2GkMH+cGRZ0k=
 go.yaml.in/yaml/v3 v3.0.4/go.mod h1:DhzuOOF2ATzADvBadXxruRBLzYTpT36CKvDb3+aBEFg=
 golang.org/x/exp v0.0.0-20240119083558-1b970713d09a h1:Q8/wZp0KX97QFTc2ywcOE0YRjZPVIx+MXInMzdvQqcA=
 golang.org/x/exp v0.0.0-20240119083558-1b970713d09a/go.mod h1:idGWGoKP1toJGkd5/ig9ZLuPcZBC3ewk7SzmH0uou08=

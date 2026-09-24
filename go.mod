@@ -6,10 +6,10 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/nlpodyssey/gopickle v0.3.0
 	github.com/oriser/regroup v0.0.0-20240925165441-f6bb0e08289e
-	github.com/sapcc/go-bits v0.0.0-20260917095256-d8aaf2d73069
+	github.com/sapcc/go-bits v0.0.0-20260924170438-e0aa5c665ed9
 	github.com/sergi/go-diff v1.4.0
 	github.com/spf13/cobra v1.10.2
-	go.xyrillian.de/gg v1.15.0
+	go.xyrillian.de/gg v1.16.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -18,5 +18,5 @@ require (
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a // indirect
-	golang.org/x/text v0.41.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
 )

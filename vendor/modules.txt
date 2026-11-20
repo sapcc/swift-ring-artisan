@@ -16,7 +16,7 @@ github.com/oriser/regroup
 github.com/sapcc/go-bits/errext
 github.com/sapcc/go-bits/logg
 github.com/sapcc/go-bits/must
-# github.com/sergi/go-diff v1.4.0
+# github.com/sergi/go-diff v1.4.5
 ## explicit; go 1.13
 github.com/sergi/go-diff/diffmatchpatch
 # github.com/spf13/cobra v1.10.2
